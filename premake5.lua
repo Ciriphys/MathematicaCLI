@@ -16,6 +16,9 @@ workspace "Mathematica"
         files { "build/src/**.cpp", "build/include/**.h" }
         includedirs { "build/src", "build/include" }
 
+        pchheader "mthpch.h"
+        pchsource "build/src/mthpch.cpp"
+
         filter "system:Windows"
             staticruntime "On"
             systemversion "latest"

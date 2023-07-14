@@ -512,3 +512,6 @@ xcuserdata/
 *.moved-aside
 *.xcodeworkspace/
 *.xcodeproj/
+
+# ===== vscode =====
+.vscode/

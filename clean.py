@@ -23,6 +23,7 @@ def WrapperRemoveTree(path):
 def DarwinCleanMakefile():
     RemoveFile("Makefile")
     RemoveFile("build/Makefile")
+    WrapperRemoveTree(".vscode/")
     return
 
 def DarwinCleanXCode():
@@ -51,7 +52,7 @@ if __name__ == "__main__":
     projectName = "Mathematica"
 
     if system == "Darwin":
-        if os.path.exists("Makefile"):
+        if os.path.exists("Makefile") or os.path.exists(".vscode/"):
             DarwinCleanMakefile()
         else:
             DarwinCleanXCode()

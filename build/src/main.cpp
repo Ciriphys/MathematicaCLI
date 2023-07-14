@@ -1,10 +1,15 @@
-#include "main.h"
+#include "mthpch.h"
+
+#include "App.h"
 
 int main(int argc, char** argv) 
 {
-#ifdef MTH_DEBUG
-    std::cout << "Hello, World! Debug mode! (MTH_DEBUG)" << std::endl;
-#else
-    std::cout << "Hello, World! Release mode! (MTH_RELEASE)" << std::endl;
-#endif
+   App* app = App::Get();
+   app->LoadCL(argc, argv);
+   app->Run();
+   int result = app->Abort();
+
+   delete app;
+
+   return result;
 }
