@@ -4,15 +4,11 @@ on: [push]
 
 jobs: 
     super-lint:
-        strategy:
-            matrix:
-                os: [windows-latest, macos-latest]
-        name: Lint codebase (platform:${{matrix.os}})
-        runs-on: ${{matrix.os}}
+        name: Lint codebase
+        runs-on: ubuntu-latest
         steps:
             - name: Checkout code
               uses: actions/checkout@v2
-
             - name: Run Super-Linter
               uses: github/super-linter@v3
               env: 
