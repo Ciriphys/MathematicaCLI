@@ -10,14 +10,14 @@ workspace "Mathematica"
         cppdialect "C++17"
         kind "ConsoleApp"
 
-        targetdir   ( "bin/" .. output .. "/%{prj.name}" )
-        objdir      ( "bin/obj/" .. output .. "/%{prj.name}" )
+        targetdir   ( "Binaries/" .. output .. "/%{prj.name}" )
+        objdir      ( "Binaries/Objects/" .. output .. "/%{prj.name}" )
 
-        files { "build/src/**.cpp", "build/include/**.h" }
-        includedirs { "build/src", "build/include" }
+        files { "Build/Source/**.cpp", "Build/Include/**.h" }
+        includedirs { "Build/Source", "Build/Include" }
 
         pchheader "mthpch.h"
-        pchsource "build/src/mthpch.cpp"
+        pchsource "Build/Source/mthpch.cpp"
 
         filter "system:Windows"
             staticruntime "On"

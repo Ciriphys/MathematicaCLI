@@ -515,3 +515,7 @@ xcuserdata/
 
 # ===== vscode =====
 .vscode/
+
+# ===== Makefile =====
+Makefile
+**/Makefile
