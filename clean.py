@@ -22,13 +22,13 @@ def WrapperRemoveTree(path):
 
 def DarwinCleanMakefile():
     RemoveFile("Makefile")
-    RemoveFile("build/Makefile")
+    RemoveFile("Build/Makefile")
     WrapperRemoveTree(".vscode/")
     return
 
 def DarwinCleanXCode():
     workspace = f"{projectName}.xcworkspace/"
-    project = f"build/{projectName}.xcodeproj/"
+    project = f"Build/{projectName}.xcodeproj/"
     WrapperRemoveTree(workspace)
     WrapperRemoveTree(project)
     print(f"Cleaned {workspace}, {project}.")
@@ -36,9 +36,9 @@ def DarwinCleanXCode():
 
 def WinCleanVS():
     solution = f"{projectName}.sln"
-    project = f"build/{projectName}.vcxproj"
-    user = f"build/{projectName}.vcxproj.user"
-    filt = f"build/{projectName}.vcxproj.filters"
+    project = f"Build/{projectName}.vcxproj"
+    user = f"Build/{projectName}.vcxproj.user"
+    filt = f"Build/{projectName}.vcxproj.filters"
     vsfold = ".vs/"
     RemoveFile(solution)
     RemoveFile(project)
@@ -68,6 +68,6 @@ if __name__ == "__main__":
         print("Unidentified system. Halting.")
         exit(1)
 
-    WrapperRemoveTree("bin/")
+    WrapperRemoveTree("Binaries/")
     print("Nothing left to clean. Halting")
     exit(0)

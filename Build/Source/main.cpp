@@ -2,14 +2,20 @@
 
 #include "App.h"
 
-int main(int argc, char** argv) 
+#if defined(MTH_WIN) || defined(MTH_MACOS)
+
+int main(int argc, char** argv)
 {
-   App* app = App::Get();
-   app->LoadCL(argc, argv);
-   app->Run();
-   int result = app->Abort();
+	App* app = App::Get();
+	app->LoadArguments(argc, argv);
+	app->Run();
+	int result = app->Abort();
 
-   delete app;
+	delete app;
 
-   return result;
+	return result;
 }
+
+#else 
+	#error MathematicaCLI is not available on your platform.
+#endif

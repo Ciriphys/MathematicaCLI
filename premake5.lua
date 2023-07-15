@@ -5,7 +5,7 @@ workspace "Mathematica"
     output = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
     project "Mathematica"
-        location "build"
+        location "Build"
         language "C++"
         cppdialect "C++17"
         kind "ConsoleApp"
@@ -28,11 +28,15 @@ workspace "Mathematica"
 
         filter "system:Mac"     
             system "macosx"
+        
+            defines { "MTH_MACOS" }
 
         filter { "configurations:Debug" }
             defines { "MTH_DEBUG", "DEBUG" }
+            optmize "Off"
             symbols "On"
         
         filter { "configurations:Release" }
             defines { "MTH_RELEASE", "NDEBUG" }
             optimize "On"
+            symbols "Default"

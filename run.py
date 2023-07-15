@@ -14,9 +14,9 @@ if __name__ == "__main__":
         target = "Debug"
 
     if system == "Darwin":
-        command = f"./bin/{target}-macosx-x86_64/{projectName}/{projectName} {args}"
+        command = f"./Binaries/{target}-macosx-x86_64/{projectName}/{projectName} {args}"
     elif system == "Windows":
-        command = f"\"bin\\{target}-windows-x86_64\\{projectName}\\{projectName}.exe\" {args}"
+        command = f"\"Binaries\\{target}-windows-x86_64\\{projectName}\\{projectName}.exe\" {args}"
     elif system == "Linux":
         print("Linux is not yet supported. Halting.")
         exit(1)
