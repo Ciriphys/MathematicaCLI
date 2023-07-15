@@ -33,7 +33,7 @@ workspace "Mathematica"
 
         filter { "configurations:Debug" }
             defines { "MTH_DEBUG", "DEBUG" }
-            optmize "Off"
+            optimize "Off"
             symbols "On"
         
         filter { "configurations:Release" }
