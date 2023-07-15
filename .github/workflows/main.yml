@@ -25,7 +25,7 @@ jobs:
         runs-on: ${{ matrix.os }}
         steps:
             - name: Checkout codebase
-              uses: action/checkout@v3
+              uses: actions/checkout@v3
             - name: Setup MSBuild
               uses: microsoft/setup-msbuild@v1.1
               with:
@@ -54,7 +54,7 @@ jobs:
         runs-on: ${{ matrix.os }}
         steps:
             - name: Checkout codebase
-              uses: action/checkout@v3
+              uses: actions/checkout@v3
             - name: Setup premake5
               uses: abel0b/setup-premake@v2.2
               with:
