@@ -4,8 +4,11 @@ on: [push]
 
 jobs: 
     super-lint:
-        name: Lint codebase
-        runs-on: [windows-latest, macos-latest]
+        strategy:
+            matrix:
+                os: [windows-latest, macos-latest]
+        name: Lint codebase (platform:${{matrix.os}})
+        runs-on: ${{matrix.os}}
         steps:
             - name: Checkout code
               uses: actions/checkout@v2
