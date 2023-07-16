@@ -14,7 +14,7 @@ workspace "Mathematica"
         objdir      ( "Binaries/Objects/" .. output .. "/%{prj.name}" )
 
         files { "Build/Source/**.cpp", "Build/Include/**.h" }
-        includedirs { "Build/Source", "Build/Include" }
+        includedirs { "Build/Source/CLI", "Build/Source/Core", "Build/Include", "Build/Include/CLI", }
 
         pchheader "mthpch.h"
         pchsource "Build/Source/mthpch.cpp"

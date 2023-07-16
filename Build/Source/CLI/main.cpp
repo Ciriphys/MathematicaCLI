@@ -4,7 +4,7 @@
 
 int main(int argc, char** argv)
 {
-	App* app = App::Get();
+	MApp* app = MApp::Get();
 	app->LoadArguments(argc, argv);
 	app->Run();
 	int result = app->Abort();

@@ -5,17 +5,17 @@
 #endif
 
 #include "App.h"
-#include "Utils.h"
+#include "Utility/Utils.h"
 
-App* App::sInstance = nullptr;
+MApp* MApp::sInstance = nullptr;
 
-App* App::Get() 
+MApp* MApp::Get() 
 {
-    if (!sInstance) new App();
+    if (!sInstance) new MApp();
     return sInstance;
 }
 
-void App::Execute()
+void MApp::Execute()
 {
 	for(auto [command, params] : mCommands)
 	{
@@ -31,7 +31,7 @@ void App::Execute()
 		{
 			Command::About();
 		}
-		else if (command == "--exit" || command == "--abort")
+		else if (command == "--exit" || command == "--abort" || command == "--quick")
 		{
 			bRunning = false;
 		}
@@ -42,7 +42,7 @@ void App::Execute()
 	}
 }
 
-void App::TypeMode()
+void MApp::TypeMode()
 {
 	MString userInput;
 	std::getline(std::cin, userInput);
@@ -50,7 +50,7 @@ void App::TypeMode()
     GenerateCommandMap();
 }
 
-void App::GenerateCommandMap()
+void MApp::GenerateCommandMap()
 {
 	MString currentCommand = "None";
 	for (auto argument : mArguments)
@@ -70,7 +70,7 @@ void App::GenerateCommandMap()
 	}
 }
 
-void App::DrawMenu()
+void MApp::DrawMenu()
 {
 	Mathematica::ClearScreen();
 	std::cout << "==== Mathematica CLI: Menu ====" << std::endl;
@@ -104,12 +104,19 @@ void App::DrawMenu()
 	}
 }
 
-App::App()
+void MApp::Alert(MString alert)
 {
-    sInstance = this;
+	Command::DisplayAlert(alert);
 }
 
-void App::LoadArguments(int argc, char** argv)
+MApp::MApp()
+{
+    sInstance = this;
+
+	mLexer = MLexer();
+}
+
+void MApp::LoadArguments(int argc, char** argv)
 {
     for(int i = 1; i < argc; i++)
     {
@@ -117,7 +124,7 @@ void App::LoadArguments(int argc, char** argv)
     }
 }
 
-void App::ExtractArguments(MString arguments)
+void MApp::ExtractArguments(MString arguments)
 {
     MString currentArgument = "";
     for (auto c : arguments)
@@ -134,7 +141,7 @@ void App::ExtractArguments(MString arguments)
     }
 }
 
-void App::Run() 
+void MApp::Run() 
 {
     do 
     {
@@ -145,7 +152,7 @@ void App::Run()
     Abort();
 }
 
-int App::Abort()
+int MApp::Abort()
 {
 	Command::DisplayExitMessage();
     return 0;
@@ -154,7 +161,7 @@ int App::Abort()
 
 // === Commands ===
 
-void App::Command::Help()
+void MApp::Command::Help()
 {
 	Mathematica::ClearScreen();
 	std::cout << "==== List of commands: ====" << std::endl;
@@ -168,7 +175,7 @@ void App::Command::Help()
 	return;
 }
 
-void App::Command::Solve()
+void MApp::Command::Solve()
 {
 	Mathematica::ClearScreen();
 	std::cout << "This functionality is not available yet!" << std::endl;
@@ -178,7 +185,7 @@ void App::Command::Solve()
 	return;
 }
 
-void App::Command::About()
+void MApp::Command::About()
 {
 	Mathematica::ClearScreen();
 	std::cout << "==== About MathematicaCLI: ====" << std::endl;
@@ -192,14 +199,24 @@ void App::Command::About()
 	return;
 }
 
-void App::Command::DisplayExitMessage()
+void MApp::Command::DisplayAlert(MString alert)
+{
+	Mathematica::ClearScreen();
+	std::cout << "==== Mathematica CLI Alert: ====" << std::endl;
+	std::cout << alert << std::endl;
+
+	WaitKey();
+	return;
+}
+
+void MApp::Command::DisplayExitMessage()
 {
 	Mathematica::ClearScreen();
 	std::cout << "==== MathematicaCLI: ====" << std::endl;
 	std::cout << "Mathematica ~ " << MTH_VERSION << std::endl;
 }
 
-void App::Command::Unknown(MString command)
+void MApp::Command::Unknown(MString command)
 {
 	Mathematica::ClearScreen();
 	std::cout << "==== Unknown command: ====" << std::endl;
@@ -210,7 +227,7 @@ void App::Command::Unknown(MString command)
 	return;
 }
 
-void App::Command::WaitKey()
+void MApp::Command::WaitKey()
 {
 	#ifndef MTH_WIN
 		system("stty raw");
