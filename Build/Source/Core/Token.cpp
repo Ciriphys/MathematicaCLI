@@ -1,6 +1,6 @@
 #include "mthpch.h"
 
-#include "Token.h"
+#include "Core/Token.h"
 
 MLexiconToken::MLexiconToken(MString __data, ELexiconTokenType __type) : data(__data), type(__type) {}
 
