@@ -13,6 +13,8 @@ class App
         ~App() = default;
 
     private:
+        App();
+
         void Execute();
         void TypeMode();
         void ExtractArguments(MString arguments);
@@ -29,12 +31,14 @@ class App
             static void DisplayExitMessage();
 
             static void Unknown(MString command);
+
+            private:
+            static void WaitKey();
         };
 
         bool bRunning = true;
         bool bTypeMode = true;
 
-        App();
         MVector<MString> mArguments;
         MHashMap<MString, MVector<MString>> mCommands;
         static App* sInstance;

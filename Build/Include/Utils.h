@@ -58,4 +58,26 @@ namespace Mathematica
         system("clear");
     #endif
     }
+
+    void TransformToLower(MString& string)
+    {
+        for (auto& c : string)
+        {
+            if((int)c >= 65 && (int)c <= 90)
+            {
+                c += 32;
+            }
+        }
+    }
+
+    void TransformToUpper(MString& string)
+    {
+        for (auto& c : string)
+        {
+            if((int)c >= 97 && (int)c <= 122)
+            {
+                c -= 32;
+            }
+        }
+    }
 };

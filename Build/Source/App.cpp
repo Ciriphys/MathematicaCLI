@@ -1,6 +1,8 @@
 #include "mthpch.h"
 
-#include <conio.h>
+#ifdef MTH_WIN
+	#include <conio.h>
+#endif
 
 #include "App.h"
 #include "Utils.h"
@@ -56,7 +58,7 @@ void App::GenerateCommandMap()
 		if (argument.rfind("-", 0) == 0 || argument.rfind("--", 0) == 0)
 		{
 			currentCommand = argument;
-			std::transform(currentCommand.begin(), currentCommand.end(), currentCommand.begin(), std::tolower);
+			Mathematica::TransformToLower(currentCommand);
 			mCommands[currentCommand] = MVector<MString>();
 		}
 		else
@@ -161,9 +163,7 @@ void App::Command::Help()
 	std::cout << " * --about --info -? \t\t: Shows the about tab." << std::endl;
 	std::cout << " * --exit --abort \t\t: Terminates the process." << std::endl;
 
-	std::cout << std::endl << std::endl;
-	std::cout << "Press any key to close.";
-	(void)getch();
+	WaitKey();
 
 	return;
 }
@@ -173,9 +173,7 @@ void App::Command::Solve()
 	Mathematica::ClearScreen();
 	std::cout << "This functionality is not available yet!" << std::endl;
 
-	std::cout << std::endl << std::endl;
-	std::cout << "Press any key to close.";
-	(void)getch();
+	WaitKey();
 
 	return;
 }
@@ -189,9 +187,7 @@ void App::Command::About()
 	std::cout << " * Distributed under the MIT License." << std::endl;
 	std::cout << " * To learn more, visit https://github.com/ZeXo-Softwares/MathematicaCLI." << std::endl;
 
-	std::cout << std::endl << std::endl;
-	std::cout << "Press any key to close.";
-	(void)getch();
+	WaitKey();
 
 	return;
 }
@@ -209,9 +205,23 @@ void App::Command::Unknown(MString command)
 	std::cout << "==== Unknown command: ====" << std::endl;
 	std::cout << "An unknown command has been passed (" << command <<"). Check for mistakes!" << std::endl;
 
-	std::cout << std::endl << std::endl;
-	std::cout << "Press any key to close.";
-	(void)getch();
+	WaitKey();
 
 	return;
+}
+
+void App::Command::WaitKey()
+{
+	#ifndef MTH_WIN
+		system("stty raw");
+	#endif
+	std::cout << std::endl << std::endl;
+	std::cout << "Press any key to close.";
+	#ifndef MTH_WIN
+		getchar();
+		system("stty cooked");
+	#endif
+	#ifdef MTH_WIN
+		(void)getch();
+	#endif
 }

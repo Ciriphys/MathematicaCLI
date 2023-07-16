@@ -23,12 +23,10 @@ workspace "Mathematica"
             staticruntime "On"
             systemversion "latest"
             system "windows"
-
             defines { "MTH_WIN" }
 
         filter "system:Mac"     
             system "macosx"
-        
             defines { "MTH_MACOS" }
 
         filter { "configurations:Debug" }

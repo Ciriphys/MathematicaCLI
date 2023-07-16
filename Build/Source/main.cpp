@@ -2,8 +2,6 @@
 
 #include "App.h"
 
-#if defined(MTH_WIN) || defined(MTH_MACOS)
-
 int main(int argc, char** argv)
 {
 	App* app = App::Get();
@@ -15,7 +13,3 @@ int main(int argc, char** argv)
 
 	return result;
 }
-
-#else 
-	#error MathematicaCLI is not available on your platform.
-#endif
