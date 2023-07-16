@@ -26,12 +26,7 @@ jobs:
             - name: Build MathematicaCLI
               working-directory: ${{  env.GITHUB_WORKSPACE  }}
               run: msbuild /m /p:Configuration=${{matrix.build-configs}} ${{  env.SOLUTION_FILE_PATH  }}
-            - name: Upload Build Artifacts
-              uses: actions/upload-artifact@v3
-              with:
-                name: MathematicaCLI CI Artifacts
-                path: Binaries/Windows/MathematicaCLI/
-            
+ 
     build-macos:
         name: Build project on macOS
         strategy:
@@ -50,9 +45,22 @@ jobs:
               run: premake5 gmake2
             - name: Build MathematicaCLI
               run: make config=${{matrix.build-configs}}
-            - name: Upload Build Artifacts
-              uses: actions/upload-artifact@v3
-              with:
-                name: MathematicaCLI CI Artifacts
-                path: Binaries/macOS/MathematicaCLI/
         
+    build-linux:
+      name: Build project on Linux
+      strategy:
+          matrix:
+              os: [ubuntu-latest]
+              build-configs: ["debug", "release"]
+      runs-on: ${{ matrix.os }} 
+      steps: 
+          - name: Checkout codebase
+            uses: actions/checkout@v3
+          - name: Setup premake5
+            uses: abel0b/setup-premake@v2.2
+            with:
+                version: "5.0.0-beta2"
+          - name: Generate project files
+            run: premake5 gmake2
+          - name: Build MathematicaCLI
+            run: make config=${{matrix.build-configs}}

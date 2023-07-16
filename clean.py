@@ -61,8 +61,7 @@ if __name__ == "__main__":
         WinCleanVS()
 
     elif system == "Linux":
-        print("Linux is not yet supported. Halting.")
-        exit(1)
+        DarwinCleanMakefile()
 
     else:
         print("Unidentified system. Halting.")

@@ -11,8 +11,7 @@ if __name__ == "__main__":
     elif system == "Windows":
         command = str("\"Vendor\\premake5\\Windows\\premake5.exe\" vs2022")
     elif system == "Linux":
-        print("Linux is not yet supported. Halting.")
-        exit(1)
+        command = f"./Vendor/premake5/macOS/premake5 gmake2"
     else:
         print("Unidentified system. Halting.")
         exit(1)

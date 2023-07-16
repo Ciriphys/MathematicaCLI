@@ -13,13 +13,11 @@ if __name__ == "__main__":
     else:
         target = "Debug"
 
-    if system == "Darwin":
+    if system == "Darwin" or system == "Linux":
+        print(f"If the command fails, please use chmod +x on path : ./Binaries/{target}-macosx-x86_64/{projectName}/{projectName}.")
         command = f"./Binaries/{target}-macosx-x86_64/{projectName}/{projectName} {args}"
     elif system == "Windows":
         command = f"\"Binaries\\{target}-windows-x86_64\\{projectName}\\{projectName}.exe\" {args}"
-    elif system == "Linux":
-        print("Linux is not yet supported. Halting.")
-        exit(1)
     else:
         print("Unidentified system. Halting.")
         exit(1)
