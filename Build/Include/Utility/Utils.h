@@ -9,7 +9,7 @@
     #define MTH_ASSERT(expression, message) if(!(expression)) Mathematica::Assert(#expression, Mathematica::RelativeToBuildPath(__FILE__).c_str(), __FUNCTION__, __LINE__, message)
     #define MTH_DEBUG_INFO(function) DisplayFunctionInfo(#function, __FUNCTION__); function
 #else 
-    #define MTH_ASSERT(expression)
+    #define MTH_ASSERT(expression, message)
     #define MTH_DEBUG_INFO(function)
 #endif
 
