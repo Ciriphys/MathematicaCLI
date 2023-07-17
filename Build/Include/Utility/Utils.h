@@ -19,6 +19,7 @@
 
 #define MTH_VERSION "Version 0.0.3a"
 #define MTH_NO_MESSAGE "No message provided."
+#define MTH_UNUSED(x) (void)x
 
 template<typename T, typename ... Args>
 constexpr MScoped<T> CreateScope(Args&& ... args)

@@ -228,15 +228,15 @@ void Mathematica::AppCommand::Unknown(MString command)
 void Mathematica::AppCommand::WaitKey()
 {
 	#ifndef MTH_WIN
-		system("stty raw");
+		MTH_UNUSED(system("stty raw"));
 	#endif
 	std::cout << std::endl << std::endl;
 	std::cout << "Press any key to close.";
 	#ifndef MTH_WIN
-		getchar();
-		system("stty cooked");
+		MTH_UNUSED(getchar());
+		MTH_UNUSED(system("stty cooked"));
 	#endif
 	#ifdef MTH_WIN
-		(void)_getch();
+		MTH_UNUSED(_getch());
 	#endif
 }

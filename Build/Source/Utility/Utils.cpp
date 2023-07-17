@@ -29,9 +29,9 @@ namespace Mathematica
 	void ClearScreen()
 	{
 #ifdef MTH_WIN
-		system("cls");
+		MTH_UNUSED(system("cls"));
 #else
-		system("clear");
+		MTH_UNUSED(system("clear"));
 #endif
 	}
 
