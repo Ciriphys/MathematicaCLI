@@ -7,9 +7,7 @@ enum class ELexiconTokenType : int
 	Number,
 	BinaryFunction,
 
-	Unknown,
-
-	None
+	Unknown
 };
 
 struct MLexiconToken
@@ -19,4 +17,14 @@ struct MLexiconToken
 
 	MLexiconToken(MString __data, ELexiconTokenType __type);
 	MString GetTokenRichInformation();
+
+	bool operator== (MLexiconToken other)
+	{
+		return (data == other.data && type == other.type);
+	}
+
+	bool operator!= (MLexiconToken other)
+	{
+		return !(*this == other);
+	}
 };

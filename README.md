@@ -1,5 +1,5 @@
 # MathematicaCLI
-A Command Line Interface for Mathematica, an equation solver.
+Command Line Interface for Mathematica, a modern equation solver.
 
 # Motivation
 MathematicaCLI is the primitive form of Mathematica, a future software for learning and discovering math.
@@ -7,8 +7,8 @@ Mathematics is a world of beauty and its abstractness may be difficult for most 
 is a problem for the century and this project is a way to solve it.
 
 # Platforms
-MathematicaCLI is currently built for Windows and macOS, hence a Linux distribution is yet to come.
-We are planning to extend this software on this platform too as soon as possible.
+MathematicaCLI is built for Windows, macOS and Linux. However, Windows and macOS are the only platforms I can test regularly,
+Linux is only tested through [GitHub Actions](https://github.com/ZeXo-Softwares/MathematicaCLI/actions).
 
 # Getting started
 MathematicaCLI uses [premake5](https://premake.github.io) to build the source, and for now, a binary source of such program is distributed with the source code.
@@ -16,7 +16,7 @@ To generate project files for your platform launch `generate.py`, to clean unnec
 to access quickly the binaries.
 
 # Authors
-Although the project is hosted on the ZeXo Softwares page, its development is entirely carried by @Ciridev.
+Even if this project is hosted on the ZeXo Softwares page, its development is entirely carried on by @Ciridev.
 
 # Licensing
 This project is licensed under the MIT license.

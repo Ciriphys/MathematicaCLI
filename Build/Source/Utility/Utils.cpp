@@ -5,10 +5,15 @@
 
 namespace Mathematica
 {
-	void Assert(const char* expression, const char* file, const char* function, int line)
+	void Assert(const char* expression, const char* file, const char* function, int line, const char* message)
 	{
-		printf("Assertion failed (%s) in file %s, in function %s, at line %d.", expression, file, function, line);
+		printf("Assertion failed (%s) in file %s, in function %s, at line %d:\n %s", expression, file, function, line, message);
 		abort();
+	}
+
+	void DisplayFunctionInfo(const char* functionName, const char* callerFunction)
+	{
+		printf("%s requested a debug information call for function \"%s\".\n", callerFunction, functionName);
 	}
 
 	MString RelativeToBuildPath(MString file)
@@ -65,16 +70,64 @@ namespace Mathematica
 		}
 	}
 
+	void RemoveQuotes(MString& string)
+	{
+		if (string.front() == '\"' && string.back() == '\"')
+		{
+			string = MString(string.begin() + 1, string.end() - 1);
+		}
+	}
+
+	MVector<MString> SeparateString(MString string, char separetor)
+	{
+		// Append a separator character to allow last separated to be included.
+		string += separetor;
+
+		MString currentSubstring = "";
+		MVector<MString> result = MVector<MString>();
+
+		bool bIsInQuotes = false;
+		MTH_ASSERT(separetor != '\"', "Cannot use <\"> as a separator!");
+
+		for (char currentChar : string)
+		{
+			if (currentChar == separetor && !bIsInQuotes)
+			{
+				if (!currentSubstring.empty())
+				{
+					result.push_back(currentSubstring);
+					currentSubstring = "";
+				}
+			}
+			else
+			{
+				if (currentChar == '\"')
+				{
+					bIsInQuotes = !bIsInQuotes;
+				}
+				currentSubstring += currentChar;
+			}
+		}
+
+		MTH_ASSERT(!bIsInQuotes, "Quotes not ended!");
+		if (result.empty())
+		{
+			result.push_back(currentSubstring);
+		}
+		return result;
+	}
+
 	void DisplayTokenArray(const MVector<MLexiconToken>& tokenArray, bool bInline)
 	{
 		char endOfLine = bInline ? ' ' : '\n';
+		auto lastToken = tokenArray.back();
 
 		std::cout << "[" << endOfLine;
 		for (auto token : tokenArray)
 		{
-			std::cout << token.GetTokenRichInformation() << ',' << endOfLine;
+			std::cout << token.GetTokenRichInformation() << (token == lastToken ? "" : ",") << endOfLine;
 		}
-		std::cout << "]" << std::endl;
+		std::cout << "]" << std::endl << std::endl;
 	}
 
 }

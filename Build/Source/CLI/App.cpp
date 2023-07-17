@@ -21,15 +21,15 @@ void MApp::Execute()
 	{
 		if (command == "--solve" || command == "-s")
 		{
-			Command::Solve();
+			Mathematica::AppCommand::Solve();
 		}
 		else if (command == "--help" || command == "-h")
 		{
-			Command::Help();
+			Mathematica::AppCommand::Help();
 		}
 		else if (command == "--about" || command == "--info" || command == "-?")
 		{
-			Command::About();
+			Mathematica::AppCommand::About();
 		}
 		else if (command == "--exit" || command == "--abort" || command == "--quick")
 		{
@@ -37,7 +37,7 @@ void MApp::Execute()
 		}
 		else
 		{
-			Command::Unknown(command);
+			Mathematica::AppCommand::Unknown(command);
 		}
 	}
 }
@@ -46,7 +46,7 @@ void MApp::TypeMode()
 {
 	MString userInput;
 	std::getline(std::cin, userInput);
-	ExtractArguments(userInput + " ");
+	mArguments = Mathematica::SeparateString(userInput);
     GenerateCommandMap();
 }
 
@@ -106,7 +106,7 @@ void MApp::DrawMenu()
 
 void MApp::Alert(MString alert)
 {
-	Command::DisplayAlert(alert);
+	Mathematica::AppCommand::DisplayAlert(alert);
 }
 
 MApp::MApp()
@@ -126,6 +126,8 @@ void MApp::LoadArguments(int argc, char** argv)
 
 void MApp::ExtractArguments(MString arguments)
 {
+	// TODO : Use Utils implementation, which is currently located in MLexer class.
+
     MString currentArgument = "";
     for (auto c : arguments)
     {
@@ -154,14 +156,14 @@ void MApp::Run()
 
 int MApp::Abort()
 {
-	Command::DisplayExitMessage();
+	Mathematica::AppCommand::DisplayExitMessage();
     return 0;
 }
 
 
 // === Commands ===
 
-void MApp::Command::Help()
+void Mathematica::AppCommand::Help()
 {
 	Mathematica::ClearScreen();
 	std::cout << "==== List of commands: ====" << std::endl;
@@ -175,17 +177,28 @@ void MApp::Command::Help()
 	return;
 }
 
-void MApp::Command::Solve()
+void Mathematica::AppCommand::Solve()
 {
 	Mathematica::ClearScreen();
-	std::cout << "This functionality is not available yet!" << std::endl;
+	std::cout << "==== MathematicaCLI: Solve ====" << std::endl;
+
+	auto app = MApp::Get();
+	auto commands = app->GetCommands();
+	auto lexer = app->GetLexer();
+
+	MString commandKey = commands.find("--solve") == commands.end() ? "-s" : "--solve";
+	for (auto equation : commands[commandKey])
+	{
+		MVector<MLexiconToken> tokens = lexer.GenerateTokens(equation); 
+		MTH_DEBUG_INFO(Mathematica::DisplayTokenArray(tokens));
+	}
 
 	WaitKey();
 
 	return;
 }
 
-void MApp::Command::About()
+void Mathematica::AppCommand::About()
 {
 	Mathematica::ClearScreen();
 	std::cout << "==== About MathematicaCLI: ====" << std::endl;
@@ -199,7 +212,7 @@ void MApp::Command::About()
 	return;
 }
 
-void MApp::Command::DisplayAlert(MString alert)
+void Mathematica::AppCommand::DisplayAlert(MString alert)
 {
 	Mathematica::ClearScreen();
 	std::cout << "==== Mathematica CLI Alert: ====" << std::endl;
@@ -209,14 +222,14 @@ void MApp::Command::DisplayAlert(MString alert)
 	return;
 }
 
-void MApp::Command::DisplayExitMessage()
+void Mathematica::AppCommand::DisplayExitMessage()
 {
 	Mathematica::ClearScreen();
 	std::cout << "==== MathematicaCLI: ====" << std::endl;
 	std::cout << "Mathematica ~ " << MTH_VERSION << std::endl;
 }
 
-void MApp::Command::Unknown(MString command)
+void Mathematica::AppCommand::Unknown(MString command)
 {
 	Mathematica::ClearScreen();
 	std::cout << "==== Unknown command: ====" << std::endl;
@@ -227,7 +240,7 @@ void MApp::Command::Unknown(MString command)
 	return;
 }
 
-void MApp::Command::WaitKey()
+void Mathematica::AppCommand::WaitKey()
 {
 	#ifndef MTH_WIN
 		system("stty raw");

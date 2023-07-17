@@ -16,6 +16,9 @@ class MApp
 
         void Alert(MString alert);
 
+        MLexer GetLexer() const { return mLexer; }
+        MHashMap<MString, MVector<MString>> GetCommands() const { return mCommands; }
+
     private:
         MApp();
 
@@ -24,22 +27,6 @@ class MApp
         void ExtractArguments(MString arguments);
         void GenerateCommandMap();
         void DrawMenu();
-
-		// Static functions may be changing in the future.
-		struct Command
-		{
-			static void Help();
-			static void Solve();
-			static void About();
-
-			static void DisplayAlert(MString alert);
-			static void DisplayExitMessage();
-
-			static void Unknown(MString command);
-
-		private:
-			static void WaitKey();
-		};
 
         bool bRunning = true;
         bool bTypeMode = true;
@@ -51,3 +38,20 @@ class MApp
 
         static MApp* sInstance;
 };
+
+namespace Mathematica
+{
+    namespace AppCommand
+    {
+        void Help();
+        void Solve();
+        void About();
+
+        void DisplayAlert(MString alert);
+        void DisplayExitMessage();
+
+        void Unknown(MString command);
+
+        void WaitKey();
+    }
+}

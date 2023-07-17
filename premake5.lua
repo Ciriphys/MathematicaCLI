@@ -30,11 +30,11 @@ workspace "Mathematica"
             defines { "MTH_MACOS" }
 
         filter { "configurations:Debug" }
-            defines { "MTH_DEBUG", "DEBUG" }
+            defines { "MTH_DEBUG", "DEBUG", "MTH_CONFIG=\"Debug\"" }
             optimize "Off"
             symbols "On"
         
         filter { "configurations:Release" }
-            defines { "MTH_RELEASE", "NDEBUG" }
+            defines { "MTH_RELEASE", "NDEBUG", "MTH_CONFIG=\"Release\"" }
             optimize "On"
             symbols "Default"
