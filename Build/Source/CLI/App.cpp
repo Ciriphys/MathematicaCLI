@@ -5,7 +5,9 @@
 #endif
 
 #include "App.h"
+
 #include "Utility/Utils.h"
+#include "Utility/Random.h"
 
 MApp* MApp::sInstance = nullptr;
 
@@ -91,7 +93,7 @@ void MApp::DrawMenu()
 
 	if (bTypeMode)
 	{
-		std::cout << "> ";
+		std::cout << "$ ";
 		TypeMode();
 		bTypeMode = false;
 	}
@@ -114,32 +116,14 @@ MApp::MApp()
     sInstance = this;
 
 	mLexer = MLexer();
+	MRandom::Init();
 }
 
-void MApp::LoadArguments(int argc, char** argv)
+void MApp::LoadArguments(int32 argc, char** argv)
 {
-    for(int i = 1; i < argc; i++)
+    for(int32 i = 1; i < argc; i++)
     {
         mArguments.push_back(argv[i]);
-    }
-}
-
-void MApp::ExtractArguments(MString arguments)
-{
-	// TODO : Use Utils implementation, which is currently located in MLexer class.
-
-    MString currentArgument = "";
-    for (auto c : arguments)
-    {
-        if (c == ' ')
-        {
-            mArguments.push_back(currentArgument);
-            currentArgument = "";
-        }
-        else
-        {
-            currentArgument += c;
-        }
     }
 }
 
@@ -154,7 +138,7 @@ void MApp::Run()
     Abort();
 }
 
-int MApp::Abort()
+int32 MApp::Abort()
 {
 	Mathematica::AppCommand::DisplayExitMessage();
     return 0;
@@ -191,6 +175,7 @@ void Mathematica::AppCommand::Solve()
 	{
 		MVector<MLexiconToken> tokens = lexer.GenerateTokens(equation); 
 		MTH_DEBUG_INFO(Mathematica::DisplayTokenArray(tokens));
+		MTH_DEBUG_INFO(Mathematica::DisplayTokenUUID(tokens, false));
 	}
 
 	WaitKey();
@@ -252,6 +237,6 @@ void Mathematica::AppCommand::WaitKey()
 		system("stty cooked");
 	#endif
 	#ifdef MTH_WIN
-		(void)getch();
+		(void)_getch();
 	#endif
 }

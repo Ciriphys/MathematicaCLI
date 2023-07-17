@@ -1,8 +1,9 @@
 #pragma once
 
+#include "Core/Identifiable.h"
 #include "Utility/Utils.h"
 
-enum class ELexiconTokenType : int
+enum class ELexiconTokenType : int32
 {
 	Number,
 	BinaryFunction,
@@ -10,7 +11,7 @@ enum class ELexiconTokenType : int
 	Unknown
 };
 
-struct MLexiconToken
+struct MLexiconToken : public MIdentifiable
 {
 	MString data;
 	ELexiconTokenType type;
@@ -20,7 +21,7 @@ struct MLexiconToken
 
 	bool operator== (MLexiconToken other)
 	{
-		return (data == other.data && type == other.type);
+		return GetUUID() == other.GetUUID();
 	}
 
 	bool operator!= (MLexiconToken other)

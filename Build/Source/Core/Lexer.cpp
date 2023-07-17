@@ -15,7 +15,7 @@ MVector<MLexiconToken> MLexer::GenerateTokens(MString equation)
 		const char operations[] = { '+', '-', '*', '/' };
 		auto isAnOperation = [operations](const char c) -> bool
 		{
-			for (int i = 0; i < 4; i++)
+			for (int32 i = 0; i < 4; i++)
 			{
 				if (c == operations[i])
 				{
@@ -26,7 +26,7 @@ MVector<MLexiconToken> MLexer::GenerateTokens(MString equation)
 			return false;
 		};
 
-		// Hint: if size is 1 then it may be an operation. 
+		// Hint32: if size is 1 then it may be an operation. 
 		// TODO (late) : Change the for loop to match literal expressions 
 		if (substring.size() == 1 && isAnOperation(substring.front()))
 		{

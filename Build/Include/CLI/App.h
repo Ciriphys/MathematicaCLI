@@ -8,9 +8,9 @@ class MApp
 { 
     public:
         static MApp* Get();
-        void LoadArguments(int argc, char** argv);
+        void LoadArguments(int32 argc, char** argv);
         void Run();
-        int Abort();
+        int32 Abort();
 
         ~MApp() = default;
 
@@ -24,7 +24,6 @@ class MApp
 
         void Execute();
         void TypeMode();
-        void ExtractArguments(MString arguments);
         void GenerateCommandMap();
         void DrawMenu();
 

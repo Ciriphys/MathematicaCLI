@@ -5,7 +5,7 @@
 
 namespace Mathematica
 {
-	void Assert(const char* expression, const char* file, const char* function, int line, const char* message)
+	void Assert(const char* expression, const char* file, const char* function, int32 line, const char* message)
 	{
 		printf("Assertion failed (%s) in file %s, in function %s, at line %d:\n %s", expression, file, function, line, message);
 		abort();
@@ -20,7 +20,7 @@ namespace Mathematica
 	{
 		MString path;
 		MString prjPath = MTH_PROJECT_PATH;
-		int index = file.find(prjPath) + prjPath.length();
+		uint64 index = file.find(prjPath) + prjPath.length();
 		path = file.substr(index);
 
 		return path;
@@ -39,7 +39,7 @@ namespace Mathematica
 	{
 		for (auto& c : string)
 		{
-			if ((int)c >= 65 && (int)c <= 90)
+			if ((int32)c >= 65 && (int32)c <= 90)
 			{
 				c += 32;
 			}
@@ -50,7 +50,7 @@ namespace Mathematica
 	{
 		for (auto& c : string)
 		{
-			if ((int)c >= 97 && (int)c <= 122)
+			if ((int32)c >= 97 && (int32)c <= 122)
 			{
 				c -= 32;
 			}
@@ -126,6 +126,19 @@ namespace Mathematica
 		for (auto token : tokenArray)
 		{
 			std::cout << token.GetTokenRichInformation() << (token == lastToken ? "" : ",") << endOfLine;
+		}
+		std::cout << "]" << std::endl << std::endl;
+	}
+
+	void DisplayTokenUUID(const MVector<MLexiconToken>& tokenArray, bool bInline /*= true*/)
+	{
+		char endOfLine = bInline ? ' ' : '\n';
+		auto lastToken = tokenArray.back();
+
+		std::cout << "[" << endOfLine;
+		for (auto token : tokenArray)
+		{
+			std::cout << token.GetUUID() << (token == lastToken ? "" : ",") << endOfLine;
 		}
 		std::cout << "]" << std::endl << std::endl;
 	}
