@@ -1,6 +1,6 @@
 #include "mthpch.h"
 
-#include "Core/Token.h"
+#include "Core/LexiconToken.h"
 #include "Utility/Utils.h"
 
 namespace Mathematica
@@ -143,4 +143,23 @@ namespace Mathematica
 		std::cout << "]" << std::endl << std::endl;
 	}
 
+	int32 Max(int32 a, int32 b)
+	{
+		return a > b ? a : b;
+	}
+
+	int32 Min(int32 a, int32 b)
+	{
+		return a < b ? a : b;
+	}
+
+	template<typename T>
+	void Swap(T& a, T& b)
+	{
+		T temp = a;
+		b = a;
+		a = temp;
+
+		return;
+	}
 }

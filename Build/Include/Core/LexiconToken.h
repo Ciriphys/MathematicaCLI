@@ -11,21 +11,11 @@ enum class ELexiconTokenType : int32
 	Unknown
 };
 
-struct MLexiconToken : public MIdentifiable
+struct MLexiconToken : public IIdentifiable
 {
 	MString data;
 	ELexiconTokenType type;
 
 	MLexiconToken(MString __data, ELexiconTokenType __type);
 	MString GetTokenRichInformation();
-
-	bool operator== (MLexiconToken other)
-	{
-		return GetUUID() == other.GetUUID();
-	}
-
-	bool operator!= (MLexiconToken other)
-	{
-		return !(*this == other);
-	}
 };

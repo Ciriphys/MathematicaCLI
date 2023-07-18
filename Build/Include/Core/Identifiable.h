@@ -2,11 +2,14 @@
 
 #include "Utility/Types.h"
 
-class MIdentifiable
+class IIdentifiable
 {
 public:
-	MIdentifiable();
+	IIdentifiable();
 	MString GetUUID() const { return mId; }
+
+	bool operator==(IIdentifiable other);
+	bool operator!=(IIdentifiable other);
 
 protected:
 	MString mId;

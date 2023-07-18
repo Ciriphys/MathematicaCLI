@@ -17,7 +17,7 @@ def WrapperRemoveTree(path):
     except FileNotFoundError:
         print(f"No directory named {path} was found!")
     except PermissionError:
-        print(f"{path} could not be deleted cause it is used by a process. \nTerminate it and relaunch the script to remove {path}.")
+        print(f"{path} could not be deleted because it is used by a process. \nTerminate it and relaunch the script to remove {path}.")
     return
 
 def DarwinCleanMakefile():
@@ -67,6 +67,7 @@ if __name__ == "__main__":
         print("Unidentified system. Halting.")
         exit(1)
 
+    RemoveFile("todo.txt")
     WrapperRemoveTree("Binaries/")
     print("Nothing left to clean. Halting")
     exit(0)

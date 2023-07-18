@@ -3,12 +3,12 @@
 #include "Core/Identifiable.h"
 #include "Utility/Random.h"
 
-MIdentifiable::MIdentifiable()
+IIdentifiable::IIdentifiable()
 {
 	mId = GenerateUUID();
 }
 
-MString MIdentifiable::GenerateUUID()
+MString IIdentifiable::GenerateUUID()
 {
 	uint32 first     = MRandom::UnsignedInt(0, 0xffffffff);		
 	uint32 second    = MRandom::UnsignedInt(0, 0xffff);			
@@ -25,4 +25,14 @@ MString MIdentifiable::GenerateUUID()
 	UUID << std::hex << fifth << sixth;
 
 	return UUID.str();
+}
+
+bool IIdentifiable::operator==(IIdentifiable other)
+{
+	return (mId == other.GetUUID());
+}
+
+bool IIdentifiable::operator!=(IIdentifiable other)
+{
+	return !(*this == other);
 }

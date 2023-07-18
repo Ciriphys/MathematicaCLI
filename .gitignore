@@ -521,3 +521,6 @@ xcuserdata/
 # ===== Makefile =====
 Makefile
 **/Makefile
+
+# ===== Other =====
+*.txt

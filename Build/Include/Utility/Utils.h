@@ -45,6 +45,12 @@ namespace Mathematica
 
 	// === Miscellaneous ===
 	void ClearScreen();
+	int32 Max(int32 a, int32 b);
+	int32 Min(int32 a, int32 b);
+	// TODO : add implementations for MNumber as well.
+
+	template<typename T>
+	void Swap(T& a, T& b);
 
 	// === String manipulation ===
 	// * The following functions are not locale-safe.

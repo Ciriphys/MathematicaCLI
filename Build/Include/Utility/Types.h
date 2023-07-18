@@ -9,6 +9,7 @@ using MString = std::string;
 using MStringStream = std::stringstream;
 using MMersenneTwister = std::mt19937;
 using MRandomDevice = std::random_device;
+using MAny = std::any;
 
 // Primitive types
 using uint64 = unsigned long long int;
