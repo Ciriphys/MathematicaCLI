@@ -11,7 +11,7 @@ namespace Mathematica
     {
         MNumber Add(const MNumber& a, const MNumber& b)
         {
-            int32 commonDenominator = Integers::LeastCommonMultiple(a.denominator, b.denominator);
+            int32 commonDenominator = Integer::LeastCommonMultiple(a.denominator, b.denominator);
             int32 numeratorA = a.numerator * commonDenominator / a.denominator;
             int32 numeratorB = b.numerator * commonDenominator / b.denominator;
 
@@ -21,7 +21,7 @@ namespace Mathematica
 
         MNumber Subtract(const MNumber& a, const MNumber& b)
         {
-            int32 commonDenominator = Integers::LeastCommonMultiple(a.denominator, b.denominator);
+            int32 commonDenominator = Integer::LeastCommonMultiple(a.denominator, b.denominator);
             int32 numeratorA = a.numerator * commonDenominator / a.denominator;
             int32 numeratorB = b.numerator * commonDenominator / b.denominator;
 
@@ -50,8 +50,8 @@ namespace Mathematica
 
         MNumber Mod(const MNumber& a, const MNumber& b)
         {
-            // TODO : Add Number Types.
-            // MTH_ASSERT(a.type != ENumberType::Integer || b.type != ENumberType::Integer, "Both numbers must be integers to perform Mod!");
+            // TODO : Implement Mod function.
+            MTH_ASSERT(a.type != ENumberType::Integer || b.type != ENumberType::Integer, "Both numbers must be integers to perform Mod!");
             MTH_ASSERT(false, "Functionality not yet implemented!");
 
             return {};

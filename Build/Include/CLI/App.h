@@ -16,7 +16,7 @@ class MApp
 
         void Alert(MString alert);
 
-        MLexer GetLexer() const { return mLexer; }
+        MRef<MLexer> GetLexer() const { return mLexer; }
         MHashMap<MString, MVector<MString>> GetCommands() const { return mCommands; }
 
     private:
@@ -33,7 +33,7 @@ class MApp
         MVector<MString> mArguments;
         MHashMap<MString, MVector<MString>> mCommands;
 
-        MLexer mLexer;
+        MRef<MLexer> mLexer;
 
         static MApp* sInstance;
 };

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "mthpch.h"
+
 // Data structures
 template<typename T>
 using MVector = std::vector<T>;
@@ -21,4 +23,4 @@ using int32  = int;
 template<typename T>
 using MRef = std::shared_ptr<T>;
 template<typename T>
-using MScoped = std::unique_ptr<T>;
+using MScope = std::unique_ptr<T>;

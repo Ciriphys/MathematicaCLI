@@ -17,6 +17,8 @@ MString IIdentifiable::GenerateUUID()
 	uint32 fifth	 = MRandom::UnsignedInt(0, 0xffffffff);
 	uint32 sixth	 = MRandom::UnsignedInt(0, 0xffff);
 
+	// TODO : Fix length of UUID.
+
 	MStringStream UUID;
 	UUID << std::hex << first   << "-";
 	UUID << std::hex << second  << "-";

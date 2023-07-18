@@ -26,8 +26,8 @@ MVector<MLexiconToken> MLexer::GenerateTokens(MString equation)
 			return false;
 		};
 
-		// Hint32: if size is 1 then it may be an operation. 
-		// TODO (late) : Change the for loop to match literal expressions 
+		// Hint: if size is 1 then it may be an operation. 
+		// TODO (late) : Change the for loop to match literal expressions.
 		if (substring.size() == 1 && isAnOperation(substring.front()))
 		{
 			tokenArray.emplace_back(substring, ELexiconTokenType::BinaryFunction);

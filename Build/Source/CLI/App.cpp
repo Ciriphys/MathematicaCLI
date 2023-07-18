@@ -1,9 +1,5 @@
 #include "mthpch.h"
 
-#ifdef MTH_WIN
-	#include <conio.h>
-#endif
-
 #include "App.h"
 
 #include "Utility/Utils.h"
@@ -115,7 +111,7 @@ MApp::MApp()
 {
     sInstance = this;
 
-	mLexer = MLexer();
+	mLexer = Mathematica::MakeRef<MLexer>();
 	MRandom::Init();
 }
 
@@ -173,7 +169,7 @@ void Mathematica::AppCommand::Solve()
 	MString commandKey = commands.find("--solve") == commands.end() ? "-s" : "--solve";
 	for (auto equation : commands[commandKey])
 	{
-		MVector<MLexiconToken> tokens = lexer.GenerateTokens(equation); 
+		MVector<MLexiconToken> tokens = lexer->GenerateTokens(equation); 
 		MTH_DEBUG_INFO(Mathematica::DisplayTokenArray(tokens));
 		MTH_DEBUG_INFO(Mathematica::DisplayTokenUUID(tokens, false));
 	}

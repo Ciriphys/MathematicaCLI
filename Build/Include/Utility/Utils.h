@@ -21,23 +21,24 @@
 #define MTH_NO_MESSAGE "No message provided."
 #define MTH_UNUSED(x) (void)x
 
-template<typename T, typename ... Args>
-constexpr MScoped<T> CreateScope(Args&& ... args)
-{
-	return std::make_unique<T>(std::forward<Args>(args)...);
-}
-
-template <typename T, typename ... Args>
-constexpr MRef<T> MakeRef(Args&&... args)
-{
-	return std::make_shared<T>(std::forward<Args>(args)...);
-}
-
 enum class ELexiconTokenType;
 struct MLexiconToken;
 
 namespace Mathematica
 {
+	// Smart pointers
+	template<typename T, typename ... Args>
+	constexpr MScope<T> MakeScope(Args&& ... args)
+	{
+		return std::make_unique<T>(std::forward<Args>(args)...);
+	}
+
+	template <typename T, typename ... Args>
+	constexpr MRef<T> MakeRef(Args&&... args)
+	{
+		return std::make_shared<T>(std::forward<Args>(args)...);
+	}
+
 	// === Debug and files ===
 	void Assert(const char* expression, const char* file, const char* function, int32 line, const char* message);
 	void DisplayFunctionInfo(const char* functionName, const char* callerFunction);
@@ -47,7 +48,7 @@ namespace Mathematica
 	void ClearScreen();
 	int32 Max(int32 a, int32 b);
 	int32 Min(int32 a, int32 b);
-	// TODO : add implementations for MNumber as well.
+	// TODO : Add implementations for MNumber as well.
 
 	template<typename T>
 	void Swap(T& a, T& b);

@@ -15,3 +15,7 @@
 #include <memory>
 #include <utility>
 
+// Console input for Windows
+#ifdef MTH_WIN
+	#include <conio.h>
+#endif

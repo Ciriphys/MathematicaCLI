@@ -3,6 +3,7 @@
 import pathlib
 
 todos = {}
+lateTodos = {}
 
 def SearchFile(file, name):
     global todos
@@ -12,12 +13,18 @@ def SearchFile(file, name):
                 toFind = "// TODO : "
                 todo = line[line.find(toFind) + len(toFind):]
                 todos[name] = todo
+           if "// TODO (late) : " in line:
+                toFind = "// TODO (late) : "
+                todo = line[line.find(toFind) + len(toFind):]
+                lateTodos[name] = todo
 
 def WriteTodo():
     global todos
     with open("todo.txt", "w+") as f:
         f.write("=== TODOs (file : todo) ===\n\n")
         for file, todo in todos.items():
+            f.write(f"{file} : {todo}")
+        for file, todo in lateTodos.items():
             f.write(f"{file} : {todo}")
 
 if __name__ == "__main__":
