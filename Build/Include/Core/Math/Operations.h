@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core/Number.h"
+struct MNumber;
 
 namespace Mathematica 
 {

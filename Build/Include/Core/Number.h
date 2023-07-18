@@ -34,5 +34,6 @@ struct MNumber : public IIdentifiable
 	void operator*=(MNumber other);
 	void operator/=(MNumber other);
 
+    double RawNumerical();
     MNumber LowestTerms();
 };

@@ -20,6 +20,11 @@ MNumber::MNumber(int32 num, int32 den) : numerator(num), denominator(den), type(
     }
 }
 
+double MNumber::RawNumerical()
+{
+    return (double)numerator / (double)denominator;
+}
+
 MNumber MNumber::LowestTerms()
 {
     int32 gcd = Mathematica::Integer::GreatestCommonDivisor(numerator, denominator);

@@ -21,11 +21,11 @@ def SearchFile(file, name):
 def WriteTodo():
     global todos
     with open("todo.txt", "w+") as f:
-        f.write("=== TODOs (file : todo) ===\n\n")
+        f.write(f"=== TODOs ({len(todos)} + {len(lateTodos)}) ===\n\n")
         for file, todo in todos.items():
             f.write(f"{file} : {todo}")
         for file, todo in lateTodos.items():
-            f.write(f"{file} : {todo}")
+            f.write(f"{file} : * {todo}")
 
 if __name__ == "__main__":
     for path in pathlib.Path('Build').rglob("*.cpp"):

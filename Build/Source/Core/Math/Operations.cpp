@@ -2,12 +2,14 @@
 
 #include "Utility/Types.h"
 
+#include "Core/Number.h"
+
 #include "Core/Math/Operations.h"
 #include "Core/Math/Integer.h"
 
 namespace Mathematica
 {
-    namespace Operations
+    namespace Operation
     {
         MNumber Add(const MNumber& a, const MNumber& b)
         {

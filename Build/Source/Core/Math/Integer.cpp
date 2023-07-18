@@ -1,6 +1,7 @@
 #include "mthpch.h"
 
 #include "Utility/Utils.h"
+
 #include "Core/Math/Integer.h"
 
 namespace Mathematica
@@ -30,5 +31,66 @@ namespace Mathematica
             
             return lower;
         }
-    }
+
+		bool IsPrime(int32 n)
+		{
+            if (n < 2) return false;
+
+            for (int32 i = 0; i * i < n; i++)
+            {
+                if (n % i == 0) return false;
+            }
+
+            return true;
+		}
+
+        MHashMap<int32, int32> Factorize(int32 n)
+        {
+            auto soe = SoE(sqrt(n));
+            MHashMap<int32, int32> result;
+
+            for (int32 i = 0; i < soe.size(); i++)
+            {
+                int32 currentPrime = soe[i];
+
+                if (n % currentPrime == 0)
+                {
+                    if (result.find(currentPrime) != result.end())
+                    {
+                        result[currentPrime]++;
+                    }
+                    else
+                    {
+                        result[currentPrime] = 1;
+                    }
+
+                    n /= currentPrime;
+                    i--;
+                }
+            }
+
+            if (result.empty())
+            {
+                result[n] = 1;
+            }
+
+            return result;
+        }
+
+        MVector<int32> SoE(int32 max)
+        {
+            // TODO : Implement a proper SoE and speed up the algorithm.
+            MVector<int32> result;
+
+            for (int32 i = 2; i <= max; i++)
+            {
+                if (IsPrime(i))
+                {
+                    result.push_back(i);
+                }
+            }
+
+            return result;
+        }
+	}
 }

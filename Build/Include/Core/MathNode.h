@@ -14,10 +14,10 @@ enum class EMathTokenType : int32
 };
 
 // This struct behaves like a node of a tree.
-struct MMathToken : public IIdentifiable
+struct MMathNode : public IIdentifiable
 {
-    MRef<MMathToken> parent;
-    MVector<MMathToken> children;
+    MRef<MMathNode> parent;
+    MVector<MMathNode> children;
 
     MAny tokenData;
     EMathTokenType type;
