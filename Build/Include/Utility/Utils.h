@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Types.h"
-#include <utility>
 
 #ifdef MTH_DEBUG 
 #define MTH_ASSERT(expression, message) if(!(expression)) Mathematica::Assert(#expression, Mathematica::RelativeToBuildPath(__FILE__).c_str(), __FUNCTION__, __LINE__, message)
@@ -17,12 +16,15 @@
 #define MTH_PROJECT_PATH "MathematicaCLI/"
 #endif
 
-#define MTH_VERSION "Version 0.0.3a"
+#define MTH_VERSION "Version 0.0.4a"
 #define MTH_NO_MESSAGE "No message provided."
 #define MTH_UNUSED(x) (void)x
 
 enum class ELexiconTokenType;
+enum class EMathNodeType;
+
 struct MLexiconToken;
+struct MMathNode;
 
 namespace Mathematica
 {
@@ -46,12 +48,14 @@ namespace Mathematica
 
 	// === Miscellaneous ===
 	void ClearScreen();
+	// TODO : Add implementations for MNumber as well.
 	int32 Max(int32 a, int32 b);
 	int32 Min(int32 a, int32 b);
-	// TODO : Add implementations for MNumber as well.
-
 	template<typename T>
 	void Swap(T& a, T& b);
+
+	// === Functions ===
+	FBinaryFunction GetBinaryFunctionFromRawData(const std::string& data);
 
 	// === String manipulation ===
 	// * The following functions are not locale-safe.
@@ -65,4 +69,8 @@ namespace Mathematica
 	void DisplayTokenArray(const MVector<MLexiconToken>& tokenArray, bool bInline = true);
 	void DisplayTokenUUID(const MVector<MLexiconToken>& tokenArray, bool bInline = true);
 	MString Stringify(ELexiconTokenType type);
+
+	// === Tree ===
+	void DisplayParsedTree(const MRef<MMathNode>& node);
+	MString Stringify(EMathNodeType type);
 };

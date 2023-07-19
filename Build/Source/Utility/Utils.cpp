@@ -1,6 +1,10 @@
 #include "mthpch.h"
 
+#include "Core/Math/Operations.h"
+
 #include "Core/LexiconToken.h"
+#include "Core/MathNode.h"
+
 #include "Utility/Utils.h"
 
 namespace Mathematica
@@ -68,6 +72,36 @@ namespace Mathematica
 		default:
 			return "Unknown";
 		}
+	}
+
+	MString Stringify(EMathNodeType type)
+	{
+		switch (type)
+		{
+		case EMathNodeType::Number:
+			return "Number";
+		case EMathNodeType::BinaryFunction:
+			return "BinaryFunction";
+		default:
+			return "Unknown";
+		}
+	}
+
+	void DisplayParsedTree(const MRef<MMathNode>& node)
+	{
+		if (!node)
+		{
+			std::cout << "None" << std::endl;
+			return;
+		}
+
+		for (auto child : node->children)
+		{
+			DisplayParsedTree(child);
+		}
+
+		std::cout << "Type: " << Stringify(node->type) << ", parent: " << (node->parent ? node->parent->GetUUID() : "None") << std::endl;
+		return;
 	}
 
 	void RemoveQuotes(MString& string)
@@ -151,6 +185,24 @@ namespace Mathematica
 	int32 Min(int32 a, int32 b)
 	{
 		return a < b ? a : b;
+	}
+
+	// TODO : Fix return type
+	FBinaryFunction GetBinaryFunctionFromRawData(const std::string& data)
+	{
+		if (data.size() == 1)
+		{
+			switch (data.front())
+			{
+			case '+': return &Mathematica::Operation::Add;
+			case '-': return &Mathematica::Operation::Subtract;
+			case '*': return &Mathematica::Operation::Multiply;
+			case '/': return &Mathematica::Operation::Divide;
+			}
+		}
+
+		MTH_ASSERT(false, "What kind of sorcery is this?!");
+		return {};
 	}
 
 	template<typename T>

@@ -3,10 +3,10 @@
 #include "Utility/Types.h"
 #include "Core/Identifiable.h"
 
-enum class EMathTokenType : int32
+enum class EMathNodeType : int32
 {
     Number, 
-    BinaryOperation,
+    BinaryFunction,
 
     Wrapper,
 
@@ -23,7 +23,7 @@ struct MMathNode : public IIdentifiable
     ChildrenType children;
 
     MAny tokenData;
-    EMathTokenType type;
+    EMathNodeType type;
 
-    MMathNode(PointerType __parent = nullptr, ChildrenType __children = {}, MAny __data = {}, EMathTokenType __type = EMathTokenType::Unknown);
+    MMathNode(PointerType __parent = nullptr, ChildrenType __children = {}, MAny __data = {}, EMathNodeType __type = EMathNodeType::Unknown);
 };

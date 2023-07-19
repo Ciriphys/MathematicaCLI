@@ -112,6 +112,8 @@ MApp::MApp()
     sInstance = this;
 
 	mLexer = Mathematica::MakeRef<MLexer>();
+	mParser = Mathematica::MakeRef<MParser>();
+
 	MRandom::Init();
 }
 
@@ -165,6 +167,7 @@ void Mathematica::AppCommand::Solve()
 	auto app = MApp::Get();
 	auto commands = app->GetCommands();
 	auto lexer = app->GetLexer();
+	auto parser = app->GetParser();
 
 	MString commandKey = commands.find("--solve") == commands.end() ? "-s" : "--solve";
 	for (auto equation : commands[commandKey])
@@ -172,6 +175,11 @@ void Mathematica::AppCommand::Solve()
 		MVector<MLexiconToken> tokens = lexer->GenerateTokens(equation); 
 		MTH_DEBUG_INFO(Mathematica::DisplayTokenArray(tokens));
 		MTH_DEBUG_INFO(Mathematica::DisplayTokenUUID(tokens, false));
+
+		parser->InitParser(tokens);
+		auto root = parser->GenerateTree();
+
+		Mathematica::DisplayParsedTree(root);
 	}
 
 	WaitKey();

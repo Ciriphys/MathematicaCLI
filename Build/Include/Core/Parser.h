@@ -8,7 +8,10 @@
 class MParser
 {
 public:
-    MParser(MVector<MLexiconToken> tokens);
+    MParser();
+
+    void InitParser(const MVector<MLexiconToken>& tokens);
+
     MRef<MMathNode> GenerateTree();
 
 private: 

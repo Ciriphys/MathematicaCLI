@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Core/Parser.h"
 #include "Core/Lexer.h"
 
 #include "Utility/Types.h"
@@ -17,6 +18,8 @@ class MApp
         void Alert(MString alert);
 
         MRef<MLexer> GetLexer() const { return mLexer; }
+        MRef<MParser> GetParser() const { return mParser; }
+
         MHashMap<MString, MVector<MString>> GetCommands() const { return mCommands; }
 
     private:
@@ -34,6 +37,7 @@ class MApp
         MHashMap<MString, MVector<MString>> mCommands;
 
         MRef<MLexer> mLexer;
+        MRef<MParser> mParser;
 
         static MApp* sInstance;
 };

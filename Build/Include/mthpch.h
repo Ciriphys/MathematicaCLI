@@ -1,6 +1,7 @@
 // Utility
 #include <iostream>
 #include <algorithm>
+#include <functional>
 #include <random>
 #include <iomanip>
 

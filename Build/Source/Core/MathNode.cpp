@@ -6,7 +6,7 @@ MMathNode::MMathNode(
     PointerType __parent,
     ChildrenType __children,
     MAny __data,
-    EMathTokenType __type
+    EMathNodeType __type
 ) :
 parent(__parent),
 children(__children),
