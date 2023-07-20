@@ -65,7 +65,7 @@ namespace Mathematica
 
 	// === Functions ===
 	FBinaryFunction GetBinaryFunctionFromRawData(const std::string& data);
-	MString Stringify(void* address);
+	MString Stringify(FBinaryFunction address);
 
 	// === String manipulation ===
 	// * The following functions are not locale-safe.

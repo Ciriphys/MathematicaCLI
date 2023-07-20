@@ -84,6 +84,7 @@ void MParser::GenerateWrappedNodes(const MVector<int32>& indexes)
 {
 	for (auto index : indexes)
 	{
+		// --solve "1+1*1-1" 
 		MRef<MMathNode> wrappedNode = mNodes[index];
 
 		// Check if previous and next node are marked to be ignored and get the right indexes for the left and right nodes.
@@ -163,4 +164,6 @@ MRef<MMathNode> MParser::GenerateTree()
 			return mTree;
 		}
 	}
+
+	return nullptr;
 }

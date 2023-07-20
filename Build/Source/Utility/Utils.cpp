@@ -176,6 +176,8 @@ namespace Mathematica
 
 	void DisplayTokenArray(const MVector<MLexiconToken>& tokenArray, bool bInline)
 	{
+		if (tokenArray.empty()) return;
+
 		char endOfLine = bInline ? ' ' : '\n';
 		auto lastToken = tokenArray.back();
 
@@ -189,6 +191,8 @@ namespace Mathematica
 
 	void DisplayTokenUUID(const MVector<MLexiconToken>& tokenArray, bool bInline /*= true*/)
 	{
+		if (tokenArray.empty()) return;
+
 		char endOfLine = bInline ? ' ' : '\n';
 		auto lastToken = tokenArray.back();
 
@@ -228,12 +232,12 @@ namespace Mathematica
 		return {};
 	}
 
-	MString Stringify(void* address)
+	MString Stringify(FBinaryFunction address)
 	{
-		void* addAddress	   = MTH_ADDRESS_OF(Mathematica::Operation::Add);
-		void* subtractAddress  = MTH_ADDRESS_OF(Mathematica::Operation::Subtract);
-		void* multiplyAddress  = MTH_ADDRESS_OF(Mathematica::Operation::Multiply);
-		void* divideAddress    = MTH_ADDRESS_OF(Mathematica::Operation::Divide);
+		FBinaryFunction addAddress		= &Mathematica::Operation::Add;
+		FBinaryFunction subtractAddress = &Mathematica::Operation::Subtract;
+		FBinaryFunction multiplyAddress = &Mathematica::Operation::Multiply;
+		FBinaryFunction divideAddress	= &Mathematica::Operation::Divide;
 
 		if		(address == addAddress)			return "Add";
 		else if (address == subtractAddress)	return "Subtract";

@@ -17,6 +17,8 @@ class MApp
 
         void Alert(MString alert);
 
+        void RefreshAPI();
+
         MRef<MLexer> GetLexer() const { return mLexer; }
         MRef<MParser> GetParser() const { return mParser; }
 

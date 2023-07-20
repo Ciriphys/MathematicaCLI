@@ -107,12 +107,16 @@ void MApp::Alert(MString alert)
 	Mathematica::AppCommand::DisplayAlert(alert);
 }
 
+void MApp::RefreshAPI()
+{
+	mLexer = Mathematica::MakeRef<MLexer>();
+	mParser = Mathematica::MakeRef<MParser>();
+}
+
 MApp::MApp()
 {
     sInstance = this;
-
-	mLexer = Mathematica::MakeRef<MLexer>();
-	mParser = Mathematica::MakeRef<MParser>();
+	RefreshAPI();
 
 	MRandom::Init();
 }
@@ -183,6 +187,7 @@ void Mathematica::AppCommand::Solve()
 		Mathematica::DisplayParsedTree(root);
 	}
 
+	app->RefreshAPI();
 	WaitKey();
 
 	return;
