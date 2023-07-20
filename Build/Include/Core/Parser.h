@@ -16,8 +16,13 @@ public:
     MRef<MMathNode> GenerateTree();
 
 private: 
-    MVector<MLexiconToken> mRawTokens;
-    MHashMap<EPriority, MVector<int32>> mOperationIndexes;
+    void GenerateWrappedNodes(const MVector<int32>& indexes);
+    void GenerateNodes(const MVector<MLexiconToken>& tokens);
 
-    MRef<MMathNode> tree;
+    [[deprecated]] MRef<MMathNode> deprecated_GenerateTree();
+
+    MHashMap<EPriority, MVector<int32>> mOperationIndexes;
+    MVector<MRef<MMathNode>> mNodes;
+
+    MRef<MMathNode> mTree;
 };

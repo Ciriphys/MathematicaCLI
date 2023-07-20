@@ -4,6 +4,7 @@
 
 #include "Core/LexiconToken.h"
 #include "Core/MathNode.h"
+#include "Core/Number.h"
 
 #include "Utility/Utils.h"
 
@@ -82,9 +83,19 @@ namespace Mathematica
 			return "Number";
 		case EMathNodeType::BinaryFunction:
 			return "BinaryFunction";
+		case EMathNodeType::Wrapper:
+			return "Wrapper";
 		default:
 			return "Unknown";
 		}
+	}
+
+	MString Stringify(MNumber number)
+	{
+		MStringStream stringStream;
+		stringStream << number.numerator << "/" << number.denominator;
+
+		return stringStream.str();
 	}
 
 	void DisplayParsedTree(const MRef<MMathNode>& node)
@@ -100,7 +111,19 @@ namespace Mathematica
 			DisplayParsedTree(child);
 		}
 
-		std::cout << "UUID: " << node->GetUUID() << " Type: " << Stringify(node->type) << ", parent: " << (node->parent ? node->parent->GetUUID() : "None") << std::endl;
+		MString data = "";
+
+		try
+		{
+			data = Stringify(std::any_cast<MNumber>(node->tokenData));
+		}
+		catch (...)
+		{
+			auto function = std::any_cast<FBinaryFunction>(node->tokenData);
+			data = Stringify(function);
+		}
+
+		std::cout << "Data : " << data << ", UUID: " << node->GetUUID() << " Type: " << Stringify(node->type) << ", parent: " << (node->parent ? node->parent->GetUUID() : "None") << std::endl;
 		return;
 	}
 
@@ -200,6 +223,22 @@ namespace Mathematica
 			case '/': return &Mathematica::Operation::Divide;
 			}
 		}
+
+		MTH_ASSERT(false, "What kind of sorcery is this?!");
+		return {};
+	}
+
+	MString Stringify(void* address)
+	{
+		void* addAddress	   = MTH_ADDRESS_OF(Mathematica::Operation::Add);
+		void* subtractAddress  = MTH_ADDRESS_OF(Mathematica::Operation::Subtract);
+		void* multiplyAddress  = MTH_ADDRESS_OF(Mathematica::Operation::Multiply);
+		void* divideAddress    = MTH_ADDRESS_OF(Mathematica::Operation::Divide);
+
+		if		(address == addAddress)			return "Add";
+		else if (address == subtractAddress)	return "Subtract";
+		else if (address == multiplyAddress)	return "Multiply";
+		else if (address == divideAddress)		return "Divide";
 
 		MTH_ASSERT(false, "What kind of sorcery is this?!");
 		return {};

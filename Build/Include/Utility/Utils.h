@@ -19,6 +19,8 @@
 #define MTH_VERSION "Version 0.0.4a"
 #define MTH_NO_MESSAGE "No message provided."
 #define MTH_UNUSED(x) (void)x
+#define MTH_ADDRESS_OF(x) (void*)&x
+#define MTH_UINT_ADDRESS_OF(x) *(uint32*)MTH_ADDRESS_OF(x)
 
 enum class ELexiconTokenType;
 enum class EMathNodeType;
@@ -48,7 +50,6 @@ namespace Mathematica
 		return std::make_pair<F, S>(std::forward<F>(first), std::forward<S>(second));
 	}
 
-
 	// === Debug and files ===
 	void Assert(const char* expression, const char* file, const char* function, int32 line, const char* message);
 	void DisplayFunctionInfo(const char* functionName, const char* callerFunction);
@@ -64,6 +65,7 @@ namespace Mathematica
 
 	// === Functions ===
 	FBinaryFunction GetBinaryFunctionFromRawData(const std::string& data);
+	MString Stringify(void* address);
 
 	// === String manipulation ===
 	// * The following functions are not locale-safe.
@@ -81,4 +83,5 @@ namespace Mathematica
 	// === Tree ===
 	void DisplayParsedTree(const MRef<MMathNode>& node);
 	MString Stringify(EMathNodeType type);
+	MString Stringify(MNumber number);
 };

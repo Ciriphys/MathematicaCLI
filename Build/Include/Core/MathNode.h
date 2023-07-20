@@ -11,7 +11,7 @@ enum class EMathNodeType : int32
 
     Wrapper,
 
-    Unknown
+    None
 };
 
 // This struct behaves like a node of a tree.
@@ -26,5 +26,5 @@ struct MMathNode : public IIdentifiable
     MAny tokenData;
     EMathNodeType type;
 
-    MMathNode(PointerType __parent = nullptr, ChildrenType __children = {}, MAny __data = {}, EMathNodeType __type = EMathNodeType::Unknown);
+    MMathNode(PointerType __parent = nullptr, ChildrenType __children = {}, MAny __data = {}, EMathNodeType __type = EMathNodeType::None);
 };

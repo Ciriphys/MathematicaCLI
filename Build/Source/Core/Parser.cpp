@@ -7,21 +7,22 @@
 
 MParser::MParser()
 {
-	mRawTokens = {};
+	mNodes = {};
 }
 
 void MParser::InitParser(const MVector<MLexiconToken>& tokens, const MHashMap<EPriority, MVector<int32>>& opIndexes)
 {
-	mRawTokens = tokens;
+	GenerateNodes(tokens);
 	mOperationIndexes = opIndexes;
 }
 
-// TODO : Implement Wrapper nodes.
-MRef<MMathNode> MParser::GenerateTree()
+// NOTE : This function is deprecated, however it will be left here for a couple commit, until I decide what to do of it.
+MRef<MMathNode> MParser::deprecated_GenerateTree()
 {
-	if (mRawTokens.size() == 0) return nullptr;
+	if (mNodes.size() == 0) return nullptr;
 
     MRef<MMathNode> root = nullptr;
+	MVector<MLexiconToken> mRawTokens = {};
 
     for(auto token : mRawTokens)
     {
@@ -75,6 +76,91 @@ MRef<MMathNode> MParser::GenerateTree()
 		MTH_ASSERT(root->children.size() == 2, "Parser error: Binary function was not filled with both arguments.");
 	}
 
-	tree = root;
+	mTree = root;
     return root;
+}
+
+void MParser::GenerateWrappedNodes(const MVector<int32>& indexes)
+{
+	for (auto index : indexes)
+	{
+		MRef<MMathNode> wrappedNode = mNodes[index];
+
+		// Check if previous and next node are marked to be ignored and get the right indexes for the left and right nodes.
+		int32 leftCounter = 1;
+		int32 rightCounter = 1;
+		int32 copyIndex = index;
+		while (mNodes[--copyIndex]->type == EMathNodeType::None) leftCounter++;
+		copyIndex = index;
+		while (mNodes[++copyIndex]->type == EMathNodeType::None) rightCounter++;
+
+		// Instantiate a reference for these nodes
+		MRef<MMathNode> leftNode = mNodes[index - leftCounter];
+		MRef<MMathNode> rightNode = mNodes[index + rightCounter];
+
+		// Unwrap nodes and make links between parents and children.
+		leftNode = (leftNode->type == EMathNodeType::Wrapper) ? leftNode->children.back() : leftNode;
+		rightNode = (rightNode->type == EMathNodeType::Wrapper) ? rightNode->children.back() : rightNode;
+
+		wrappedNode->children.push_back(leftNode);
+		wrappedNode->children.push_back(rightNode);
+		leftNode->parent = wrappedNode;
+		rightNode->parent = wrappedNode;
+
+		// Create a new wrapper node and append the wrapped tree. 
+		// Then create new left and right nodes, and mark them to be ignored for the next calls.
+		mNodes[index] = Mathematica::MakeRef<MMathNode>();
+		mNodes[index]->type = EMathNodeType::Wrapper;
+		mNodes[index]->children.push_back(wrappedNode);
+		mNodes[index - leftCounter] = Mathematica::MakeRef<MMathNode>();
+		mNodes[index + rightCounter] = Mathematica::MakeRef<MMathNode>();
+		mNodes[index - leftCounter]->type = EMathNodeType::None;
+		mNodes[index + rightCounter]->type = EMathNodeType::None;
+	}
+}
+
+void MParser::GenerateNodes(const MVector<MLexiconToken>& tokens)
+{
+	for (auto token : tokens)
+	{
+		MRef<MMathNode> currentNode = Mathematica::MakeRef<MMathNode>();
+
+		// Create node
+		switch (token.type)
+		{
+		case ELexiconTokenType::Number:
+			currentNode->tokenData = MNumber(token.data);
+			currentNode->type = EMathNodeType::Number;
+			break;
+		case ELexiconTokenType::BinaryFunction:
+			currentNode->tokenData = Mathematica::GetBinaryFunctionFromRawData(token.data);
+			currentNode->type = EMathNodeType::BinaryFunction;
+			break;
+		default:
+			MTH_ASSERT(false, "Parser error: Unkown token detected!");
+			break;
+		}
+
+		mNodes.push_back(currentNode);
+	}
+}
+
+MRef<MMathNode> MParser::GenerateTree()
+{
+	auto highIndexes = mOperationIndexes[EPriority::High];
+	auto normalIndexes = mOperationIndexes[EPriority::Normal];
+	auto lowIndexes = mOperationIndexes[EPriority::Low];
+
+	GenerateWrappedNodes(highIndexes);
+	GenerateWrappedNodes(normalIndexes);
+	GenerateWrappedNodes(lowIndexes);
+
+	for (auto node : mNodes)
+	{
+		if (node->type == EMathNodeType::Wrapper)
+		{
+			mTree = node->children.back();
+			return mTree;
+		}
+	}
 }
