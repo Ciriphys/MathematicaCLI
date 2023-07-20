@@ -84,7 +84,6 @@ void MParser::GenerateWrappedNodes(const MVector<int32>& indexes)
 {
 	for (auto index : indexes)
 	{
-		// --solve "1+1*1-1" 
 		MRef<MMathNode> wrappedNode = mNodes[index];
 
 		// Check if previous and next node are marked to be ignored and get the right indexes for the left and right nodes.
@@ -99,7 +98,13 @@ void MParser::GenerateWrappedNodes(const MVector<int32>& indexes)
 		MRef<MMathNode> leftNode = mNodes[index - leftCounter];
 		MRef<MMathNode> rightNode = mNodes[index + rightCounter];
 
-		// Unwrap nodes and make links between parents and children.
+		// Make sure that the user sent a proper input.
+		// Then, unwrap nodes and make links between parents and children.
+		MTH_ASSERT(leftNode->type == EMathNodeType::Number || leftNode->type == EMathNodeType::Wrapper,
+			"Parser error: tree generation cannot be completed, [leftNode] was not idoneous.");
+		MTH_ASSERT(rightNode->type == EMathNodeType::Number || rightNode->type == EMathNodeType::Wrapper,
+			"Parser error: tree generation cannot be completed, [rightNode] was not idoneous.");
+
 		leftNode = (leftNode->type == EMathNodeType::Wrapper) ? leftNode->children.back() : leftNode;
 		rightNode = (rightNode->type == EMathNodeType::Wrapper) ? rightNode->children.back() : rightNode;
 
