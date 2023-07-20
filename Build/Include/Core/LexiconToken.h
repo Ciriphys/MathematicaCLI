@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Core/Identifiable.h"
+
 #include "Utility/Utils.h"
 
 enum class ELexiconTokenType : int32

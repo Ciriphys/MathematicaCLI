@@ -1,36 +1,60 @@
 #include "mthpch.h"
 
 #include "Core/Lexer.h"
+
 #include "Utility/Utils.h"
 
-MVector<MLexiconToken> MLexer::GenerateTokens(MString equation)
+MLexer::MLexer() : mTokens({}), mOperationIndexes({}) {}
+
+void MLexer::GenerateTokens(MString equation)
 {
-	MVector<MLexiconToken> tokenArray = MVector<MLexiconToken>();
+	mTokens = {};
+	mOperationIndexes = {};
 
 	Mathematica::RemoveQuotes(equation);
 	MVector<MString> separetedEquation = Mathematica::SeparateString(equation);
 
+	const char operations[] = { '+', '-', '*', '/' };
+	auto isAnOperation = [operations](const char c) -> bool
+	{
+		for (int32 i = 0; i < 4; i++)
+		{
+			if (c == operations[i])
+			{
+				return true;
+			}
+		}
+
+		return false;
+	};
+
+	// TODO : Wrap the contents of "-/+ creation" into parentheses, to prevent miscalculations with OOO.
 	for (auto substring : separetedEquation)
 	{
-		const char operations[] = { '+', '-', '*', '/' };
-		auto isAnOperation = [operations](const char c) -> bool
-		{
-			for (int32 i = 0; i < 4; i++)
-			{
-				if (c == operations[i])
-				{
-					return true;
-				}
-			}
-
-			return false;
-		};
-
 		// Hint: if size is 1 then it may be an operation. 
 		// TODO (late) : Change the for loop to match literal expressions.
 		if (substring.size() == 1 && isAnOperation(substring.front()))
 		{
-			tokenArray.emplace_back(substring, ELexiconTokenType::BinaryFunction);
+			if (mTokens.size() == 0 || mTokens.back().type == ELexiconTokenType::BinaryFunction)
+			{
+				if (substring.front() == '+' || substring.front() == '-')
+				{
+					mTokens.emplace_back("0", ELexiconTokenType::Number);
+				}
+			}
+
+			mTokens.emplace_back(substring, ELexiconTokenType::BinaryFunction);
+
+			// Add index of operation.
+			if (substring.front() == '+' || substring.front() == '-')
+			{
+				mOperationIndexes[EPriority::Low].push_back((int32)(mTokens.size() - 1));
+			}
+			else
+			{
+				mOperationIndexes[EPriority::Normal].push_back((int32)(mTokens.size() - 1));
+			}
+
 			continue;
 		}
 
@@ -43,7 +67,7 @@ MVector<MLexiconToken> MLexer::GenerateTokens(MString equation)
 			{
 				if (!bIsNumber)
 				{
-					tokenArray.emplace_back(currentSubsubstring, ELexiconTokenType::Unknown);
+					mTokens.emplace_back(currentSubsubstring, ELexiconTokenType::Unknown);
 					currentSubsubstring = "";
 					bIsNumber = true;
 				}
@@ -53,16 +77,38 @@ MVector<MLexiconToken> MLexer::GenerateTokens(MString equation)
 			{
 				if (!currentSubsubstring.empty())
 				{
-					tokenArray.emplace_back(RemoveTrailingZeros(currentSubsubstring), ELexiconTokenType::Number);
+					mTokens.emplace_back(RemoveTrailingZeros(currentSubsubstring), ELexiconTokenType::Number);
 				}
-				tokenArray.emplace_back(MString(1, currentChar), ELexiconTokenType::BinaryFunction);
+				else
+				{
+					if (mTokens.size() == 0 || mTokens.back().type == ELexiconTokenType::BinaryFunction)
+					{
+						if (currentChar == '+' || currentChar == '-')
+						{
+							mTokens.emplace_back("0", ELexiconTokenType::Number);
+						}
+					}
+				}
+
+				mTokens.emplace_back(MString(1, currentChar), ELexiconTokenType::BinaryFunction);
+
+				// Add index of operation.
+				if (currentChar == '+' || currentChar == '-')
+				{
+					mOperationIndexes[EPriority::Low].push_back((int32)(mTokens.size() - 1));
+				}
+				else
+				{
+					mOperationIndexes[EPriority::Normal].push_back((int32)(mTokens.size() - 1));
+				}
+
 				currentSubsubstring = "";
 			}
 			else
 			{
 				if (!currentSubsubstring.empty() && bIsNumber)
 				{
-					tokenArray.emplace_back(RemoveTrailingZeros(currentSubsubstring), ELexiconTokenType::Number);
+					mTokens.emplace_back(RemoveTrailingZeros(currentSubsubstring), ELexiconTokenType::Number);
 					currentSubsubstring = "";
 				}
 				currentSubsubstring += currentChar;
@@ -74,16 +120,14 @@ MVector<MLexiconToken> MLexer::GenerateTokens(MString equation)
 		{
 			if (bIsNumber)
 			{
-				tokenArray.emplace_back(RemoveTrailingZeros(currentSubsubstring), ELexiconTokenType::Number);
+				mTokens.emplace_back(RemoveTrailingZeros(currentSubsubstring), ELexiconTokenType::Number);
 			}
 			else
 			{
-				tokenArray.emplace_back(currentSubsubstring, ELexiconTokenType::Unknown);
+				mTokens.emplace_back(currentSubsubstring, ELexiconTokenType::Unknown);
 			}
 		}
 	}
-
-	return tokenArray;
 }
 
 MString MLexer::RemoveTrailingZeros(MString string)
@@ -108,3 +152,5 @@ MString MLexer::RemoveTrailingZeros(MString string)
 
 	return number.length() > 0 ? number : "0";
 }
+
+// REFACTOR : Change C-like casts into C++-like casts.

@@ -6,7 +6,7 @@
 #define MTH_ASSERT(expression, message) if(!(expression)) Mathematica::Assert(#expression, Mathematica::RelativeToBuildPath(__FILE__).c_str(), __FUNCTION__, __LINE__, message)
 #define MTH_DEBUG_INFO(function) DisplayFunctionInfo(#function, __FUNCTION__); function
 #else 
-#define MTH_ASSERT(expression, message)
+#define MTH_ASSERT(expression, message) throw message
 #define MTH_DEBUG_INFO(function)
 #endif
 
@@ -28,7 +28,7 @@ struct MMathNode;
 
 namespace Mathematica
 {
-	// Smart pointers
+	// === Smart pointers ===
 	template<typename T, typename ... Args>
 	constexpr MScope<T> MakeScope(Args&& ... args)
 	{
@@ -40,6 +40,14 @@ namespace Mathematica
 	{
 		return std::make_shared<T>(std::forward<Args>(args)...);
 	}
+
+	// === Pair ===
+	template <typename F, typename S>
+	constexpr MPair<F, S> MakePair(F&& first, S&& second)
+	{
+		return std::make_pair<F, S>(std::forward<F>(first), std::forward<S>(second));
+	}
+
 
 	// === Debug and files ===
 	void Assert(const char* expression, const char* file, const char* function, int32 line, const char* message);

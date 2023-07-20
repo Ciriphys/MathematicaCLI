@@ -1,7 +1,8 @@
 #pragma once
 
-#include "Utility/Utils.h"
 #include "Core/Identifiable.h"
+
+#include "Utility/Utils.h"
 
 // This definition might vary.
 enum class ENumberType : int32

@@ -1,9 +1,9 @@
 #include "mthpch.h"
 
-#include "Core/Number.h"
-
 #include "Core/Math/Integer.h"
 #include "Core/Math/Operations.h"
+
+#include "Core/Number.h"
 
 MNumber::MNumber(int32 num, int32 den) : numerator(num), denominator(den), type(ENumberType::Real) 
 {

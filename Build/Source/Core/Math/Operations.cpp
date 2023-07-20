@@ -1,11 +1,11 @@
 #include "mthpch.h"
 
-#include "Utility/Types.h"
+#include "Core/Math/Operations.h"
+#include "Core/Math/Integer.h"
 
 #include "Core/Number.h"
 
-#include "Core/Math/Operations.h"
-#include "Core/Math/Integer.h"
+#include "Utility/Types.h"
 
 namespace Mathematica
 {

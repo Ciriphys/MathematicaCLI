@@ -1,6 +1,6 @@
 #include "mthpch.h"
 
-#include "App.h"
+#include "CLI/App.h"
 
 #include "Utility/Utils.h"
 #include "Utility/Random.h"
@@ -172,11 +172,12 @@ void Mathematica::AppCommand::Solve()
 	MString commandKey = commands.find("--solve") == commands.end() ? "-s" : "--solve";
 	for (auto equation : commands[commandKey])
 	{
-		MVector<MLexiconToken> tokens = lexer->GenerateTokens(equation); 
+		lexer->GenerateTokens(equation); 
+		MVector<MLexiconToken> tokens = lexer->GetTokens();
 		MTH_DEBUG_INFO(Mathematica::DisplayTokenArray(tokens));
 		MTH_DEBUG_INFO(Mathematica::DisplayTokenUUID(tokens, false));
 
-		parser->InitParser(tokens);
+		parser->InitParser(tokens, lexer->GetOperationIndex());
 		auto root = parser->GenerateTree();
 
 		Mathematica::DisplayParsedTree(root);

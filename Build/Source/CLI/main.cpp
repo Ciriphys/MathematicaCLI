@@ -1,6 +1,6 @@
 #include "mthpch.h"
 
-#include "App.h"
+#include "CLI/App.h"
 
 int32 main(int32 argc, char** argv)
 {

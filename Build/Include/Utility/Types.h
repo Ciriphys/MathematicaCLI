@@ -1,7 +1,5 @@
 #pragma once
 
-#include "mthpch.h"
-
 // Forward declarations
 struct MNumber;
 
@@ -12,9 +10,15 @@ template<typename K, typename V>
 using MHashMap = std::unordered_map<K, V>;
 using MString = std::string;
 using MStringStream = std::stringstream;
+template<typename T>
+using MStack = std::stack<T>;
+template<typename F, typename S>
+using MPair = std::pair<F, S>;
+using MAny = std::any;
+
+// Miscellaneous
 using MMersenneTwister = std::mt19937;
 using MRandomDevice = std::random_device;
-using MAny = std::any;
 
 // Functions
 typedef MNumber(*FBinaryFunction)(const MNumber&, const MNumber&);

@@ -1,22 +1,26 @@
 #include "mthpch.h"
 
-#include "Utility/Utils.h"
 #include "Core/Number.h"
 #include "Core/Parser.h"
+
+#include "Utility/Utils.h"
 
 MParser::MParser()
 {
 	mRawTokens = {};
 }
 
-void MParser::InitParser(const MVector<MLexiconToken>& tokens)
+void MParser::InitParser(const MVector<MLexiconToken>& tokens, const MHashMap<EPriority, MVector<int32>>& opIndexes)
 {
 	mRawTokens = tokens;
+	mOperationIndexes = opIndexes;
 }
 
 // TODO : Implement Wrapper nodes.
 MRef<MMathNode> MParser::GenerateTree()
 {
+	if (mRawTokens.size() == 0) return nullptr;
+
     MRef<MMathNode> root = nullptr;
 
     for(auto token : mRawTokens)
@@ -64,6 +68,12 @@ MRef<MMathNode> MParser::GenerateTree()
 			break;
 		}
     }
+
+	// Perform another check to make sure that even small incomplete inputs are caught.
+	if (root->type == EMathNodeType::BinaryFunction)
+	{
+		MTH_ASSERT(root->children.size() == 2, "Parser error: Binary function was not filled with both arguments.");
+	}
 
 	tree = root;
     return root;

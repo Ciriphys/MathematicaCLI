@@ -11,7 +11,7 @@ namespace Mathematica
 {
 	void Assert(const char* expression, const char* file, const char* function, int32 line, const char* message)
 	{
-		printf("Assertion failed (%s) in file %s, in function %s, at line %d:\n %s", expression, file, function, line, message);
+		printf("Assertion failed (%s) in file %s,\nin function %s, at line %d:\n%s", expression, file, function, line, message);
 		abort();
 	}
 
@@ -100,7 +100,7 @@ namespace Mathematica
 			DisplayParsedTree(child);
 		}
 
-		std::cout << "Type: " << Stringify(node->type) << ", parent: " << (node->parent ? node->parent->GetUUID() : "None") << std::endl;
+		std::cout << "UUID: " << node->GetUUID() << " Type: " << Stringify(node->type) << ", parent: " << (node->parent ? node->parent->GetUUID() : "None") << std::endl;
 		return;
 	}
 

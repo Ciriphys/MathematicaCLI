@@ -1,8 +1,8 @@
 #include "mthpch.h"
 
-#include "Utility/Utils.h"
-
 #include "Core/Math/Integer.h"
+
+#include "Utility/Utils.h"
 
 namespace Mathematica
 {
@@ -46,7 +46,7 @@ namespace Mathematica
 
         MHashMap<int32, int32> Factorize(int32 n)
         {
-            auto soe = SoE(sqrt(n));
+            auto soe = SoE((int32)sqrt(n));
             MHashMap<int32, int32> result;
 
             for (int32 i = 0; i < soe.size(); i++)
@@ -94,3 +94,5 @@ namespace Mathematica
         }
 	}
 }
+
+// REFACTOR : Change C-like casts into C++-like casts.

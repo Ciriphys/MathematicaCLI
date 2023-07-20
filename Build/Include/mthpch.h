@@ -1,20 +1,21 @@
 // Utility
-#include <iostream>
-#include <algorithm>
 #include <functional>
-#include <random>
+#include <algorithm>
+#include <iostream>
 #include <iomanip>
+#include <random>
 
 // Data structures
+#include <unordered_map>
+#include <sstream>
 #include <vector>
 #include <string>
-#include <sstream>
-#include <unordered_map>
+#include <stack>
 #include <any>
 
 // Smart Pointers
-#include <memory>
 #include <utility>
+#include <memory>
 
 // Console input for Windows
 #ifdef MTH_WIN
