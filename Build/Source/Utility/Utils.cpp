@@ -66,12 +66,12 @@ namespace Mathematica
 	{
 		switch (type)
 		{
-		case ELexiconTokenType::Number:
-			return "Number";
-		case ELexiconTokenType::BinaryFunction:
-			return "BinaryFunction";
-		default:
-			return "Unknown";
+		case ELexiconTokenType::Number:			return "Number";
+		case ELexiconTokenType::BinaryFunction: return "BinaryFunction";
+		case ELexiconTokenType::WrapperStart:	return "WrapperStart";
+		case ELexiconTokenType::WrapperEnd:		return "WrapperEnd";
+
+		default: return "Unknown";
 		}
 	}
 
@@ -79,14 +79,11 @@ namespace Mathematica
 	{
 		switch (type)
 		{
-		case EMathNodeType::Number:
-			return "Number";
-		case EMathNodeType::BinaryFunction:
-			return "BinaryFunction";
-		case EMathNodeType::Wrapper:
-			return "Wrapper";
-		default:
-			return "Unknown";
+		case EMathNodeType::Number:			return "Number";
+		case EMathNodeType::BinaryFunction: return "BinaryFunction";
+		case EMathNodeType::Wrapper:		return "Wrapper";
+
+		default: return "Unknown";
 		}
 	}
 

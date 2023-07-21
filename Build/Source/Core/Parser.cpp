@@ -86,7 +86,7 @@ void MParser::GenerateWrappedNodes(const MVector<int32>& indexes)
 	{
 		MRef<MMathNode> wrappedNode = mNodes[index];
 
-		// Check if previous and next node are marked to be ignored and get the right indexes for the left and right nodes.
+		// Check if previous and next node are marked to be ignored and get the indexes for the left and right nodes.
 		int32 leftCounter = 1;
 		int32 rightCounter = 1;
 		int32 copyIndex = index;

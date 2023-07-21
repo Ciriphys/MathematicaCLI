@@ -7,7 +7,7 @@
 #define MTH_DEBUG_INFO(function) DisplayFunctionInfo(#function, __FUNCTION__); function
 #else 
 #define MTH_ASSERT(expression, message) throw message
-#define MTH_DEBUG_INFO(function)
+#define MTH_DEBUG_INFO(function) function;
 #endif
 
 #ifdef MTH_WIN

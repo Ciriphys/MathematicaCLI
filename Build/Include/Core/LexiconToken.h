@@ -8,6 +8,8 @@ enum class ELexiconTokenType : int32
 {
 	Number,
 	BinaryFunction,
+	WrapperStart, 
+	WrapperEnd,
 
 	Unknown
 };
