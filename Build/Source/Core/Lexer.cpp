@@ -80,20 +80,20 @@ void MLexer::GenerateTokens(MString equation)
 				if(!skipMarker)
 				{
 					mTokens.emplace_back(substring, ELexiconTokenType::BinaryFunction);
+
+					// Set the priority for the operation index.
+					if (substring.front() == '+' || substring.front() == '-')
+					{
+						mOperationIndexes[EPriority::Low].push_back((int32)(mTokens.size() - 1));
+					}
+					else
+					{
+						mOperationIndexes[EPriority::Normal].push_back((int32)(mTokens.size() - 1));
+					}
 				}
 				else
 				{
 					skipMarker = false;
-				}
-
-				// Set the priority for the operation index.
-				if (substring.front() == '+' || substring.front() == '-')
-				{
-					mOperationIndexes[EPriority::Low].push_back((int32)(mTokens.size() - 1));
-				}
-				else
-				{
-					mOperationIndexes[EPriority::Normal].push_back((int32)(mTokens.size() - 1));
 				}
 
 				continue;
@@ -176,20 +176,20 @@ void MLexer::GenerateTokens(MString equation)
 				if(!skipMarker)
 				{
 					mTokens.emplace_back(MString(1, currentChar), ELexiconTokenType::BinaryFunction);
+
+					// Set the priority of such operation.
+					if (currentChar == '+' || currentChar == '-')
+					{
+						mOperationIndexes[EPriority::Low].push_back((int32)(mTokens.size() - 1));
+					}
+					else
+					{
+						mOperationIndexes[EPriority::Normal].push_back((int32)(mTokens.size() - 1));
+					}
 				}
 				else
 				{
 					skipMarker = false;
-				}
-
-				// Set the priority of such operation.
-				if (currentChar == '+' || currentChar == '-')
-				{
-					mOperationIndexes[EPriority::Low].push_back((int32)(mTokens.size() - 1));
-				}
-				else
-				{
-					mOperationIndexes[EPriority::Normal].push_back((int32)(mTokens.size() - 1));
 				}
 
 				// Reset the currentSubsubstring, to allow a new number to be stored.

@@ -2,6 +2,7 @@
 
 #include "Core/Identifiable.h"
 
+#include "Utility/Conversions.h"
 #include "Utility/Random.h"
 
 IIdentifiable::IIdentifiable()
@@ -18,14 +19,12 @@ MString IIdentifiable::GenerateUUID()
 	uint32 fifth	 = MRandom::UnsignedInt(0, 0xffffffff);
 	uint32 sixth	 = MRandom::UnsignedInt(0, 0xffff);
 
-	// TODO : Fix length of UUID.
-
 	MStringStream UUID;
-	UUID << std::hex << first   << "-";
-	UUID << std::hex << second  << "-";
-	UUID << std::hex << third   << "-";
-	UUID << std::hex << fourth  << "-";
-	UUID << std::hex << fifth << sixth;
+	UUID << Mathematica::Convert::IntToHexString(first, 8) << "-";
+	UUID << Mathematica::Convert::IntToHexString(second, 4) << "-";
+	UUID << Mathematica::Convert::IntToHexString(third, 4) << "-";
+	UUID << Mathematica::Convert::IntToHexString(fourth, 4) << "-";
+	UUID << Mathematica::Convert::IntToHexString(fifth, 8) << Mathematica::Convert::IntToHexString(sixth, 4);
 
 	return UUID.str();
 }

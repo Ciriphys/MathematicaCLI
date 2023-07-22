@@ -120,7 +120,7 @@ namespace Mathematica
 			data = Stringify(function);
 		}
 
-		std::cout << "Data : " << data << ", UUID: " << node->GetUUID() << " Type: " << Stringify(node->type) << ", parent: " << (node->parent ? node->parent->GetUUID() : "None") << std::endl;
+		std::cout << "Data : " << data << ", UUID: " << node->GetShortUUID() << " Type: " << Stringify(node->type) << ", parent: " << (node->parent ? node->parent->GetShortUUID() : "None") << std::endl;
 		return;
 	}
 
@@ -196,7 +196,7 @@ namespace Mathematica
 		std::cout << "[" << endOfLine;
 		for (auto token : tokenArray)
 		{
-			std::cout << token.GetUUID() << (token == lastToken ? "" : ",") << endOfLine;
+			std::cout << token.GetShortUUID() << (token == lastToken ? "" : ",") << endOfLine;
 		}
 		std::cout << "]" << std::endl << std::endl;
 	}
