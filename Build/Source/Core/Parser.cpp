@@ -8,88 +8,26 @@
 MParser::MParser()
 {
 	mNodes = {};
+	mScopedIndex = -1;
 }
 
-void MParser::InitParser(const MVector<MLexiconToken>& tokens, const MHashMap<EPriority, MVector<int32>>& opIndexes)
+void MParser::InitParser(const MVector<MLexiconToken>& tokens, const MMap<uint32, MHashMap<EPriority, MVector<uint32>>>& opIndexes, const MHashMap<uint32, MPair<uint32, MVector<MPair<uint32, uint32>>>>& scopeCounter)
 {
 	GenerateNodes(tokens);
 	mOperationIndexes = opIndexes;
+	mScopeCounter = scopeCounter;
 }
 
-// NOTE : This function is deprecated, however it will be left here for a couple commit, until I decide what to do of it.
-MRef<MMathNode> MParser::deprecated_GenerateTree()
-{
-	if (mNodes.size() == 0) return nullptr;
-
-    MRef<MMathNode> root = nullptr;
-	MVector<MLexiconToken> mRawTokens = {};
-
-    for(auto token : mRawTokens)
-    {
-        MRef<MMathNode> currentToken = Mathematica::MakeRef<MMathNode>();
-
-		switch (token.type)
-		{
-		case ELexiconTokenType::Number:
-			currentToken->tokenData = MNumber(token.data);
-			currentToken->type = EMathNodeType::Number;
-
-			if (root)
-			{
-				root->children.push_back(currentToken);
-				currentToken->parent = root;
-			}
-			else
-			{
-				root = currentToken;
-			}
-			break;
-
-		case ELexiconTokenType::BinaryFunction:
-			currentToken->tokenData = Mathematica::GetBinaryFunctionFromRawData(token.data);
-			currentToken->type = EMathNodeType::BinaryFunction;
-
-			if (root)
-			{
-				root->parent = currentToken;
-				currentToken->children.push_back(root);
-
-				if (root->type == EMathNodeType::BinaryFunction)
-				{
-					MTH_ASSERT(root->children.size() == 2, "Parser error: Binary function was not filled with both arguments.");
-				}
-			}
-
-			root = currentToken;
-
-			break;
-
-		case ELexiconTokenType::Unknown:
-			MTH_ASSERT(false, "Parser error: Unknown token found!");
-			break;
-		}
-    }
-
-	// Perform another check to make sure that even small incomplete inputs are caught.
-	if (root->type == EMathNodeType::BinaryFunction)
-	{
-		MTH_ASSERT(root->children.size() == 2, "Parser error: Binary function was not filled with both arguments.");
-	}
-
-	mTree = root;
-    return root;
-}
-
-void MParser::GenerateWrappedNodes(const MVector<int32>& indexes)
+void MParser::GenerateWrappedNodes(const MVector<uint32>& indexes)
 {
 	for (auto index : indexes)
 	{
 		MRef<MMathNode> wrappedNode = mNodes[index];
 
 		// Check if previous and next node are marked to be ignored and get the indexes for the left and right nodes.
-		int32 leftCounter = 1;
-		int32 rightCounter = 1;
-		int32 copyIndex = index;
+		uint32 leftCounter = 1;
+		uint32 rightCounter = 1;
+		uint32 copyIndex = index;
 		while (mNodes[--copyIndex]->type == EMathNodeType::None) leftCounter++;
 		copyIndex = index;
 		while (mNodes[++copyIndex]->type == EMathNodeType::None) rightCounter++;
@@ -122,6 +60,8 @@ void MParser::GenerateWrappedNodes(const MVector<int32>& indexes)
 		mNodes[index + rightCounter] = Mathematica::MakeRef<MMathNode>();
 		mNodes[index - leftCounter]->type = EMathNodeType::None;
 		mNodes[index + rightCounter]->type = EMathNodeType::None;
+
+		mScopedIndex = Mathematica::Min(mScopedIndex, index);
 	}
 }
 
@@ -142,6 +82,12 @@ void MParser::GenerateNodes(const MVector<MLexiconToken>& tokens)
 			currentNode->tokenData = Mathematica::GetBinaryFunctionFromRawData(token.data);
 			currentNode->type = EMathNodeType::BinaryFunction;
 			break;
+		case ELexiconTokenType::WrapperStart:
+			currentNode->type = EMathNodeType::WrapStart;
+			break;
+		case ELexiconTokenType::WrapperEnd:
+			currentNode->type = EMathNodeType::WrapEnd;
+			break;
 		default:
 			MTH_ASSERT(false, "Parser error: Unkown token detected!");
 			break;
@@ -153,13 +99,27 @@ void MParser::GenerateNodes(const MVector<MLexiconToken>& tokens)
 
 MRef<MMathNode> MParser::GenerateTree()
 {
-	auto highIndexes = mOperationIndexes[EPriority::High];
-	auto normalIndexes = mOperationIndexes[EPriority::Normal];
-	auto lowIndexes = mOperationIndexes[EPriority::Low];
+	for (auto it = mOperationIndexes.rbegin(); it != mOperationIndexes.rend(); it++)
+	{
+		auto scopeIndex = it->first;
+		auto scopeData = it->second;
 
-	GenerateWrappedNodes(highIndexes);
-	GenerateWrappedNodes(normalIndexes);
-	GenerateWrappedNodes(lowIndexes);
+		auto highIndexes = scopeData[EPriority::High];
+		auto normalIndexes = scopeData[EPriority::Normal];
+		auto lowIndexes = scopeData[EPriority::Low];
+
+		GenerateWrappedNodes(highIndexes);
+		GenerateWrappedNodes(normalIndexes);
+		GenerateWrappedNodes(lowIndexes);
+
+		auto dummy = mScopeCounter[scopeIndex].second;
+
+		for (auto [first, second] : dummy)
+		{
+			mNodes[first]->type = EMathNodeType::None;
+			mNodes[second]->type = EMathNodeType::None;
+		}
+	}
 
 	for (auto node : mNodes)
 	{

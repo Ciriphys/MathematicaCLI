@@ -9,6 +9,9 @@ enum class EMathNodeType : int32
     Number, 
     BinaryFunction,
 
+    WrapStart,
+    WrapEnd,
+
     Wrapper,
 
     None

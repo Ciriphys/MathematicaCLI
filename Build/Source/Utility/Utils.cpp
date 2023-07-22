@@ -211,8 +211,17 @@ namespace Mathematica
 		return a < b ? a : b;
 	}
 
-	// TODO : Fix return type
-	FBinaryFunction GetBinaryFunctionFromRawData(const std::string& data)
+	uint32 Max(uint32 a, uint32 b)
+	{
+		return a > b ? a : b;
+	}
+
+	uint32 Min(uint32 a, uint32 b)
+	{
+		return a < b ? a : b;
+	}
+
+	FBinaryFunction GetBinaryFunctionFromRawData(const MString& data)
 	{
 		if (data.size() == 1)
 		{

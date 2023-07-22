@@ -8,6 +8,8 @@ template<typename T>
 using MVector = std::vector<T>;
 template<typename K, typename V>
 using MHashMap = std::unordered_map<K, V>;
+template<typename K, typename V>
+using MMap = std::map<K, V>;
 using MString = std::string;
 using MStringStream = std::stringstream;
 template<typename T>

@@ -181,7 +181,7 @@ void Mathematica::AppCommand::Solve()
 		MTH_DEBUG_INFO(Mathematica::DisplayTokenArray(tokens));
 		MTH_DEBUG_INFO(Mathematica::DisplayTokenUUID(tokens, false));
 
-		parser->InitParser(tokens, lexer->GetOperationIndex());
+		parser->InitParser(tokens, lexer->GetOperationIndex(), lexer->GetScopeCounter());
 		auto root = parser->GenerateTree();
 
 		Mathematica::DisplayParsedTree(root);

@@ -49,6 +49,8 @@ void MLexer::GenerateTokens(MString equation)
 		return "No";
 	};
 
+	mTokens.emplace_back("#", ELexiconTokenType::WrapperStart);
+
 	// REFACTOR : The first half of the for loop might be deleted in the future, as well as string separation.
 	// REFACTOR : Instead, it might be convenient to just ignore the spaces.
 	for (auto substring : separetedEquation)
@@ -61,8 +63,7 @@ void MLexer::GenerateTokens(MString equation)
 			{
 				// Check if the previous token was a function or if the tokens are empty.
 				// then, check if this operation is a "+" or a "-"
-				// if those checks are valid, then add a zero to represent the sign of the number.
-				// TODO : Wrap the contents of "-/+ creation" into parentheses, to prevent miscalculations with OOO.
+				// if those checks are valid, then add a flag to represent the sign of the number.
 				if (mTokens.size() == 0 || mTokens.back().type == ELexiconTokenType::BinaryFunction)
 				{
 					switch(substring.front())
@@ -76,7 +77,6 @@ void MLexer::GenerateTokens(MString equation)
 				}
 
 				// Add the operation to the back of the tokens.
-				// TODO : Add a boolean to trigger the closure of the wrapper to solve the mismatch.
 				if(!skipMarker)
 				{
 					mTokens.emplace_back(substring, ELexiconTokenType::BinaryFunction);
@@ -84,11 +84,12 @@ void MLexer::GenerateTokens(MString equation)
 					// Set the priority for the operation index.
 					if (substring.front() == '+' || substring.front() == '-')
 					{
-						mOperationIndexes[EPriority::Low].push_back((int32)(mTokens.size() - 1));
+						mOperationIndexes[parenthesesCount][EPriority::Low].push_back((int32)(mTokens.size() - 1));
+						
 					}
 					else
 					{
-						mOperationIndexes[EPriority::Normal].push_back((int32)(mTokens.size() - 1));
+						mOperationIndexes[parenthesesCount][EPriority::Normal].push_back((int32)(mTokens.size() - 1));
 					}
 				}
 				else
@@ -107,13 +108,29 @@ void MLexer::GenerateTokens(MString equation)
 					{
 						// If so, create a multiplication token.
 						mTokens.emplace_back("*", ELexiconTokenType::BinaryFunction);
+						mOperationIndexes[parenthesesCount][EPriority::Normal].push_back((int32)(mTokens.size() - 1));
 					}
 					mTokens.emplace_back("#", ELexiconTokenType::WrapperStart);
 					parenthesesCount++;
+					
+					// Initialize scope counter to send information to the parser.
+					if (mScopeCounter.find(parenthesesCount) != mScopeCounter.end())
+					{
+						mScopeCounter[parenthesesCount].first++;
+						mScopeCounter[parenthesesCount].second.emplace_back(mTokens.size() - 1, (uint32)0);
+					}
+					else
+					{
+						MVector<MPair<uint32, uint32>> parLocation;
+						parLocation.emplace_back(mTokens.size() - 1, (uint32)0);
+						MPair<uint32, MVector<MPair<uint32, uint32>>> scopeCount = {(uint32)1, parLocation};
+						mScopeCounter[parenthesesCount] = scopeCount;
+					}
 				}
 				else
 				{
 					mTokens.emplace_back("#", ELexiconTokenType::WrapperEnd);
+					mScopeCounter[parenthesesCount].second[mScopeCounter[parenthesesCount].first - 1].second = mTokens.size() - 1;
 					parenthesesCount--;
 				}
 
@@ -180,11 +197,11 @@ void MLexer::GenerateTokens(MString equation)
 					// Set the priority of such operation.
 					if (currentChar == '+' || currentChar == '-')
 					{
-						mOperationIndexes[EPriority::Low].push_back((int32)(mTokens.size() - 1));
+						mOperationIndexes[parenthesesCount][EPriority::Low].push_back((int32)(mTokens.size() - 1));
 					}
 					else
 					{
-						mOperationIndexes[EPriority::Normal].push_back((int32)(mTokens.size() - 1));
+						mOperationIndexes[parenthesesCount][EPriority::Normal].push_back((int32)(mTokens.size() - 1));
 					}
 				}
 				else
@@ -209,15 +226,32 @@ void MLexer::GenerateTokens(MString equation)
 					{
 						// If so, create a multiplication token.
 						mTokens.emplace_back("*", ELexiconTokenType::BinaryFunction);
+						mOperationIndexes[parenthesesCount][EPriority::Normal].push_back((int32)(mTokens.size() - 1));
 					}
 					mTokens.emplace_back("#", ELexiconTokenType::WrapperStart);
 					parenthesesCount++;
+
+					// Initialize scope counter to send information to the parser.
+					if (mScopeCounter.find(parenthesesCount) != mScopeCounter.end())
+					{
+						mScopeCounter[parenthesesCount].first++;
+						mScopeCounter[parenthesesCount].second.emplace_back(mTokens.size() - 1, (uint32)0);
+					}
+					else
+					{
+						MVector<MPair<uint32, uint32>> parLocation;
+						parLocation.emplace_back(mTokens.size() - 1, (uint32)0);
+						MPair<uint32, MVector<MPair<uint32, uint32>>> scopeCount = { (uint32)1, parLocation };
+						mScopeCounter[parenthesesCount] = scopeCount;
+					}
 				}
 				else
 				{
 					mTokens.emplace_back("#", ELexiconTokenType::WrapperEnd);
+					mScopeCounter[parenthesesCount].second[mScopeCounter[parenthesesCount].first - 1].second = mTokens.size() - 1;
 					parenthesesCount--;
 				}
+				// --solve "(1+2)(2+1)"
 
 				currentSubsubstring = "";
 			}
@@ -252,6 +286,8 @@ void MLexer::GenerateTokens(MString equation)
 	}
 
 	MTH_ASSERT(parenthesesCount == 0, "Syntax error: parentheses mismatch found!");
+	mTokens.emplace_back("#", ELexiconTokenType::WrapperEnd);
+
 }
 
 MString MLexer::StringifyNumberToken(MString string, bool invertSign)

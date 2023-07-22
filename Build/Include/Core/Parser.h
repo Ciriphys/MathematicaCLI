@@ -11,18 +11,19 @@ class MParser
 public:
     MParser();
 
-    void InitParser(const MVector<MLexiconToken>& tokens, const MHashMap<EPriority, MVector<int32>>& opIndexes);
+    void InitParser(const MVector<MLexiconToken>& tokens, const MMap<uint32, MHashMap<EPriority, MVector<uint32>>>& opIndexes, const MHashMap<uint32, MPair<uint32, MVector<MPair<uint32, uint32>>>>& scopeCounter);
 
     MRef<MMathNode> GenerateTree();
 
 private: 
-    void GenerateWrappedNodes(const MVector<int32>& indexes);
+    void GenerateWrappedNodes(const MVector<uint32>& indexes);
     void GenerateNodes(const MVector<MLexiconToken>& tokens);
 
-    [[deprecated]] MRef<MMathNode> deprecated_GenerateTree();
-
-    MHashMap<EPriority, MVector<int32>> mOperationIndexes;
+    MHashMap<uint32, MPair<uint32, MVector<MPair<uint32, uint32>>>> mScopeCounter;
+    MMap<uint32, MHashMap<EPriority, MVector<uint32>>> mOperationIndexes;
     MVector<MRef<MMathNode>> mNodes;
 
     MRef<MMathNode> mTree;
+
+	uint32 mScopedIndex;
 };

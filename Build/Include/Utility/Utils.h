@@ -16,7 +16,7 @@
 #define MTH_PROJECT_PATH "MathematicaCLI/"
 #endif
 
-#define MTH_VERSION "Version 0.0.5a"
+#define MTH_VERSION "Version 0.0.6a"
 #define MTH_NO_MESSAGE "No message provided."
 #define MTH_UNUSED(x) (void)x
 #define MTH_ADDRESS_OF(x) (void*)&x
@@ -60,11 +60,13 @@ namespace Mathematica
 	// TODO : Add implementations for MNumber as well.
 	int32 Max(int32 a, int32 b);
 	int32 Min(int32 a, int32 b);
+	uint32 Max(uint32 a, uint32 b);
+	uint32 Min(uint32 a, uint32 b);
 	template<typename T>
 	void Swap(T& a, T& b);
 
 	// === Functions ===
-	FBinaryFunction GetBinaryFunctionFromRawData(const std::string& data);
+	FBinaryFunction GetBinaryFunctionFromRawData(const MString& data);
 	MString Stringify(FBinaryFunction address);
 
 	// === String manipulation ===
