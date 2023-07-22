@@ -20,7 +20,7 @@ MNumber::MNumber(int32 num, int32 den) : numerator(num), denominator(den), type(
     }
 }
 
-MNumber::MNumber(const std::string& strNumber)
+MNumber::MNumber(const MString& strNumber)
 {
     // TODO : add support for fractions and real numbers.
     numerator = std::atoi(strNumber.c_str());

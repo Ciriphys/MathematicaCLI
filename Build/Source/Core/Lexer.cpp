@@ -16,6 +16,8 @@ void MLexer::GenerateTokens(MString equation)
 	MVector<MString> separetedEquation = Mathematica::SeparateString(equation);
 
 	uint32 parenthesesCount = 0;
+	bool invertSign = false;
+	bool skipMarker = false;
 
 	auto isAnOperation = [](const char c) -> bool
 	{
@@ -63,16 +65,26 @@ void MLexer::GenerateTokens(MString equation)
 				// TODO : Wrap the contents of "-/+ creation" into parentheses, to prevent miscalculations with OOO.
 				if (mTokens.size() == 0 || mTokens.back().type == ELexiconTokenType::BinaryFunction)
 				{
-					if (substring.front() == '+' || substring.front() == '-')
+					switch(substring.front())
 					{
-						//mTokens.emplace_back("#", ELexiconTokenType::WrapperStart);
-						mTokens.emplace_back("0", ELexiconTokenType::Number);
+						case '+': break;
+						case '-': invertSign = !invertSign; break;
+						default: MTH_ASSERT(false, "SyntaxError: Invalid token identified!"); break;
 					}
+
+					skipMarker = true;
 				}
 
 				// Add the operation to the back of the tokens.
 				// TODO : Add a boolean to trigger the closure of the wrapper to solve the mismatch.
-				mTokens.emplace_back(substring, ELexiconTokenType::BinaryFunction);
+				if(!skipMarker)
+				{
+					mTokens.emplace_back(substring, ELexiconTokenType::BinaryFunction);
+				}
+				else
+				{
+					skipMarker = false;
+				}
 
 				// Set the priority for the operation index.
 				if (substring.front() == '+' || substring.front() == '-')
@@ -131,6 +143,7 @@ void MLexer::GenerateTokens(MString equation)
 					// If so, create a multiplication token.
 					mTokens.emplace_back("*", ELexiconTokenType::BinaryFunction);
 				}
+
 				currentSubsubstring += currentChar;
 			}
 			else if(isAnOperation(currentChar)) // <--- Check if it is an operation
@@ -138,7 +151,8 @@ void MLexer::GenerateTokens(MString equation)
 				// Check if currentSubsubstring is not empty. If so, it means it is a number, so append to mTokens.
 				if (!currentSubsubstring.empty())
 				{
-					mTokens.emplace_back(RemoveTrailingZeros(currentSubsubstring), ELexiconTokenType::Number);
+					mTokens.emplace_back(StringifyNumberToken(currentSubsubstring, invertSign), ELexiconTokenType::Number);
+					invertSign = false;
 				}
 				else
 				{
@@ -147,16 +161,26 @@ void MLexer::GenerateTokens(MString equation)
 					// Also, the current token must be a '+' or a '-'.
 					if (mTokens.size() == 0 || mTokens.back().type == ELexiconTokenType::BinaryFunction)
 					{
-						if (currentChar == '+' || currentChar == '-')
+						switch(currentChar)
 						{
-							//mTokens.emplace_back("#", ELexiconTokenType::WrapperStart);
-							mTokens.emplace_back("0", ELexiconTokenType::Number);
+							case '+': break;
+							case '-': invertSign = !invertSign; break;
+							default: MTH_ASSERT(false, "SyntaxError: Invalid token identified!"); break;
 						}
+
+						skipMarker = true;
 					}
 				}
 
 				// Append the operation to mTokens.
-				mTokens.emplace_back(MString(1, currentChar), ELexiconTokenType::BinaryFunction);
+				if(!skipMarker)
+				{
+					mTokens.emplace_back(MString(1, currentChar), ELexiconTokenType::BinaryFunction);
+				}
+				else
+				{
+					skipMarker = false;
+				}
 
 				// Set the priority of such operation.
 				if (currentChar == '+' || currentChar == '-')
@@ -175,7 +199,8 @@ void MLexer::GenerateTokens(MString equation)
 			{
 				if (!currentSubsubstring.empty())
 				{
-					mTokens.emplace_back(RemoveTrailingZeros(currentSubsubstring), ELexiconTokenType::Number);
+					mTokens.emplace_back(StringifyNumberToken(currentSubsubstring, invertSign), ELexiconTokenType::Number);
+					invertSign = false;
 				}
 				if (result == "Start")
 				{	
@@ -204,7 +229,7 @@ void MLexer::GenerateTokens(MString equation)
 
 				if (!currentSubsubstring.empty() && bIsNumber)
 				{
-					mTokens.emplace_back(RemoveTrailingZeros(currentSubsubstring), ELexiconTokenType::Number);
+					mTokens.emplace_back(StringifyNumberToken(currentSubsubstring, invertSign), ELexiconTokenType::Number);
 					currentSubsubstring = "";
 				}
 				currentSubsubstring += currentChar;
@@ -215,11 +240,12 @@ void MLexer::GenerateTokens(MString equation)
 		{
 			if (bIsNumber)
 			{
-				mTokens.emplace_back(RemoveTrailingZeros(currentSubsubstring), ELexiconTokenType::Number);
+				mTokens.emplace_back(StringifyNumberToken(currentSubsubstring, invertSign), ELexiconTokenType::Number);
+				invertSign = false;
 			}
 			else
 			{
-				MTH_ASSERT(false, "Syntax error: unknown token found!");
+				MTH_ASSERT(false, "Syntax error: An unknown token has been found!");
 				//mTokens.emplace_back(currentSubsubstring, ELexiconTokenType::Unknown);
 			}
 		}
@@ -228,7 +254,7 @@ void MLexer::GenerateTokens(MString equation)
 	MTH_ASSERT(parenthesesCount == 0, "Syntax error: parentheses mismatch found!");
 }
 
-MString MLexer::RemoveTrailingZeros(MString string)
+MString MLexer::StringifyNumberToken(MString string, bool invertSign)
 {
 	bool bSkip = false;
 	MString number = "";
@@ -248,7 +274,11 @@ MString MLexer::RemoveTrailingZeros(MString string)
 		}
 	}
 
-	return number.length() > 0 ? number : "0";
+
+	number = number.length() > 0 ? number : "0";
+	number = number != "0" && invertSign ? "-" + number : number; 
+
+	return number;
 }
 
 // REFACTOR : Change C-like casts into C++-like casts.

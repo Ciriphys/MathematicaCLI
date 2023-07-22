@@ -22,7 +22,7 @@ public:
 	MHashMap<EPriority, MVector<int32>> GetOperationIndex() const { return mOperationIndexes; }
 
 private:
-	MString RemoveTrailingZeros(MString string);
+	MString StringifyNumberToken(MString string, bool invertSign);
 
 	MVector<MLexiconToken> mTokens;
 	MHashMap<EPriority, MVector<int32>> mOperationIndexes;

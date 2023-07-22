@@ -24,7 +24,7 @@ struct MNumber : public IIdentifiable
     ENumberType type;
 
     MNumber(int32 num = 0, int32 den = 1);
-    MNumber(const std::string& strNumber);
+    MNumber(const MString& strNumber);
 
     MNumber operator+(MNumber other);
     MNumber operator-(MNumber other);

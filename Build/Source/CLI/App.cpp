@@ -200,7 +200,7 @@ void Mathematica::AppCommand::About()
 	std::cout << " * Written by Ciridev with <3" << std::endl;
 	std::cout << " * " << MTH_VERSION << std::endl;
 	std::cout << " * Distributed under the MIT License." << std::endl;
-	std::cout << " * To learn more, visit https://github.com/ZeXo-Softwares/MathematicaCLI." << std::endl;
+	std::cout << " * To learn more, visit https://github.com/Ciridev/MathematicaCLI." << std::endl;
 
 	WaitKey();
 
