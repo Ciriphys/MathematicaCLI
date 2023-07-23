@@ -7,8 +7,6 @@
 
 MNumber::MNumber(int32 num, int32 den) : numerator(num), denominator(den), type(ENumberType::Real) 
 {
-    *this = LowestTerms();
-    
     // TODO : This implementation does not include Real type numbers. For now the only allowed types are Integer and Rational.
     if (denominator == 1)
     {
