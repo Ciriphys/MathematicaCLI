@@ -16,7 +16,7 @@
 #define MTH_PROJECT_PATH "MathematicaCLI/"
 #endif
 
-#define MTH_VERSION "Version 0.0.6a"
+#define MTH_VERSION "Version 0.0.7a"
 #define MTH_NO_MESSAGE "No message provided."
 #define MTH_UNUSED(x) (void)x
 #define MTH_ADDRESS_OF(x) (void*)&x

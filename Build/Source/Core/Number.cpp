@@ -24,6 +24,8 @@ MNumber::MNumber(const MString& strNumber)
     numerator = std::atoi(strNumber.c_str());
     denominator = 1;
 
+    MTH_ASSERT(denominator != 0, "NumberInitError: Cannot divide by zero!");
+
     type = ENumberType::Integer;
 }
 

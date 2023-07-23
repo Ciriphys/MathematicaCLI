@@ -46,6 +46,8 @@ namespace Mathematica
             int32 numerator = a.numerator * b.denominator;
             int32 denominator = a.denominator * b.numerator;
             
+            MTH_ASSERT(denominator != 0, "DomainError: Cannot divide by zero!");
+
             MNumber result = { numerator, denominator };
             return result.LowestTerms();
         }

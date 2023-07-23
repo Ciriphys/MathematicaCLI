@@ -180,23 +180,16 @@ void Mathematica::AppCommand::Solve()
 	{
 		lexer->GenerateTokens(equation); 
 		MVector<MLexiconToken> tokens = lexer->GetTokens();
-		MTH_DEBUG_INFO(Mathematica::DisplayTokenArray(tokens));
-		MTH_DEBUG_INFO(Mathematica::DisplayTokenUUID(tokens, false));
 
 		parser->InitParser(tokens, lexer->GetOperationIndex(), lexer->GetScopeCounter());
 		auto root = parser->GenerateTree();
 
-		Mathematica::DisplayParsedTree(root);
 		solveEngine->InitSolver(root);
 		auto result = solveEngine->SolveTree();
 
-
-		std::cout << Stringify(result) << std::endl;
-		//Mathematica::AppCommand::DisplayAlert("Result: " + Stringify(result));
+		Mathematica::AppCommand::DisplayAlert("Result: " + Stringify(result), "Result of equation: " + equation);
+		app->RefreshAPI();
 	}
-
-	app->RefreshAPI();
-	WaitKey();
 
 	return;
 }
@@ -215,10 +208,10 @@ void Mathematica::AppCommand::About()
 	return;
 }
 
-void Mathematica::AppCommand::DisplayAlert(MString alert)
+void Mathematica::AppCommand::DisplayAlert(MString alert, MString title)
 {
 	Mathematica::ClearScreen();
-	std::cout << "==== Mathematica CLI Alert: ====" << std::endl;
+	std::cout << "==== " << title << " ====" << std::endl;
 	std::cout << alert << std::endl;
 
 	WaitKey();

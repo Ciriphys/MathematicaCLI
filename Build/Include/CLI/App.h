@@ -55,7 +55,7 @@ namespace Mathematica
         void Solve();
         void About();
 
-        void DisplayAlert(MString alert);
+        void DisplayAlert(MString alert, MString title = "Mathematica CLI Alert:");
         void DisplayExitMessage();
 
         void Unknown(MString command);
