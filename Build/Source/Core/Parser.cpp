@@ -61,6 +61,7 @@ void MParser::GenerateWrappedNodes(const MVector<uint32>& indexes)
 		mNodes[index - leftCounter]->type = EMathNodeType::None;
 		mNodes[index + rightCounter]->type = EMathNodeType::None;
 
+		// Save the lowest index to speed up the search. 
 		mScopedIndex = Mathematica::Min(mScopedIndex, index);
 	}
 }
@@ -75,11 +76,11 @@ void MParser::GenerateNodes(const MVector<MLexiconToken>& tokens)
 		switch (token.type)
 		{
 		case ELexiconTokenType::Number:
-			currentNode->tokenData = MNumber(token.data);
+			currentNode->data = MNumber(token.data);
 			currentNode->type = EMathNodeType::Number;
 			break;
 		case ELexiconTokenType::BinaryFunction:
-			currentNode->tokenData = Mathematica::GetBinaryFunctionFromRawData(token.data);
+			currentNode->data = Mathematica::GetBinaryFunctionFromRawData(token.data);
 			currentNode->type = EMathNodeType::BinaryFunction;
 			break;
 		case ELexiconTokenType::WrapperStart:

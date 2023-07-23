@@ -112,11 +112,11 @@ namespace Mathematica
 
 		try
 		{
-			data = Stringify(std::any_cast<MNumber>(node->tokenData));
+			data = Stringify(std::any_cast<MNumber>(node->data));
 		}
 		catch (...)
 		{
-			auto function = std::any_cast<FBinaryFunction>(node->tokenData);
+			auto function = std::any_cast<FBinaryFunction>(node->data);
 			data = Stringify(function);
 		}
 

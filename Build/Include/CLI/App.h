@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Core/Solver.h"
 #include "Core/Parser.h"
 #include "Core/Lexer.h"
 
@@ -21,6 +22,7 @@ class MApp
 
         MRef<MLexer> GetLexer() const { return mLexer; }
         MRef<MParser> GetParser() const { return mParser; }
+        MRef<MSolver> GetSolveEngine() const { return mSolveEngine; }
 
         MHashMap<MString, MVector<MString>> GetCommands() const { return mCommands; }
 
@@ -40,6 +42,7 @@ class MApp
 
         MRef<MLexer> mLexer;
         MRef<MParser> mParser;
+        MRef<MSolver> mSolveEngine;
 
         static MApp* sInstance;
 };

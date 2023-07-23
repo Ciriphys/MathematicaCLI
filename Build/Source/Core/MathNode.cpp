@@ -10,7 +10,7 @@ MMathNode::MMathNode(
 ) :
 parent(__parent),
 children(__children),
-tokenData(__data),
+data(__data),
 type(__type)
 {
 

@@ -26,7 +26,7 @@ struct MMathNode : public IIdentifiable
     PointerType parent;
     ChildrenType children;
 
-    MAny tokenData;
+    MAny data;
     EMathNodeType type;
 
     MMathNode(PointerType __parent = nullptr, ChildrenType __children = {}, MAny __data = {}, EMathNodeType __type = EMathNodeType::None);

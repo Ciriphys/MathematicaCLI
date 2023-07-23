@@ -111,6 +111,7 @@ void MApp::RefreshAPI()
 {
 	mLexer = Mathematica::MakeRef<MLexer>();
 	mParser = Mathematica::MakeRef<MParser>();
+	mSolveEngine = Mathematica::MakeRef<MSolver>();
 }
 
 MApp::MApp()
@@ -172,6 +173,7 @@ void Mathematica::AppCommand::Solve()
 	auto commands = app->GetCommands();
 	auto lexer = app->GetLexer();
 	auto parser = app->GetParser();
+	auto solveEngine = app->GetSolveEngine();
 
 	MString commandKey = commands.find("--solve") == commands.end() ? "-s" : "--solve";
 	for (auto equation : commands[commandKey])
@@ -185,6 +187,12 @@ void Mathematica::AppCommand::Solve()
 		auto root = parser->GenerateTree();
 
 		Mathematica::DisplayParsedTree(root);
+		solveEngine->InitSolver(root);
+		auto result = solveEngine->SolveTree();
+
+
+		std::cout << Stringify(result) << std::endl;
+		//Mathematica::AppCommand::DisplayAlert("Result: " + Stringify(result));
 	}
 
 	app->RefreshAPI();
