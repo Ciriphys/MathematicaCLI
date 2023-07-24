@@ -8,7 +8,9 @@
 MParser::MParser()
 {
 	mNodes = {};
-	mScopedIndex = -1;
+	mFirstIndex = -1;
+	mExecutionFlow = {};
+	mExecutionIndex = 0;
 }
 
 void MParser::InitParser(const MVector<MLexiconToken>& tokens, const MMap<uint32, MHashMap<EPriority, MVector<uint32>>>& opIndexes, const MHashMap<uint32, MPair<uint32, MVector<MPair<uint32, uint32>>>>& scopeCounter)
@@ -18,8 +20,10 @@ void MParser::InitParser(const MVector<MLexiconToken>& tokens, const MMap<uint32
 	mScopeCounter = scopeCounter;
 }
 
-void MParser::GenerateWrappedNodes(const MVector<uint32>& indexes)
+void MParser::GenerateWrappedNodes(MHashMap<EPriority, MVector<uint32>>& scopeData, EPriority priority)
 {
+	MVector<uint32> indexes = scopeData[priority];
+
 	for (auto index : indexes)
 	{
 		MRef<MMathNode> wrappedNode = mNodes[index];
@@ -61,9 +65,15 @@ void MParser::GenerateWrappedNodes(const MVector<uint32>& indexes)
 		mNodes[index - leftCounter]->type = EMathNodeType::None;
 		mNodes[index + rightCounter]->type = EMathNodeType::None;
 
+		// TODO : Save using a flag that is determined by a user command.
+		// Save the current operation in the execution flow.
+		mExecutionFlow[mExecutionIndex].push_back(wrappedNode);
+
 		// Save the lowest index to speed up the search. 
-		mScopedIndex = Mathematica::Min(mScopedIndex, index);
+		mFirstIndex = Mathematica::Min(mFirstIndex, index);
 	}
+
+	mExecutionIndex++;
 }
 
 void MParser::GenerateNodes(const MVector<MLexiconToken>& tokens)
@@ -105,13 +115,9 @@ MRef<MMathNode> MParser::GenerateTree()
 		auto scopeIndex = it->first;
 		auto scopeData = it->second;
 
-		auto highIndexes = scopeData[EPriority::High];
-		auto normalIndexes = scopeData[EPriority::Normal];
-		auto lowIndexes = scopeData[EPriority::Low];
-
-		GenerateWrappedNodes(highIndexes);
-		GenerateWrappedNodes(normalIndexes);
-		GenerateWrappedNodes(lowIndexes);
+		GenerateWrappedNodes(scopeData, EPriority::High);
+		GenerateWrappedNodes(scopeData, EPriority::Medium);
+		GenerateWrappedNodes(scopeData, EPriority::Low);
 
 		auto dummy = mScopeCounter[scopeIndex].second;
 
@@ -124,10 +130,10 @@ MRef<MMathNode> MParser::GenerateTree()
 
 	for (auto node : mNodes)
 	{
-		if (node->type == EMathNodeType::Wrapper)
+		if (node->type == EMathNodeType::Wrapper || node->type == EMathNodeType::Number)
 		{
-			mTree = node->children.back();
-			return mTree;
+			if (node->type == EMathNodeType::Number) return mTree = node;
+			else return mTree = node->children.back();
 		}
 	}
 

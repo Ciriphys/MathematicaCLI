@@ -7,7 +7,7 @@
 enum class EPriority : int32
 {
 	Low, 
-	Normal,
+	Medium,
 	High
 };
 

@@ -89,7 +89,7 @@ void MLexer::GenerateTokens(MString equation)
 					}
 					else
 					{
-						mOperationIndexes[parenthesesCount][EPriority::Normal].push_back((int32)(mTokens.size() - 1));
+						mOperationIndexes[parenthesesCount][EPriority::Medium].push_back((int32)(mTokens.size() - 1));
 					}
 				}
 				else
@@ -108,7 +108,7 @@ void MLexer::GenerateTokens(MString equation)
 					{
 						// If so, create a multiplication token.
 						mTokens.emplace_back("*", ELexiconTokenType::BinaryFunction);
-						mOperationIndexes[parenthesesCount][EPriority::Normal].push_back((int32)(mTokens.size() - 1));
+						mOperationIndexes[parenthesesCount][EPriority::Medium].push_back((int32)(mTokens.size() - 1));
 					}
 					mTokens.emplace_back("#", ELexiconTokenType::WrapperStart);
 					parenthesesCount++;
@@ -201,7 +201,7 @@ void MLexer::GenerateTokens(MString equation)
 					}
 					else
 					{
-						mOperationIndexes[parenthesesCount][EPriority::Normal].push_back((int32)(mTokens.size() - 1));
+						mOperationIndexes[parenthesesCount][EPriority::Medium].push_back((int32)(mTokens.size() - 1));
 					}
 				}
 				else
@@ -226,7 +226,7 @@ void MLexer::GenerateTokens(MString equation)
 					{
 						// If so, create a multiplication token.
 						mTokens.emplace_back("*", ELexiconTokenType::BinaryFunction);
-						mOperationIndexes[parenthesesCount][EPriority::Normal].push_back((int32)(mTokens.size() - 1));
+						mOperationIndexes[parenthesesCount][EPriority::Medium].push_back((int32)(mTokens.size() - 1));
 					}
 					mTokens.emplace_back("#", ELexiconTokenType::WrapperStart);
 					parenthesesCount++;

@@ -1,19 +1,19 @@
 #include "mthpch.h"
 
-#include "CLI/App.h"
+#include "CLI/Application.h"
 
 #include "Utility/Utils.h"
 #include "Utility/Random.h"
 
-MApp* MApp::sInstance = nullptr;
+MApplication* MApplication::sInstance = nullptr;
 
-MApp* MApp::Get() 
+MApplication* MApplication::Get() 
 {
-    if (!sInstance) new MApp();
+    if (!sInstance) new MApplication();
     return sInstance;
 }
 
-void MApp::Execute()
+void MApplication::Execute()
 {
 	for(auto [command, params] : mCommands)
 	{
@@ -40,7 +40,7 @@ void MApp::Execute()
 	}
 }
 
-void MApp::TypeMode()
+void MApplication::TypeMode()
 {
 	MString userInput;
 	std::getline(std::cin, userInput);
@@ -48,7 +48,7 @@ void MApp::TypeMode()
     GenerateCommandMap();
 }
 
-void MApp::GenerateCommandMap()
+void MApplication::GenerateCommandMap()
 {
 	MString currentCommand = "None";
 	for (auto argument : mArguments)
@@ -68,7 +68,7 @@ void MApp::GenerateCommandMap()
 	}
 }
 
-void MApp::DrawMenu()
+void MApplication::DrawMenu()
 {
 	Mathematica::ClearScreen();
 	std::cout << "==== Mathematica CLI: Menu ====" << std::endl;
@@ -102,19 +102,19 @@ void MApp::DrawMenu()
 	}
 }
 
-void MApp::Alert(MString alert)
+void MApplication::Alert(MString alert)
 {
 	Mathematica::AppCommand::DisplayAlert(alert);
 }
 
-void MApp::RefreshAPI()
+void MApplication::RefreshAPI()
 {
 	mLexer = Mathematica::MakeRef<MLexer>();
 	mParser = Mathematica::MakeRef<MParser>();
 	mSolveEngine = Mathematica::MakeRef<MSolver>();
 }
 
-MApp::MApp()
+MApplication::MApplication()
 {
     sInstance = this;
 	RefreshAPI();
@@ -122,7 +122,7 @@ MApp::MApp()
 	MRandom::Init();
 }
 
-void MApp::LoadArguments(int32 argc, char** argv)
+void MApplication::LoadArguments(int32 argc, char** argv)
 {
     for(int32 i = 1; i < argc; i++)
     {
@@ -130,7 +130,7 @@ void MApp::LoadArguments(int32 argc, char** argv)
     }
 }
 
-void MApp::Run() 
+void MApplication::Run() 
 {
     do 
     {
@@ -141,7 +141,7 @@ void MApp::Run()
     Abort();
 }
 
-int32 MApp::Abort()
+int32 MApplication::Abort()
 {
 	Mathematica::AppCommand::DisplayExitMessage();
     return 0;
@@ -169,25 +169,30 @@ void Mathematica::AppCommand::Solve()
 	Mathematica::ClearScreen();
 	std::cout << "==== MathematicaCLI: Solve ====" << std::endl;
 
-	auto app = MApp::Get();
+	auto app = MApplication::Get();
 	auto commands = app->GetCommands();
-	auto lexer = app->GetLexer();
-	auto parser = app->GetParser();
-	auto solveEngine = app->GetSolveEngine();
 
 	MString commandKey = commands.find("--solve") == commands.end() ? "-s" : "--solve";
 	for (auto equation : commands[commandKey])
 	{
+		auto lexer = app->GetLexer();
+		auto parser = app->GetParser();
+		auto solveEngine = app->GetSolveEngine();
+
 		lexer->GenerateTokens(equation); 
 		MVector<MLexiconToken> tokens = lexer->GetTokens();
 
 		parser->InitParser(tokens, lexer->GetOperationIndex(), lexer->GetScopeCounter());
 		auto root = parser->GenerateTree();
 
-		solveEngine->InitSolver(root);
+		// TODO : Parse user input to choose which task should be performed.
+		solveEngine->InitSolver(root, parser->GetExecutionFlow());
 		auto result = solveEngine->SolveTree();
 
-		Mathematica::AppCommand::DisplayAlert("Result: " + Stringify(result), "Result of equation: " + equation);
+		MStringStream alertText;
+		alertText << "Result: " << Stringify(result) << "\n" << "Raw Value: " << result.RawNumerical();
+
+		Mathematica::AppCommand::DisplayAlert(alertText.str(), "Result of equation: " + equation);
 		app->RefreshAPI();
 	}
 

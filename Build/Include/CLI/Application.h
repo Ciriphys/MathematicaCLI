@@ -6,15 +6,15 @@
 
 #include "Utility/Types.h"
 
-class MApp 
+class MApplication 
 { 
     public:
-        static MApp* Get();
+        static MApplication* Get();
         void LoadArguments(int32 argc, char** argv);
         void Run();
         int32 Abort();
 
-        ~MApp() = default;
+        ~MApplication() = default;
 
         void Alert(MString alert);
 
@@ -27,7 +27,7 @@ class MApp
         MHashMap<MString, MVector<MString>> GetCommands() const { return mCommands; }
 
     private:
-        MApp();
+        MApplication();
 
         void Execute();
         void TypeMode();
@@ -44,7 +44,7 @@ class MApp
         MRef<MParser> mParser;
         MRef<MSolver> mSolveEngine;
 
-        static MApp* sInstance;
+        static MApplication* sInstance;
 };
 
 namespace Mathematica
