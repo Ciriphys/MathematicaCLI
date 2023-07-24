@@ -18,7 +18,7 @@ to access quickly the binaries, specifying the arguments and thee configuration.
 
 # Code conventions
 I use `camelCase` for variables, `UPPER_SNAKE_CASE` for macros and `UpperCamelCase` for files, directories, functions, struct, classes and namespaces. Every function that would be defined in a global scope is instead declared in the `Mathematica` namespace. Every class, struct or type definition has the prefix `M`, enumerators start with `E`, and function pointers start with `F`. I use `STL` implementations for data structures, and these types are aliased by the `using` keyword. Every definition of these types can be found in `Build/Include/Utility/Types.h`. For member variables of classes, I generally use the prefix `m`, for instance: `mTree`. For structs, variables use plain camelCase. Last, to bind functionalities for `todo.py`, use the keywords: `TODO`, `TODO (late)`, `NOTE` and `REFACTOR`, each followed by a space and a colon. The following phrase will then be added in `todo.txt`.
-**For contributions, please stick to these conventions. Any pull request will not be accepted if those requirements are not met.**
+**For contributions, please be aware of these conventions. Any pull request will not be accepted if those requirements are not met.**
 
 # Authors
 The development of this project is entirely carried on by me, @Ciridev.
