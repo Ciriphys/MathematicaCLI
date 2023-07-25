@@ -6,14 +6,12 @@
 
 Lexer::Lexer() : mTokens({}), mOperationIndexes({}) {}
 
-// REFACTOR : Marked Lexer::GenerateTokens for refactor.
 void Lexer::GenerateTokens(String equation)
 {
 	mTokens = {};
 	mOperationIndexes = {};
 
 	Mathematica::RemoveQuotes(equation);
-	Vector<String> separetedEquation = Mathematica::SeparateString(equation);
 
 	uint32 parenthesesCount = 0;
 	bool invertSign = false;
@@ -49,26 +47,46 @@ void Lexer::GenerateTokens(String equation)
 		return "No";
 	};
 
-	// REFACTOR : The first half of the for loop might be deleted in the future, as well as string separation.
-	// REFACTOR : Instead, it might be convenient to just ignore the spaces.
-	for (auto substring : separetedEquation)
+	// Check if a substring contains both numbers and operations.
+	String currentSubstring = "";
+	for (auto currentChar : equation)
 	{
-		// TODO (late) : Change the for loop to match literal expressions.
-		// Hint: if size is 1 then it may be an operation. 
-		if (substring.size() == 1)
+		if (currentChar == ' ') continue;
+
+		if (!(currentChar < 48 || currentChar > 57) || currentChar == '.') // <--- Check if it is a number
 		{
-			if (isAnOperation(substring.front())) // <--- Check if it is an operation
+			// Check if the flag bIsNumber is false. If so, throw a SyntaxError.
+			// TODO : Build class SyntaxError.
+
+			// Check if the previous token was a closing parenthesis.
+			if (!mTokens.empty() && mTokens.back().type == ELexiconTokenType::WrapperEnd)
 			{
-				// Check if the previous token was a function or if the tokens are empty.
-				// then, check if this operation is a "+" or a "-"
-				// if those checks are valid, then add a flag to represent the sign of the number.
+				// If so, create a multiplication token.
+				mTokens.emplace_back("*", ELexiconTokenType::BinaryFunction);
+			}
+
+			currentSubstring += currentChar;
+		}
+		else if(isAnOperation(currentChar)) // <--- Check if it is an operation
+		{
+			// Check if currentSubsubstring is not empty. If so, it means it is a number, so append to mTokens.
+			if (!currentSubstring.empty())
+			{
+				mTokens.emplace_back(StringifyNumberToken(currentSubstring, invertSign), ELexiconTokenType::Number);
+				invertSign = false;
+			}
+			else
+			{
+				// If it is empty, It might be necessary to generate a zero token to represent the sign.
+				// This, again, it is only possible if the previous token was an operation or the mTokens array is empty.
+				// Also, the current token must be a '+' or a '-'.
 				if (
 					mTokens.size() == 0 ||
 					mTokens.back().type == ELexiconTokenType::BinaryFunction ||
 					mTokens.back().type == ELexiconTokenType::WrapperStart
-				) 
+				)
 				{
-					switch(substring.front())
+					switch(currentChar)
 					{
 						case '+': break;
 						case '-': invertSign = !invertSign; break;
@@ -77,216 +95,83 @@ void Lexer::GenerateTokens(String equation)
 
 					skipMarker = true;
 				}
-
-				// Add the operation to the back of the tokens.
-				if(!skipMarker)
-				{
-					mTokens.emplace_back(substring, ELexiconTokenType::BinaryFunction);
-
-					// Set the priority for the operation index.
-					if (substring.front() == '+' || substring.front() == '-')
-					{
-						mOperationIndexes[parenthesesCount][EPriority::Low].push_back((int32)(mTokens.size() - 1));
-						
-					}
-					else
-					{
-						mOperationIndexes[parenthesesCount][EPriority::Medium].push_back((int32)(mTokens.size() - 1));
-					}
-				}
-				else
-				{
-					skipMarker = false;
-				}
-
-				continue;
 			}
-			else if (String result = isParenthesis(substring.front()); result != "No") // <--- Check if it is a parenthesis
+
+			// Append the operation to mTokens.
+			if(!skipMarker)
 			{
-				if (result == "Start")
+				mTokens.emplace_back(String(1, currentChar), ELexiconTokenType::BinaryFunction);
+
+				// Set the priority of such operation.
+				if (currentChar == '+' || currentChar == '-')
 				{
-					// Check if the previous token was a number or a parenthesis.
-					if (!mTokens.empty() && (mTokens.back().type == ELexiconTokenType::Number || mTokens.back().type == ELexiconTokenType::WrapperEnd))
-					{
-						// If so, create a multiplication token.
-						mTokens.emplace_back("*", ELexiconTokenType::BinaryFunction);
-						mOperationIndexes[parenthesesCount][EPriority::Medium].push_back((int32)(mTokens.size() - 1));
-					}
-					mTokens.emplace_back("#", ELexiconTokenType::WrapperStart);
-					parenthesesCount++;
-					
-					// Initialize scope counter to send information to the parser.
-					if (mScopeCounter.find(parenthesesCount) != mScopeCounter.end())
-					{
-						mScopeCounter[parenthesesCount].first++;
-						mScopeCounter[parenthesesCount].second.emplace_back(mTokens.size() - 1, (uint32)0);
-					}
-					else
-					{
-						Vector<Pair<uint32, uint32>> parLocation;
-						parLocation.emplace_back(mTokens.size() - 1, (uint32)0);
-						Pair<uint32, Vector<Pair<uint32, uint32>>> scopeCount = {(uint32)1, parLocation};
-						mScopeCounter[parenthesesCount] = scopeCount;
-					}
+					mOperationIndexes[parenthesesCount][EPriority::Low].push_back(Mathematica::Cast<uint32>(mTokens.size() - 1));
 				}
 				else
 				{
-					mTokens.emplace_back("#", ELexiconTokenType::WrapperEnd);
-					mScopeCounter[parenthesesCount].second[mScopeCounter[parenthesesCount].first - 1].second = mTokens.size() - 1;
-					parenthesesCount--;
+					mOperationIndexes[parenthesesCount][EPriority::Medium].push_back(Mathematica::Cast<uint32>(mTokens.size() - 1));
 				}
-
-				continue;
 			}
+			else
+			{
+				skipMarker = false;
+			}
+
+			// Reset the currentSubsubstring, to allow a new number to be stored.
+			currentSubstring = "";
 		}
-
-		// Check if a substring contains both numbers and operations.
-		bool bIsNumber = true;
-		String currentSubsubstring = "";
-		for (auto currentChar : substring)
+		else if (String result = isParenthesis(currentChar); result != "No") // <--- Check if it a parenthesis
 		{
-			if (!(currentChar < 48 || currentChar > 57) || currentChar == '.') // <--- Check if it is a number
+			if (!currentSubstring.empty())
 			{
-				// Check if the flag bIsNumber is false. If so, throw a SyntaxError.
-				// TODO : Build class SyntaxError.
-				if (!bIsNumber) // <-- This statement should never be called. However I should check that, I'll leave it here for now.
-				{
-					MTH_ASSERT(bIsNumber, "SyntaxError: An unknown token has been found!");
-					//mTokens.emplace_back(currentSubsubstring, ELexiconTokenType::Unknown);
-					//currentSubsubstring = "";
-					//bIsNumber = true;
-				}
-				// Check if the previous token was a closing parenthesis.
-				if (!mTokens.empty() && mTokens.back().type == ELexiconTokenType::WrapperEnd)
+				mTokens.emplace_back(StringifyNumberToken(currentSubstring, invertSign), ELexiconTokenType::Number);
+				invertSign = false;
+			}
+			if (result == "Start")
+			{	
+				// Check if the previous token was a number or a parenthesis.
+				if (!mTokens.empty() && (mTokens.back().type == ELexiconTokenType::Number || mTokens.back().type == ELexiconTokenType::WrapperEnd))
 				{
 					// If so, create a multiplication token.
 					mTokens.emplace_back("*", ELexiconTokenType::BinaryFunction);
+					mOperationIndexes[parenthesesCount][EPriority::Medium].push_back(Mathematica::Cast<uint32>(mTokens.size() - 1));
 				}
+				mTokens.emplace_back("#", ELexiconTokenType::WrapperStart);
+				parenthesesCount++;
 
-				currentSubsubstring += currentChar;
-			}
-			else if(isAnOperation(currentChar)) // <--- Check if it is an operation
-			{
-				// Check if currentSubsubstring is not empty. If so, it means it is a number, so append to mTokens.
-				if (!currentSubsubstring.empty())
+				// Initialize scope counter to send information to the parser.
+				if (mScopeCounter.find(parenthesesCount) != mScopeCounter.end())
 				{
-					mTokens.emplace_back(StringifyNumberToken(currentSubsubstring, invertSign), ELexiconTokenType::Number);
-					invertSign = false;
+					mScopeCounter[parenthesesCount].first++;
+					mScopeCounter[parenthesesCount].second.emplace_back(mTokens.size() - 1, (uint32)0);
 				}
 				else
 				{
-					// If it is empty, It might be necessary to generate a zero token to represent the sign.
-					// This, again, it is only possible if the previous token was an operation or the mTokens array is empty.
-					// Also, the current token must be a '+' or a '-'.
-					if (
-						mTokens.size() == 0 ||
-						mTokens.back().type == ELexiconTokenType::BinaryFunction ||
-						mTokens.back().type == ELexiconTokenType::WrapperStart
-					)
-					{
-						switch(currentChar)
-						{
-							case '+': break;
-							case '-': invertSign = !invertSign; break;
-							default: MTH_ASSERT(false, "SyntaxError: Invalid token identified!"); break;
-						}
-
-						skipMarker = true;
-					}
+					Vector<Pair<uint32, uint32>> parLocation;
+					parLocation.emplace_back(mTokens.size() - 1, Mathematica::Cast<uint32>(0));
+					Pair<uint32, Vector<Pair<uint32, uint32>>> scopeCount = { Mathematica::Cast<uint32>(1), parLocation };
+					mScopeCounter[parenthesesCount] = scopeCount;
 				}
-
-				// Append the operation to mTokens.
-				if(!skipMarker)
-				{
-					mTokens.emplace_back(String(1, currentChar), ELexiconTokenType::BinaryFunction);
-
-					// Set the priority of such operation.
-					if (currentChar == '+' || currentChar == '-')
-					{
-						mOperationIndexes[parenthesesCount][EPriority::Low].push_back((int32)(mTokens.size() - 1));
-					}
-					else
-					{
-						mOperationIndexes[parenthesesCount][EPriority::Medium].push_back((int32)(mTokens.size() - 1));
-					}
-				}
-				else
-				{
-					skipMarker = false;
-				}
-
-				// Reset the currentSubsubstring, to allow a new number to be stored.
-				currentSubsubstring = "";
-			}
-			else if (String result = isParenthesis(currentChar); result != "No") // <--- Check if it a parenthesis
-			{
-				if (!currentSubsubstring.empty())
-				{
-					mTokens.emplace_back(StringifyNumberToken(currentSubsubstring, invertSign), ELexiconTokenType::Number);
-					invertSign = false;
-				}
-				if (result == "Start")
-				{	
-					// Check if the previous token was a number or a parenthesis.
-					if (!mTokens.empty() && (mTokens.back().type == ELexiconTokenType::Number || mTokens.back().type == ELexiconTokenType::WrapperEnd))
-					{
-						// If so, create a multiplication token.
-						mTokens.emplace_back("*", ELexiconTokenType::BinaryFunction);
-						mOperationIndexes[parenthesesCount][EPriority::Medium].push_back((int32)(mTokens.size() - 1));
-					}
-					mTokens.emplace_back("#", ELexiconTokenType::WrapperStart);
-					parenthesesCount++;
-
-					// Initialize scope counter to send information to the parser.
-					if (mScopeCounter.find(parenthesesCount) != mScopeCounter.end())
-					{
-						mScopeCounter[parenthesesCount].first++;
-						mScopeCounter[parenthesesCount].second.emplace_back(mTokens.size() - 1, (uint32)0);
-					}
-					else
-					{
-						Vector<Pair<uint32, uint32>> parLocation;
-						parLocation.emplace_back(mTokens.size() - 1, (uint32)0);
-						Pair<uint32, Vector<Pair<uint32, uint32>>> scopeCount = { (uint32)1, parLocation };
-						mScopeCounter[parenthesesCount] = scopeCount;
-					}
-				}
-				else
-				{
-					mTokens.emplace_back("#", ELexiconTokenType::WrapperEnd);
-					mScopeCounter[parenthesesCount].second[mScopeCounter[parenthesesCount].first - 1].second = mTokens.size() - 1;
-					parenthesesCount--;
-				}
-				currentSubsubstring = "";
 			}
 			else
 			{
-				// This is an unknown token! We should throw here!
-				bIsNumber = false;
-				MTH_ASSERT(bIsNumber, "SyntaxError: An unknown token has been found!");
-
-				if (!currentSubsubstring.empty() && bIsNumber)
-				{
-					mTokens.emplace_back(StringifyNumberToken(currentSubsubstring, invertSign), ELexiconTokenType::Number);
-					currentSubsubstring = "";
-				}
-				currentSubsubstring += currentChar;
+				mTokens.emplace_back("#", ELexiconTokenType::WrapperEnd);
+				mScopeCounter[parenthesesCount].second[mScopeCounter[parenthesesCount].first - 1].second = mTokens.size() - 1;
+				parenthesesCount--;
 			}
+			currentSubstring = "";
 		}
-
-		if (!currentSubsubstring.empty())
+		else
 		{
-			if (bIsNumber)
-			{
-				mTokens.emplace_back(StringifyNumberToken(currentSubsubstring, invertSign), ELexiconTokenType::Number);
-				invertSign = false;
-			}
-			else
-			{
-				MTH_ASSERT(false, "Syntax error: An unknown token has been found!");
-				//mTokens.emplace_back(currentSubsubstring, ELexiconTokenType::Unknown);
-			}
+			// This is an unknown token! We should throw here!
+			MTH_ASSERT(false, "SyntaxError: An unknown token has been found!");
 		}
+	}
+
+	if (!currentSubstring.empty())
+	{
+		mTokens.emplace_back(StringifyNumberToken(currentSubstring, invertSign), ELexiconTokenType::Number);
+		invertSign = false;
 	}
 
 	MTH_ASSERT(parenthesesCount == 0, "Syntax error: parentheses mismatch found!");

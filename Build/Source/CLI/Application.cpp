@@ -190,7 +190,10 @@ void Mathematica::AppCommand::Solve()
 		auto result = solveEngine->SolveTree();
 
 		StringStream alertText;
-		alertText << "Result: " << Stringify(result) << "\n" << "Raw Value: " << result.RawNumerical();
+
+		alertText << "Result: " << Stringify(result) << "\n";
+		alertText.precision(6);
+		alertText << std::fixed << "Decimal value: " << result.RawNumerical();
 
 		Mathematica::AppCommand::DisplayAlert(alertText.str(), "Result of equation: " + equation);
 		app->RefreshAPI();

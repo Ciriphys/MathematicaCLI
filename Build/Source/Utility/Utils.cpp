@@ -90,7 +90,12 @@ namespace Mathematica
 	String Stringify(Number number)
 	{
 		StringStream stringStream;
-		stringStream << number.numerator << "/" << number.denominator;
+		stringStream << number.numerator;
+
+		if (number.denominator != 1)
+		{
+			stringStream << "/" << number.denominator;
+		}
 
 		return stringStream.str();
 	}
@@ -132,20 +137,20 @@ namespace Mathematica
 		}
 	}
 
-	Vector<String> SeparateString(String string, char separetor)
+	Vector<String> SeparateString(String string, char separator)
 	{
 		// Append a separator character to allow last separated to be included.
-		string += separetor;
+		string += separator;
 
 		String currentSubstring = "";
 		Vector<String> result = Vector<String>();
 
 		bool bIsInQuotes = false;
-		MTH_ASSERT(separetor != '\"', "Cannot use <\"> as a separator!");
+		MTH_ASSERT(separator != '\"', "SyntaxError: Cannot use <\"> as a separator!");
 
 		for (char currentChar : string)
 		{
-			if (currentChar == separetor && !bIsInQuotes)
+			if (currentChar == separator && !bIsInQuotes)
 			{
 				if (!currentSubstring.empty())
 				{
@@ -163,7 +168,7 @@ namespace Mathematica
 			}
 		}
 
-		MTH_ASSERT(!bIsInQuotes, "Quotes not ended!");
+		MTH_ASSERT(!bIsInQuotes, "SyntaxError: Quotes not ended!");
 		if (result.empty())
 		{
 			result.push_back(currentSubstring);

@@ -123,7 +123,7 @@ void Parser::GenerateNodes(const Vector<LexiconToken>& tokens)
 			currentNode->type = EMathNodeType::WrapEnd;
 			break;
 		default:
-			MTH_ASSERT(false, "Parser error: Unkown token detected!");
+			MTH_ASSERT(false, "ParserError: Unkown token detected!");
 			break;
 		}
 
@@ -142,9 +142,9 @@ Ref<MathNode> Parser::GenerateTree()
 		GenerateWrappedNodes(scopeData, EPriority::Medium);
 		GenerateWrappedNodes(scopeData, EPriority::Low);
 
-		auto dummy = mScopeCounter[scopeIndex].second;
+		auto parenthesesIndexes = mScopeCounter[scopeIndex].second;
 
-		for (auto [first, second] : dummy)
+		for (auto [first, second] : parenthesesIndexes)
 		{
 			mNodes[first]->type = EMathNodeType::None;
 			mNodes[second]->type = EMathNodeType::None;

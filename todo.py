@@ -14,34 +14,46 @@ def SearchFile(file, name):
            if "// TODO : " in line:
                 toFind = "// TODO : "
                 todo = line[line.find(toFind) + len(toFind):]
-                todos[name] = todo
+                if not name in todos:
+                    todos[name] = []
+                todos[name].append(todo)
            if "// TODO (late) : " in line:
                 toFind = "// TODO (late) : "
                 todo = line[line.find(toFind) + len(toFind):]
-                lateTodos[name] = todo
+                if not name in lateTodos:
+                    lateTodos[name] = []
+                lateTodos[name].append(todo)
            if "// NOTE : " in line:
                 toFind = "// NOTE : "
                 note = line[line.find(toFind) + len(toFind):]
-                notes[name] = note
+                if not name in notes:
+                    notes[name] = []
+                notes[name].append(note)
            if "// REFACTOR : " in line:
                 toFind = "// REFACTOR : "
                 refact = line[line.find(toFind) + len(toFind):]
-                refactor[name] = refact
+                if not name in refactor:
+                    refactor[name] = []
+                refactor[name].append(refact)
 
 def WriteTodo():
     global todos
     with open("todo.txt", "w+") as f:
-        f.write(f"=== TODOs ({len(todos)} + {len(lateTodos)}) ===\n\n")
+        f.write(f"=== TODOs ===\n\n")
         for file, todo in todos.items():
-            f.write(f"{file} : {todo}")
+            for t in todo:
+                f.write(f"{file} : {t}")
         for file, todo in lateTodos.items():
-            f.write(f"{file} : * {todo}")
-        f.write(f"\n=== Notes ({len(notes)}) ===\n\n")
+            for t in todo:
+                f.write(f"{file} : * {t}")
+        f.write(f"\n=== Notes ===\n\n")
         for file, note in notes.items():
-            f.write(f"{file} : {note}")
-        f.write(f"\n\n=== Refactor code ({len(notes)}) ===\n\n")
+            for n in note:
+                f.write(f"{file} : {n}")
+        f.write(f"\n\n=== Refactor code ===\n\n")
         for file, refact in refactor.items():
-            f.write(f"{file} : {refact}")
+            for r in refact:
+                f.write(f"{file} : {r}")
 
 
 if __name__ == "__main__":

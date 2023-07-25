@@ -46,7 +46,7 @@ namespace Mathematica
 
         HashMap<int32, int32> Factorize(int32 n)
         {
-            auto soe = SoE((int32)sqrt(n));
+            auto soe = SoE(Mathematica::Cast<int32>(sqrt(n)));
             HashMap<int32, int32> result;
 
             for (int32 i = 0; i < soe.size(); i++)
@@ -94,5 +94,3 @@ namespace Mathematica
         }
 	}
 }
-
-// REFACTOR : Change C-like casts into C++-like casts.
