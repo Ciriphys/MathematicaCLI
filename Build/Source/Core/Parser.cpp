@@ -20,6 +20,7 @@ void Parser::InitParser(const Vector<LexiconToken>& tokens, const Map<uint32, Ha
 	mScopeCounter = scopeCounter;
 }
 
+// REFACTOR : Use bit masks for type to improve readability.
 void Parser::GenerateWrappedNodes(HashMap<EPriority, Vector<uint32>>& scopeData, EPriority priority)
 {
 	Vector<uint32> indexes = scopeData[priority];
@@ -31,10 +32,32 @@ void Parser::GenerateWrappedNodes(HashMap<EPriority, Vector<uint32>>& scopeData,
 		// Check if previous and next node are marked to be ignored and get the indexes for the left and right nodes.
 		uint32 leftCounter = 1;
 		uint32 rightCounter = 1;
-		uint32 copyIndex = index;
-		while (mNodes[--copyIndex]->type == EMathNodeType::None) leftCounter++;
-		copyIndex = index;
-		while (mNodes[++copyIndex]->type == EMathNodeType::None) rightCounter++;
+
+		uint32 copyIndex = index - 1;
+		while (
+			mNodes[copyIndex]->type == EMathNodeType::None ||
+			mNodes[copyIndex]->type == EMathNodeType::WrapEnd ||
+			mNodes[copyIndex]->type == EMathNodeType::WrapStart
+		)
+		{
+			MTH_ASSERT(copyIndex != 0, "ParserError: There is no [leftNode] of type: Number!");
+
+			leftCounter++;
+			copyIndex--;
+		}
+
+		copyIndex = index + 1;
+		while (
+			mNodes[copyIndex]->type == EMathNodeType::None ||
+			mNodes[copyIndex]->type == EMathNodeType::WrapStart ||
+			mNodes[copyIndex]->type == EMathNodeType::WrapEnd
+		)
+		{
+			MTH_ASSERT(copyIndex != mNodes.size() - 1, "ParserError: There is no [rightNode] of type: Number!");
+
+			rightCounter++;
+			copyIndex++;
+		}
 
 		// Instantiate a reference for these nodes
 		Ref<MathNode> leftNode = mNodes[index - leftCounter];
@@ -43,9 +66,9 @@ void Parser::GenerateWrappedNodes(HashMap<EPriority, Vector<uint32>>& scopeData,
 		// Make sure that the user sent a proper input.
 		// Then, unwrap nodes and make links between parents and children.
 		MTH_ASSERT(leftNode->type == EMathNodeType::Number || leftNode->type == EMathNodeType::Wrapper,
-			"Parser error: tree generation cannot be completed, [leftNode] was not idoneous.");
+			"ParserError: Tree generation cannot be completed, [leftNode] was not idoneous.");
 		MTH_ASSERT(rightNode->type == EMathNodeType::Number || rightNode->type == EMathNodeType::Wrapper,
-			"Parser error: tree generation cannot be completed, [rightNode] was not idoneous.");
+			"ParserError: Tree generation cannot be completed, [rightNode] was not idoneous.");
 
 		leftNode = (leftNode->type == EMathNodeType::Wrapper) ? leftNode->children.back() : leftNode;
 		rightNode = (rightNode->type == EMathNodeType::Wrapper) ? rightNode->children.back() : rightNode;

@@ -45,6 +45,7 @@ Number Solver::RecursiveSolve(const Ref<MathNode>& node)
             break;
         default:
             MTH_ASSERT(false, "What kind of sorcery is this?!");
+            return {};
             break;
     }
 }

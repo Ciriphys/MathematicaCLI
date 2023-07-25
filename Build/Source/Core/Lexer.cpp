@@ -62,7 +62,11 @@ void Lexer::GenerateTokens(String equation)
 				// Check if the previous token was a function or if the tokens are empty.
 				// then, check if this operation is a "+" or a "-"
 				// if those checks are valid, then add a flag to represent the sign of the number.
-				if (mTokens.size() == 0 || mTokens.back().type == ELexiconTokenType::BinaryFunction)
+				if (
+					mTokens.size() == 0 ||
+					mTokens.back().type == ELexiconTokenType::BinaryFunction ||
+					mTokens.back().type == ELexiconTokenType::WrapperStart
+				) 
 				{
 					switch(substring.front())
 					{
@@ -174,7 +178,11 @@ void Lexer::GenerateTokens(String equation)
 					// If it is empty, It might be necessary to generate a zero token to represent the sign.
 					// This, again, it is only possible if the previous token was an operation or the mTokens array is empty.
 					// Also, the current token must be a '+' or a '-'.
-					if (mTokens.size() == 0 || mTokens.back().type == ELexiconTokenType::BinaryFunction)
+					if (
+						mTokens.size() == 0 ||
+						mTokens.back().type == ELexiconTokenType::BinaryFunction ||
+						mTokens.back().type == ELexiconTokenType::WrapperStart
+					)
 					{
 						switch(currentChar)
 						{
@@ -249,8 +257,6 @@ void Lexer::GenerateTokens(String equation)
 					mScopeCounter[parenthesesCount].second[mScopeCounter[parenthesesCount].first - 1].second = mTokens.size() - 1;
 					parenthesesCount--;
 				}
-				// --solve "(1+2)(2+1)"
-
 				currentSubsubstring = "";
 			}
 			else

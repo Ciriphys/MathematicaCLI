@@ -17,7 +17,7 @@ namespace Mathematica
 				result += number;
 			}
 
-			return result / numbers.size();
+			return result / Mathematica::Cast<int32>(numbers.size());
 		}
 
 		Number Average(Number first, Number second)
@@ -47,7 +47,7 @@ namespace Mathematica
 
 			if (!delta) return { Mathematica::Cast<int32>(number), 1 };
 
-			while (abs(betweenValue - delta) > FLT_EPSILON)
+			while (abs(betweenValue - delta) > MTH_FLOAT32_EPSILON)
 			{
 				if (delta < betweenValue)
 				{

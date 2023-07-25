@@ -11,16 +11,18 @@
 #endif
 
 #ifdef MTH_WIN
-#define MTH_PROJECT_PATH "MathematicaCLI\\"
+constexpr auto MTH_PROJECT_PATH = "MathematicaCLI\\";
 #else
-#define MTH_PROJECT_PATH "MathematicaCLI/"
+constexpr auto MTH_PROJECT_PATH = "MathematicaCLI/";
 #endif
 
-#define MTH_VERSION "Version 0.0.9a"
-#define MTH_NO_MESSAGE "No message provided."
 #define MTH_UNUSED(x) Mathematica::Cast<void>(x)
 #define MTH_ADDRESS_OF(x) (void*)&x
 #define MTH_UINT_ADDRESS_OF(x) *(uint32*)MTH_ADDRESS_OF(x)
+
+constexpr auto MTH_VERSION = "Version 0.0.9a";
+constexpr auto MTH_NO_MESSAGE = "No message provided.";
+constexpr auto MTH_FLOAT32_EPSILON = 1.192092896e-07F;
 
 enum class ELexiconTokenType;
 enum class EMathNodeType;

@@ -48,7 +48,7 @@ namespace Mathematica
 
 		float32 StringToFloat32(String string)
 		{
-			return std::atof(string.c_str());
+			return Mathematica::Cast<float32>(std::atof(string.c_str()));
 		}
 
 		float64 StringToFloat64(String string)
