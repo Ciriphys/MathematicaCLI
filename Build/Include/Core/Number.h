@@ -36,6 +36,8 @@ struct Number : public Identifiable
 	void operator*=(Number other);
 	void operator/=(Number other);
 
-    double RawNumerical();
-    Number LowestTerms();
+    float32 RawNumerical();
+
+    Number LowestTerms(int32 num, int32 den);
+    void LowestTerms();
 };

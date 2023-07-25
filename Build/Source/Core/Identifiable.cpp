@@ -20,11 +20,11 @@ String Identifiable::GenerateUUID()
 	uint32 sixth	 = RandomEngine::UnsignedInt(0, 0xffff);
 
 	StringStream UUID;
-	UUID << Mathematica::Convert::IntToHexString(first, 8) << "-";
-	UUID << Mathematica::Convert::IntToHexString(second, 4) << "-";
-	UUID << Mathematica::Convert::IntToHexString(third, 4) << "-";
-	UUID << Mathematica::Convert::IntToHexString(fourth, 4) << "-";
-	UUID << Mathematica::Convert::IntToHexString(fifth, 8) << Mathematica::Convert::IntToHexString(sixth, 4);
+	UUID << Mathematica::Convert::Uint32ToHexString(first, 8) << "-";
+	UUID << Mathematica::Convert::Uint32ToHexString(second, 4) << "-";
+	UUID << Mathematica::Convert::Uint32ToHexString(third, 4) << "-";
+	UUID << Mathematica::Convert::Uint32ToHexString(fourth, 4) << "-";
+	UUID << Mathematica::Convert::Uint32ToHexString(fifth, 8) << Mathematica::Convert::Uint32ToHexString(sixth, 4);
 
 	return UUID.str();
 }

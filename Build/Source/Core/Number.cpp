@@ -1,12 +1,19 @@
 #include "mthpch.h"
 
-#include "Core/Math/Integer.h"
 #include "Core/Math/Operations.h"
+#include "Core/Math/Rational.h"
+#include "Core/Math/Integer.h"
 
 #include "Core/Number.h"
 
-Number::Number(int32 num, int32 den) : numerator(num), denominator(den), type(ENumberType::Real) 
+#include "Utility/Conversions.h"
+
+Number::Number(int32 num, int32 den) : numerator(num), denominator(den), type(ENumberType::Real)
 {
+    MTH_ASSERT(denominator != 0, "NumberInitError: Cannot divide by zero!");
+
+    LowestTerms();
+
     // TODO : This implementation does not include Real type numbers. For now the only allowed types are Integer and Rational.
     if (denominator == 1)
     {
@@ -21,23 +28,32 @@ Number::Number(int32 num, int32 den) : numerator(num), denominator(den), type(EN
 Number::Number(const String& strNumber)
 {
     // TODO : Add support for fractions and real numbers.
-    numerator = std::atoi(strNumber.c_str());
-    denominator = 1;
+    float32 rawNumerical = Mathematica::Convert::StringToFloat32(strNumber);
+    Number fraction = Mathematica::Rational::Farey(rawNumerical);
 
-    MTH_ASSERT(denominator != 0, "NumberInitError: Cannot divide by zero!");
+    numerator = fraction.numerator;
+    denominator = fraction.denominator;
 
     type = ENumberType::Integer;
 }
 
-double Number::RawNumerical()
+float32 Number::RawNumerical()
 {
-    return (double)numerator / (double)denominator;
+    return (float32)numerator / (float32)denominator;
 }
 
-Number Number::LowestTerms()
+Number Number::LowestTerms(int32 numerator, int32 denominator)
 {
     int32 gcd = Mathematica::Integer::GreatestCommonDivisor(numerator, denominator);
-    return { numerator / gcd, denominator / gcd };
+    return { numerator / gcd, denominator / gcd};
+}
+
+void Number::LowestTerms()
+{
+    int32 gcd = Mathematica::Integer::GreatestCommonDivisor(numerator, denominator);
+    
+    numerator /= gcd;
+    denominator /= gcd;
 }
 
 Number Number::operator+(Number other)

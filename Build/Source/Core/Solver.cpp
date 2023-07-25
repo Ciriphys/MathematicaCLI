@@ -36,12 +36,12 @@ Number Solver::RecursiveSolve(const Ref<MathNode>& node)
                 Number right = RecursiveSolve(rightChild);
 
                 // Get the function assigned to the math node.
-                FBinaryFunction function = std::any_cast<FBinaryFunction>(node->data);
+                FBinaryFunction function = Mathematica::AnyCast<FBinaryFunction>(node->data);
                 return function(left, right);
             }
             break;
         case EMathNodeType::Number:      
-            return std::any_cast<Number>(node->data);
+            return Mathematica::AnyCast<Number>(node->data);
             break;
         default:
             MTH_ASSERT(false, "What kind of sorcery is this?!");
@@ -68,10 +68,10 @@ Number Solver::ExecutionSolve()
 
 			MTH_ASSERT(leftChild->type  == EMathNodeType::Number, "What kind of sorcery is this?!");
 			MTH_ASSERT(rightChild->type == EMathNodeType::Number, "What kind of sorcery is this?!");
-            Number left  = std::any_cast<Number>( leftChild->data);
-            Number right = std::any_cast<Number>(rightChild->data);
+            Number left  = Mathematica::AnyCast<Number>( leftChild->data);
+            Number right = Mathematica::AnyCast<Number>(rightChild->data);
 
-            FBinaryFunction function = std::any_cast<FBinaryFunction>(operation->data);
+            FBinaryFunction function = Mathematica::AnyCast<FBinaryFunction>(operation->data);
             Number operationResult = function(left, right);
 
             Ref<MathNode> newNode = Mathematica::MakeRef<MathNode>();

@@ -17,8 +17,7 @@ namespace Mathematica
             int32 numeratorA = a.numerator * commonDenominator / a.denominator;
             int32 numeratorB = b.numerator * commonDenominator / b.denominator;
 
-            Number result = {numeratorA + numeratorB, commonDenominator};
-            return result.LowestTerms();
+            return { numeratorA + numeratorB, commonDenominator };
         }
 
         Number Subtract(const Number& a, const Number& b)
@@ -27,8 +26,7 @@ namespace Mathematica
             int32 numeratorA = a.numerator * commonDenominator / a.denominator;
             int32 numeratorB = b.numerator * commonDenominator / b.denominator;
 
-            Number result = {numeratorA - numeratorB, commonDenominator};
-            return result.LowestTerms();
+            return { numeratorA - numeratorB, commonDenominator };
         }
 
         Number Multiply(const Number& a, const Number& b)
@@ -36,10 +34,8 @@ namespace Mathematica
             int32 numerator = a.numerator * b.numerator;
             int32 denominator = a.denominator * b.denominator;
             
-            Number result = { numerator, denominator };
-            return result.LowestTerms();
+            return { numerator, denominator };
         }
-
 
         Number Divide(const Number& a, const Number& b)
         {
@@ -48,8 +44,7 @@ namespace Mathematica
             
             MTH_ASSERT(denominator != 0, "DomainError: Cannot divide by zero!");
 
-            Number result = { numerator, denominator };
-            return result.LowestTerms();
+            return { numerator, denominator };
         }
 
         Number Mod(const Number& a, const Number& b)

@@ -7,17 +7,17 @@ namespace Mathematica
 {
 	namespace Convert
 	{
-		String IntToHexString(uint32 number, uint32 length)
+		String Uint32ToHexString(uint32 number, uint32 length)
 		{
-			return IntToBaseString(number, 16, length);
+			return Uint32ToBaseString(number, 16, length);
 		}
 
-		String IntToOctString(uint32 number, uint32 length)
+		String Uint32ToOctString(uint32 number, uint32 length)
 		{
-			return IntToBaseString(number, 8, length);
+			return Uint32ToBaseString(number, 8, length);
 		}
 
-		String IntToBaseString(uint32 number, uint32 base, uint32 length)
+		String Uint32ToBaseString(uint32 number, uint32 base, uint32 length)
 		{
 			MTH_ASSERT(base < 36, "ConversionError: Base is too large!");
 
@@ -34,6 +34,35 @@ namespace Mathematica
 			}
 
 			return result;
+		}
+
+		int32 StringToInt32(String string)
+		{
+			return std::atoi(string.c_str());
+		}
+
+		String Int32ToString(int32 number)
+		{
+			return std::to_string(number);
+		}
+
+		float32 StringToFloat32(String string)
+		{
+			return std::atof(string.c_str());
+		}
+
+		float64 StringToFloat64(String string)
+		{
+			return std::atof(string.c_str());
+		}
+
+		String Float32ToString(float32 number)
+		{
+			return std::to_string(number);
+		}
+		String Float64ToString(float64 number)
+		{
+			return std::to_string(number);
 		}
 	}
 }

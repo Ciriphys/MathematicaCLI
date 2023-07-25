@@ -15,7 +15,7 @@ void RandomEngine::Init()
 
 int32 RandomEngine::Int(int32 minRange, int32 maxRange)
 {
-	MTH_ASSERT(sInstance, "RandomEngine instance has not been initialized. Please call RandomEngine::Init().");
+	MTH_ASSERT(sInstance, "RandomEngine instance has not been initialized. Please invoke RandomEngine::Init().");
 
 	std::uniform_int_distribution<int32> uniformDistribution(minRange, maxRange);
 	return uniformDistribution(mMersenneTwister);
@@ -23,17 +23,25 @@ int32 RandomEngine::Int(int32 minRange, int32 maxRange)
 
 uint32 RandomEngine::UnsignedInt(uint32 minRange, uint32 maxRange)
 {
-	MTH_ASSERT(sInstance, "RandomEngine instance has not been initialized. Please call RandomEngine::Init().");
+	MTH_ASSERT(sInstance, "RandomEngine instance has not been initialized. Please invoke RandomEngine::Init().");
 
 	std::uniform_int_distribution<uint32> uniformDistribution(minRange, maxRange);
 	return uniformDistribution(mMersenneTwister);
 }
 
+float32 RandomEngine::Float(float32 minRange, float32 maxRange)
+{
+	MTH_ASSERT(sInstance, "RandomEngine instance has not been initialized. Please invoke RandomEngine::Init().");
+
+	std::uniform_real_distribution<float32> uniformDistribution(minRange, maxRange);
+	return uniformDistribution(mMersenneTwister);
+}
+
 float64 RandomEngine::Double(float64 minRange, float64 maxRange)
 {
-	MTH_ASSERT(sInstance, "RandomEngine instance has not been initialized. Please call RandomEngine::Init().");
+	MTH_ASSERT(sInstance, "RandomEngine instance has not been initialized. Please invoke RandomEngine::Init().");
 
-	std::uniform_real_distribution<double> uniformDistribution(minRange, maxRange);
+	std::uniform_real_distribution<float64> uniformDistribution(minRange, maxRange);
 	return uniformDistribution(mMersenneTwister);
 }
 

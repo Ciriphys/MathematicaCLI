@@ -49,8 +49,6 @@ void Lexer::GenerateTokens(String equation)
 		return "No";
 	};
 
-	mTokens.emplace_back("#", ELexiconTokenType::WrapperStart);
-
 	// REFACTOR : The first half of the for loop might be deleted in the future, as well as string separation.
 	// REFACTOR : Instead, it might be convenient to just ignore the spaces.
 	for (auto substring : separetedEquation)
@@ -286,8 +284,6 @@ void Lexer::GenerateTokens(String equation)
 	}
 
 	MTH_ASSERT(parenthesesCount == 0, "Syntax error: parentheses mismatch found!");
-	mTokens.emplace_back("#", ELexiconTokenType::WrapperEnd);
-
 }
 
 String Lexer::StringifyNumberToken(String string, bool invertSign)

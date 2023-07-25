@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Types.h"
+#include "Utility/Types.h"
 
 #ifdef MTH_DEBUG 
 #define MTH_ASSERT(expression, message) if(!(expression)) Mathematica::Assert(#expression, Mathematica::RelativeToBuildPath(__FILE__).c_str(), __FUNCTION__, __LINE__, message)
@@ -16,9 +16,9 @@
 #define MTH_PROJECT_PATH "MathematicaCLI/"
 #endif
 
-#define MTH_VERSION "Version 0.0.8a"
+#define MTH_VERSION "Version 0.0.9a"
 #define MTH_NO_MESSAGE "No message provided."
-#define MTH_UNUSED(x) (void)x
+#define MTH_UNUSED(x) Mathematica::Cast<void>(x)
 #define MTH_ADDRESS_OF(x) (void*)&x
 #define MTH_UINT_ADDRESS_OF(x) *(uint32*)MTH_ADDRESS_OF(x)
 
@@ -48,6 +48,26 @@ namespace Mathematica
 	constexpr Pair<F, S> MakePair(F&& first, S&& second)
 	{
 		return std::make_pair<F, S>(std::forward<F>(first), std::forward<S>(second));
+	}
+
+	// === Any === 
+	template <typename T>
+	constexpr auto AnyCast(const Any& value)
+	{
+		return std::any_cast<T>(value);
+	}
+
+	// === Casts === 
+	template <typename F, typename S>
+	constexpr auto Cast(const S& what)
+	{
+		return static_cast<F>(what);
+	}
+
+	template <typename T>
+	constexpr auto Recast(const void* what)
+	{
+		return reinterpret_cast<T>(what);
 	}
 
 	// === Debug and files ===
