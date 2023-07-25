@@ -2,19 +2,19 @@
 
 #include "Utility/Types.h"
 
-class IIdentifiable
+class Identifiable
 {
 public:
-	IIdentifiable();
-	MString GetUUID() const { return mId; }
-	MString GetShortUUID() const { return MString(mId.begin(), mId.begin() + 7); }
+	Identifiable();
+	String GetUUID() const { return mId; }
+	String GetShortUUID() const { return String(mId.begin(), mId.begin() + 7); }
 
-	bool operator==(IIdentifiable other);
-	bool operator!=(IIdentifiable other);
+	bool operator==(Identifiable other);
+	bool operator!=(Identifiable other);
 
 protected:
-	MString mId;
+	String mId;
 
 private:
-	MString GenerateUUID();
+	String GenerateUUID();
 };

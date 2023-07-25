@@ -21,10 +21,10 @@ namespace Mathematica
 		printf("%s requested a debug information call for function \"%s\".\n", callerFunction, functionName);
 	}
 
-	MString RelativeToBuildPath(MString file)
+	String RelativeToBuildPath(String file)
 	{
-		MString path;
-		MString prjPath = MTH_PROJECT_PATH;
+		String path;
+		String prjPath = MTH_PROJECT_PATH;
 		uint64 index = file.find(prjPath) + prjPath.length();
 		path = file.substr(index);
 
@@ -40,7 +40,7 @@ namespace Mathematica
 #endif
 	}
 
-	void TransformToLower(MString& string)
+	void TransformToLower(String& string)
 	{
 		for (auto& c : string)
 		{
@@ -51,7 +51,7 @@ namespace Mathematica
 		}
 	}
 
-	void TransformToUpper(MString& string)
+	void TransformToUpper(String& string)
 	{
 		for (auto& c : string)
 		{
@@ -62,7 +62,7 @@ namespace Mathematica
 		}
 	}
 
-	MString Stringify(ELexiconTokenType type)
+	String Stringify(ELexiconTokenType type)
 	{
 		switch (type)
 		{
@@ -75,7 +75,7 @@ namespace Mathematica
 		}
 	}
 
-	MString Stringify(EMathNodeType type)
+	String Stringify(EMathNodeType type)
 	{
 		switch (type)
 		{
@@ -87,15 +87,15 @@ namespace Mathematica
 		}
 	}
 
-	MString Stringify(MNumber number)
+	String Stringify(Number number)
 	{
-		MStringStream stringStream;
+		StringStream stringStream;
 		stringStream << number.numerator << "/" << number.denominator;
 
 		return stringStream.str();
 	}
 
-	void DisplayParsedTree(const MRef<MMathNode>& node)
+	void DisplayParsedTree(const Ref<MathNode>& node)
 	{
 		if (!node)
 		{
@@ -108,11 +108,11 @@ namespace Mathematica
 			DisplayParsedTree(child);
 		}
 
-		MString data = "";
+		String data = "";
 
 		try
 		{
-			data = Stringify(std::any_cast<MNumber>(node->data));
+			data = Stringify(std::any_cast<Number>(node->data));
 		}
 		catch (...)
 		{
@@ -124,21 +124,21 @@ namespace Mathematica
 		return;
 	}
 
-	void RemoveQuotes(MString& string)
+	void RemoveQuotes(String& string)
 	{
 		if (string.front() == '\"' && string.back() == '\"')
 		{
-			string = MString(string.begin() + 1, string.end() - 1);
+			string = String(string.begin() + 1, string.end() - 1);
 		}
 	}
 
-	MVector<MString> SeparateString(MString string, char separetor)
+	Vector<String> SeparateString(String string, char separetor)
 	{
 		// Append a separator character to allow last separated to be included.
 		string += separetor;
 
-		MString currentSubstring = "";
-		MVector<MString> result = MVector<MString>();
+		String currentSubstring = "";
+		Vector<String> result = Vector<String>();
 
 		bool bIsInQuotes = false;
 		MTH_ASSERT(separetor != '\"', "Cannot use <\"> as a separator!");
@@ -171,7 +171,7 @@ namespace Mathematica
 		return result;
 	}
 
-	void DisplayTokenArray(const MVector<MLexiconToken>& tokenArray, bool bInline)
+	void DisplayTokenArray(const Vector<LexiconToken>& tokenArray, bool bInline)
 	{
 		if (tokenArray.empty()) return;
 
@@ -186,7 +186,7 @@ namespace Mathematica
 		std::cout << "]" << std::endl << std::endl;
 	}
 
-	void DisplayTokenUUID(const MVector<MLexiconToken>& tokenArray, bool bInline /*= true*/)
+	void DisplayTokenUUID(const Vector<LexiconToken>& tokenArray, bool bInline /*= true*/)
 	{
 		if (tokenArray.empty()) return;
 
@@ -221,7 +221,7 @@ namespace Mathematica
 		return a < b ? a : b;
 	}
 
-	FBinaryFunction GetBinaryFunctionFromRawData(const MString& data)
+	FBinaryFunction GetBinaryFunctionFromRawData(const String& data)
 	{
 		if (data.size() == 1)
 		{
@@ -238,7 +238,7 @@ namespace Mathematica
 		return {};
 	}
 
-	MString Stringify(FBinaryFunction address)
+	String Stringify(FBinaryFunction address)
 	{
 		FBinaryFunction addAddress		= &Mathematica::Operation::Add;
 		FBinaryFunction subtractAddress = &Mathematica::Operation::Subtract;

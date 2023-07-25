@@ -2,11 +2,11 @@
 
 #include "Core/LexiconToken.h"
 
-MLexiconToken::MLexiconToken(MString __data, ELexiconTokenType __type) : data(__data), type(__type) {}
+LexiconToken::LexiconToken(String __data, ELexiconTokenType __type) : data(__data), type(__type) {}
 
-MString MLexiconToken::GetTokenRichInformation()
+String LexiconToken::GetTokenRichInformation()
 {
-    MStringStream information;
+    StringStream information;
     information << "@";
     information << Mathematica::Stringify(type);
     information << "(" << data << ")";

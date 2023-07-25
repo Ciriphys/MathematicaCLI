@@ -11,23 +11,23 @@ enum class EPriority : int32
 	High
 };
 
-class MLexer
+class Lexer
 {
 public:
-	MLexer();
+	Lexer();
 
-	void GenerateTokens(MString equation);
+	void GenerateTokens(String equation);
 
-	MVector<MLexiconToken> GetTokens() const { return mTokens; }
-	MMap<uint32, MHashMap<EPriority, MVector<uint32>>> GetOperationIndex() const { return mOperationIndexes; }
-	MHashMap<uint32, MPair<uint32, MVector<MPair<uint32, uint32>>>> GetScopeCounter() const { return mScopeCounter; }
+	Vector<LexiconToken> GetTokens() const { return mTokens; }
+	Map<uint32, HashMap<EPriority, Vector<uint32>>> GetOperationIndex() const { return mOperationIndexes; }
+	HashMap<uint32, Pair<uint32, Vector<Pair<uint32, uint32>>>> GetScopeCounter() const { return mScopeCounter; }
 
 private:
-	MString StringifyNumberToken(MString string, bool invertSign);
+	String StringifyNumberToken(String string, bool invertSign);
 
-	MVector<MLexiconToken> mTokens;
-	MMap<uint32, MHashMap<EPriority, MVector<uint32>>> mOperationIndexes;
-	MHashMap<uint32, MPair<uint32, MVector<MPair<uint32, uint32>>>> mScopeCounter;
+	Vector<LexiconToken> mTokens;
+	Map<uint32, HashMap<EPriority, Vector<uint32>>> mOperationIndexes;
+	HashMap<uint32, Pair<uint32, Vector<Pair<uint32, uint32>>>> mScopeCounter;
 };
 
-// NOTE : Making MLexer and MParser friends is potentially useful. Maybe in the future I'll change that.
+// NOTE : Making Lexer and Parser friends is potentially useful. Maybe in the future I'll change that.

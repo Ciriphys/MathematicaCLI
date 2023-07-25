@@ -5,21 +5,21 @@
 #include "Utility/Conversions.h"
 #include "Utility/Random.h"
 
-IIdentifiable::IIdentifiable()
+Identifiable::Identifiable()
 {
 	mId = GenerateUUID();
 }
 
-MString IIdentifiable::GenerateUUID()
+String Identifiable::GenerateUUID()
 {
-	uint32 first     = MRandom::UnsignedInt(0, 0xffffffff);		
-	uint32 second    = MRandom::UnsignedInt(0, 0xffff);			
-	uint32 third	 = MRandom::UnsignedInt(0, 0xffff);			
-	uint32 fourth	 = MRandom::UnsignedInt(0, 0xffff);
-	uint32 fifth	 = MRandom::UnsignedInt(0, 0xffffffff);
-	uint32 sixth	 = MRandom::UnsignedInt(0, 0xffff);
+	uint32 first     = RandomEngine::UnsignedInt(0, 0xffffffff);		
+	uint32 second    = RandomEngine::UnsignedInt(0, 0xffff);			
+	uint32 third	 = RandomEngine::UnsignedInt(0, 0xffff);			
+	uint32 fourth	 = RandomEngine::UnsignedInt(0, 0xffff);
+	uint32 fifth	 = RandomEngine::UnsignedInt(0, 0xffffffff);
+	uint32 sixth	 = RandomEngine::UnsignedInt(0, 0xffff);
 
-	MStringStream UUID;
+	StringStream UUID;
 	UUID << Mathematica::Convert::IntToHexString(first, 8) << "-";
 	UUID << Mathematica::Convert::IntToHexString(second, 4) << "-";
 	UUID << Mathematica::Convert::IntToHexString(third, 4) << "-";
@@ -29,12 +29,12 @@ MString IIdentifiable::GenerateUUID()
 	return UUID.str();
 }
 
-bool IIdentifiable::operator==(IIdentifiable other)
+bool Identifiable::operator==(Identifiable other)
 {
 	return (mId == other.GetUUID());
 }
 
-bool IIdentifiable::operator!=(IIdentifiable other)
+bool Identifiable::operator!=(Identifiable other)
 {
 	return !(*this == other);
 }

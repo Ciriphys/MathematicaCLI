@@ -44,10 +44,10 @@ namespace Mathematica
             return true;
 		}
 
-        MHashMap<int32, int32> Factorize(int32 n)
+        HashMap<int32, int32> Factorize(int32 n)
         {
             auto soe = SoE((int32)sqrt(n));
-            MHashMap<int32, int32> result;
+            HashMap<int32, int32> result;
 
             for (int32 i = 0; i < soe.size(); i++)
             {
@@ -77,10 +77,10 @@ namespace Mathematica
             return result;
         }
 
-        MVector<int32> SoE(int32 max)
+        Vector<int32> SoE(int32 max)
         {
             // TODO : Implement a proper SoE and speed up the algorithm.
-            MVector<int32> result;
+            Vector<int32> result;
 
             for (int32 i = 2; i <= max; i++)
             {

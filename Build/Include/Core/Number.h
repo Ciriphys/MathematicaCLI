@@ -17,25 +17,25 @@ enum class ENumberType : int32
 };
 
 // TODO : Add support for real numbers. Currently this definition is valid for rationals.
-struct MNumber : public IIdentifiable
+struct Number : public Identifiable
 {
     int32 numerator;
     int32 denominator;
     ENumberType type;
 
-    MNumber(int32 num = 0, int32 den = 1);
-    MNumber(const MString& strNumber);
+    Number(int32 num = 0, int32 den = 1);
+    Number(const String& strNumber);
 
-    MNumber operator+(MNumber other);
-    MNumber operator-(MNumber other);
-    MNumber operator*(MNumber other);
-    MNumber operator/(MNumber other);
+    Number operator+(Number other);
+    Number operator-(Number other);
+    Number operator*(Number other);
+    Number operator/(Number other);
 
-	void operator+=(MNumber other);
-	void operator-=(MNumber other);
-	void operator*=(MNumber other);
-	void operator/=(MNumber other);
+	void operator+=(Number other);
+	void operator-=(Number other);
+	void operator*=(Number other);
+	void operator/=(Number other);
 
     double RawNumerical();
-    MNumber LowestTerms();
+    Number LowestTerms();
 };

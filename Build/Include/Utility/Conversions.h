@@ -7,9 +7,11 @@ namespace Mathematica
 	// TODO : Add more conversions.
 	namespace Convert
 	{
-		MString IntToHexString(uint32 number, uint32 length);
-		MString IntToOctString(uint32 number, uint32 length);
+		String IntToHexString(uint32 number, uint32 length);
+		String IntToOctString(uint32 number, uint32 length);
 
-		MString IntToBaseString(uint32 number, uint32 base, uint32 length);
+		String IntToBaseString(uint32 number, uint32 base, uint32 length);
+
+		// TODO : Write String to Float and Float to string
 	}
 }

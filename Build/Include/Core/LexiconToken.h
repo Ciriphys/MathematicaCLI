@@ -14,11 +14,11 @@ enum class ELexiconTokenType : int32
 	Unknown
 };
 
-struct MLexiconToken : public IIdentifiable
+struct LexiconToken : public Identifiable
 {
-	MString data;
+	String data;
 	ELexiconTokenType type;
 
-	MLexiconToken(MString __data, ELexiconTokenType __type);
-	MString GetTokenRichInformation();
+	LexiconToken(String __data, ELexiconTokenType __type);
+	String GetTokenRichInformation();
 };

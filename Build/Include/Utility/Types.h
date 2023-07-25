@@ -1,38 +1,45 @@
 #pragma once
 
 // Forward declarations
-struct MNumber;
+struct Number;
 
 // Data structures
+using String = std::string;
+using StringStream = std::stringstream;
+using Any = std::any;
+
 template<typename T>
-using MVector = std::vector<T>;
+using Vector = std::vector<T>;
+
 template<typename K, typename V>
-using MHashMap = std::unordered_map<K, V>;
+using HashMap = std::unordered_map<K, V>;
+
 template<typename K, typename V>
-using MMap = std::map<K, V>;
-using MString = std::string;
-using MStringStream = std::stringstream;
+using Map = std::map<K, V>;
+
 template<typename T>
-using MStack = std::stack<T>;
+using Stack = std::stack<T>;
+
 template<typename F, typename S>
-using MPair = std::pair<F, S>;
-using MAny = std::any;
+using Pair = std::pair<F, S>;
 
 // Miscellaneous
-using MMersenneTwister = std::mt19937;
-using MRandomDevice = std::random_device;
+using MersenneTwister = std::mt19937;
+using RandomDevice = std::random_device;
 
 // Functions
-typedef MNumber(*FBinaryFunction)(const MNumber&, const MNumber&);
+typedef Number(*FBinaryFunction)(const Number&, const Number&);
 
 // Primitive types
-using uint64 = unsigned long long int;
-using uint32 = unsigned int;
-using int64  = long long int;
-using int32  = int;
+using uint64  = unsigned long long int;
+using uint32  = unsigned int;
+using int64   = long long int;
+using int32   = int;
+using float32 = float;
+using float64 = double;
 
 // Smart pointers
 template<typename T>
-using MRef = std::shared_ptr<T>;
+using Ref = std::shared_ptr<T>;
 template<typename T>
-using MScope = std::unique_ptr<T>;
+using Scope = std::unique_ptr<T>;

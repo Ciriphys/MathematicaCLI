@@ -5,15 +5,15 @@
 #include "Utility/Utils.h"
 #include "Utility/Random.h"
 
-MApplication* MApplication::sInstance = nullptr;
+Application* Application::sInstance = nullptr;
 
-MApplication* MApplication::Get() 
+Application* Application::Get() 
 {
-    if (!sInstance) new MApplication();
+    if (!sInstance) new Application();
     return sInstance;
 }
 
-void MApplication::Execute()
+void Application::Execute()
 {
 	for(auto [command, params] : mCommands)
 	{
@@ -40,24 +40,24 @@ void MApplication::Execute()
 	}
 }
 
-void MApplication::TypeMode()
+void Application::TypeMode()
 {
-	MString userInput;
+	String userInput;
 	std::getline(std::cin, userInput);
 	mArguments = Mathematica::SeparateString(userInput);
     GenerateCommandMap();
 }
 
-void MApplication::GenerateCommandMap()
+void Application::GenerateCommandMap()
 {
-	MString currentCommand = "None";
+	String currentCommand = "None";
 	for (auto argument : mArguments)
 	{
 		if (argument.rfind("-", 0) == 0 || argument.rfind("--", 0) == 0)
 		{
 			currentCommand = argument;
 			Mathematica::TransformToLower(currentCommand);
-			mCommands[currentCommand] = MVector<MString>();
+			mCommands[currentCommand] = Vector<String>();
 		}
 		else
 		{
@@ -68,7 +68,7 @@ void MApplication::GenerateCommandMap()
 	}
 }
 
-void MApplication::DrawMenu()
+void Application::DrawMenu()
 {
 	Mathematica::ClearScreen();
 	std::cout << "==== Mathematica CLI: Menu ====" << std::endl;
@@ -102,27 +102,27 @@ void MApplication::DrawMenu()
 	}
 }
 
-void MApplication::Alert(MString alert)
+void Application::Alert(String alert)
 {
 	Mathematica::AppCommand::DisplayAlert(alert);
 }
 
-void MApplication::RefreshAPI()
+void Application::RefreshAPI()
 {
-	mLexer = Mathematica::MakeRef<MLexer>();
-	mParser = Mathematica::MakeRef<MParser>();
-	mSolveEngine = Mathematica::MakeRef<MSolver>();
+	mLexer = Mathematica::MakeRef<Lexer>();
+	mParser = Mathematica::MakeRef<Parser>();
+	mSolveEngine = Mathematica::MakeRef<Solver>();
 }
 
-MApplication::MApplication()
+Application::Application()
 {
     sInstance = this;
 	RefreshAPI();
 
-	MRandom::Init();
+	RandomEngine::Init();
 }
 
-void MApplication::LoadArguments(int32 argc, char** argv)
+void Application::LoadArguments(int32 argc, char** argv)
 {
     for(int32 i = 1; i < argc; i++)
     {
@@ -130,7 +130,7 @@ void MApplication::LoadArguments(int32 argc, char** argv)
     }
 }
 
-void MApplication::Run() 
+void Application::Run() 
 {
     do 
     {
@@ -141,7 +141,7 @@ void MApplication::Run()
     Abort();
 }
 
-int32 MApplication::Abort()
+int32 Application::Abort()
 {
 	Mathematica::AppCommand::DisplayExitMessage();
     return 0;
@@ -169,10 +169,10 @@ void Mathematica::AppCommand::Solve()
 	Mathematica::ClearScreen();
 	std::cout << "==== MathematicaCLI: Solve ====" << std::endl;
 
-	auto app = MApplication::Get();
+	auto app = Application::Get();
 	auto commands = app->GetCommands();
 
-	MString commandKey = commands.find("--solve") == commands.end() ? "-s" : "--solve";
+	String commandKey = commands.find("--solve") == commands.end() ? "-s" : "--solve";
 	for (auto equation : commands[commandKey])
 	{
 		auto lexer = app->GetLexer();
@@ -180,7 +180,7 @@ void Mathematica::AppCommand::Solve()
 		auto solveEngine = app->GetSolveEngine();
 
 		lexer->GenerateTokens(equation); 
-		MVector<MLexiconToken> tokens = lexer->GetTokens();
+		Vector<LexiconToken> tokens = lexer->GetTokens();
 
 		parser->InitParser(tokens, lexer->GetOperationIndex(), lexer->GetScopeCounter());
 		auto root = parser->GenerateTree();
@@ -189,7 +189,7 @@ void Mathematica::AppCommand::Solve()
 		solveEngine->InitSolver(root, parser->GetExecutionFlow());
 		auto result = solveEngine->SolveTree();
 
-		MStringStream alertText;
+		StringStream alertText;
 		alertText << "Result: " << Stringify(result) << "\n" << "Raw Value: " << result.RawNumerical();
 
 		Mathematica::AppCommand::DisplayAlert(alertText.str(), "Result of equation: " + equation);
@@ -213,7 +213,7 @@ void Mathematica::AppCommand::About()
 	return;
 }
 
-void Mathematica::AppCommand::DisplayAlert(MString alert, MString title)
+void Mathematica::AppCommand::DisplayAlert(String alert, String title)
 {
 	Mathematica::ClearScreen();
 	std::cout << "==== " << title << " ====" << std::endl;
@@ -230,7 +230,7 @@ void Mathematica::AppCommand::DisplayExitMessage()
 	std::cout << "Mathematica ~ " << MTH_VERSION << std::endl;
 }
 
-void Mathematica::AppCommand::Unknown(MString command)
+void Mathematica::AppCommand::Unknown(String command)
 {
 	Mathematica::ClearScreen();
 	std::cout << "==== Unknown command: ====" << std::endl;

@@ -4,16 +4,16 @@
 
 #include "Utility/Utils.h"
 
-MLexer::MLexer() : mTokens({}), mOperationIndexes({}) {}
+Lexer::Lexer() : mTokens({}), mOperationIndexes({}) {}
 
-// REFACTOR : Marked MLexer::GenerateTokens for refactor.
-void MLexer::GenerateTokens(MString equation)
+// REFACTOR : Marked Lexer::GenerateTokens for refactor.
+void Lexer::GenerateTokens(String equation)
 {
 	mTokens = {};
 	mOperationIndexes = {};
 
 	Mathematica::RemoveQuotes(equation);
-	MVector<MString> separetedEquation = Mathematica::SeparateString(equation);
+	Vector<String> separetedEquation = Mathematica::SeparateString(equation);
 
 	uint32 parenthesesCount = 0;
 	bool invertSign = false;
@@ -99,7 +99,7 @@ void MLexer::GenerateTokens(MString equation)
 
 				continue;
 			}
-			else if (MString result = isParenthesis(substring.front()); result != "No") // <--- Check if it is a parenthesis
+			else if (String result = isParenthesis(substring.front()); result != "No") // <--- Check if it is a parenthesis
 			{
 				if (result == "Start")
 				{
@@ -121,9 +121,9 @@ void MLexer::GenerateTokens(MString equation)
 					}
 					else
 					{
-						MVector<MPair<uint32, uint32>> parLocation;
+						Vector<Pair<uint32, uint32>> parLocation;
 						parLocation.emplace_back(mTokens.size() - 1, (uint32)0);
-						MPair<uint32, MVector<MPair<uint32, uint32>>> scopeCount = {(uint32)1, parLocation};
+						Pair<uint32, Vector<Pair<uint32, uint32>>> scopeCount = {(uint32)1, parLocation};
 						mScopeCounter[parenthesesCount] = scopeCount;
 					}
 				}
@@ -140,10 +140,10 @@ void MLexer::GenerateTokens(MString equation)
 
 		// Check if a substring contains both numbers and operations.
 		bool bIsNumber = true;
-		MString currentSubsubstring = "";
+		String currentSubsubstring = "";
 		for (auto currentChar : substring)
 		{
-			if (!(currentChar < 48 || currentChar > 57)) // <--- Check if it is a number
+			if (!(currentChar < 48 || currentChar > 57) || currentChar == '.') // <--- Check if it is a number
 			{
 				// Check if the flag bIsNumber is false. If so, throw a SyntaxError.
 				// TODO : Build class SyntaxError.
@@ -192,7 +192,7 @@ void MLexer::GenerateTokens(MString equation)
 				// Append the operation to mTokens.
 				if(!skipMarker)
 				{
-					mTokens.emplace_back(MString(1, currentChar), ELexiconTokenType::BinaryFunction);
+					mTokens.emplace_back(String(1, currentChar), ELexiconTokenType::BinaryFunction);
 
 					// Set the priority of such operation.
 					if (currentChar == '+' || currentChar == '-')
@@ -212,7 +212,7 @@ void MLexer::GenerateTokens(MString equation)
 				// Reset the currentSubsubstring, to allow a new number to be stored.
 				currentSubsubstring = "";
 			}
-			else if (MString result = isParenthesis(currentChar); result != "No") // <--- Check if it a parenthesis
+			else if (String result = isParenthesis(currentChar); result != "No") // <--- Check if it a parenthesis
 			{
 				if (!currentSubsubstring.empty())
 				{
@@ -239,9 +239,9 @@ void MLexer::GenerateTokens(MString equation)
 					}
 					else
 					{
-						MVector<MPair<uint32, uint32>> parLocation;
+						Vector<Pair<uint32, uint32>> parLocation;
 						parLocation.emplace_back(mTokens.size() - 1, (uint32)0);
-						MPair<uint32, MVector<MPair<uint32, uint32>>> scopeCount = { (uint32)1, parLocation };
+						Pair<uint32, Vector<Pair<uint32, uint32>>> scopeCount = { (uint32)1, parLocation };
 						mScopeCounter[parenthesesCount] = scopeCount;
 					}
 				}
@@ -290,10 +290,10 @@ void MLexer::GenerateTokens(MString equation)
 
 }
 
-MString MLexer::StringifyNumberToken(MString string, bool invertSign)
+String Lexer::StringifyNumberToken(String string, bool invertSign)
 {
 	bool bSkip = false;
-	MString number = "";
+	String number = "";
 	for (auto digit : string)
 	{
 		if (digit == '0' && !bSkip)

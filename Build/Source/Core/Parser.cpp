@@ -5,7 +5,7 @@
 
 #include "Utility/Utils.h"
 
-MParser::MParser()
+Parser::Parser()
 {
 	mNodes = {};
 	mFirstIndex = -1;
@@ -13,20 +13,20 @@ MParser::MParser()
 	mExecutionIndex = 0;
 }
 
-void MParser::InitParser(const MVector<MLexiconToken>& tokens, const MMap<uint32, MHashMap<EPriority, MVector<uint32>>>& opIndexes, const MHashMap<uint32, MPair<uint32, MVector<MPair<uint32, uint32>>>>& scopeCounter)
+void Parser::InitParser(const Vector<LexiconToken>& tokens, const Map<uint32, HashMap<EPriority, Vector<uint32>>>& opIndexes, const HashMap<uint32, Pair<uint32, Vector<Pair<uint32, uint32>>>>& scopeCounter)
 {
 	GenerateNodes(tokens);
 	mOperationIndexes = opIndexes;
 	mScopeCounter = scopeCounter;
 }
 
-void MParser::GenerateWrappedNodes(MHashMap<EPriority, MVector<uint32>>& scopeData, EPriority priority)
+void Parser::GenerateWrappedNodes(HashMap<EPriority, Vector<uint32>>& scopeData, EPriority priority)
 {
-	MVector<uint32> indexes = scopeData[priority];
+	Vector<uint32> indexes = scopeData[priority];
 
 	for (auto index : indexes)
 	{
-		MRef<MMathNode> wrappedNode = mNodes[index];
+		Ref<MathNode> wrappedNode = mNodes[index];
 
 		// Check if previous and next node are marked to be ignored and get the indexes for the left and right nodes.
 		uint32 leftCounter = 1;
@@ -37,8 +37,8 @@ void MParser::GenerateWrappedNodes(MHashMap<EPriority, MVector<uint32>>& scopeDa
 		while (mNodes[++copyIndex]->type == EMathNodeType::None) rightCounter++;
 
 		// Instantiate a reference for these nodes
-		MRef<MMathNode> leftNode = mNodes[index - leftCounter];
-		MRef<MMathNode> rightNode = mNodes[index + rightCounter];
+		Ref<MathNode> leftNode = mNodes[index - leftCounter];
+		Ref<MathNode> rightNode = mNodes[index + rightCounter];
 
 		// Make sure that the user sent a proper input.
 		// Then, unwrap nodes and make links between parents and children.
@@ -57,11 +57,11 @@ void MParser::GenerateWrappedNodes(MHashMap<EPriority, MVector<uint32>>& scopeDa
 
 		// Create a new wrapper node and append the wrapped tree. 
 		// Then create new left and right nodes, and mark them to be ignored for the next calls.
-		mNodes[index] = Mathematica::MakeRef<MMathNode>();
+		mNodes[index] = Mathematica::MakeRef<MathNode>();
 		mNodes[index]->type = EMathNodeType::Wrapper;
 		mNodes[index]->children.push_back(wrappedNode);
-		mNodes[index - leftCounter] = Mathematica::MakeRef<MMathNode>();
-		mNodes[index + rightCounter] = Mathematica::MakeRef<MMathNode>();
+		mNodes[index - leftCounter] = Mathematica::MakeRef<MathNode>();
+		mNodes[index + rightCounter] = Mathematica::MakeRef<MathNode>();
 		mNodes[index - leftCounter]->type = EMathNodeType::None;
 		mNodes[index + rightCounter]->type = EMathNodeType::None;
 
@@ -76,17 +76,17 @@ void MParser::GenerateWrappedNodes(MHashMap<EPriority, MVector<uint32>>& scopeDa
 	mExecutionIndex++;
 }
 
-void MParser::GenerateNodes(const MVector<MLexiconToken>& tokens)
+void Parser::GenerateNodes(const Vector<LexiconToken>& tokens)
 {
 	for (auto token : tokens)
 	{
-		MRef<MMathNode> currentNode = Mathematica::MakeRef<MMathNode>();
+		Ref<MathNode> currentNode = Mathematica::MakeRef<MathNode>();
 
 		// Create node
 		switch (token.type)
 		{
 		case ELexiconTokenType::Number:
-			currentNode->data = MNumber(token.data);
+			currentNode->data = Number(token.data);
 			currentNode->type = EMathNodeType::Number;
 			break;
 		case ELexiconTokenType::BinaryFunction:
@@ -108,7 +108,7 @@ void MParser::GenerateNodes(const MVector<MLexiconToken>& tokens)
 	}
 }
 
-MRef<MMathNode> MParser::GenerateTree()
+Ref<MathNode> Parser::GenerateTree()
 {
 	for (auto it = mOperationIndexes.rbegin(); it != mOperationIndexes.rend(); it++)
 	{

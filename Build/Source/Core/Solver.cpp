@@ -4,23 +4,23 @@
 
 #include "Core/Solver.h"
 
-void MSolver::InitSolver(const MRef<MMathNode>& tree)
+void Solver::InitSolver(const Ref<MathNode>& tree)
 {
     mTree = tree;
 }
 
-void MSolver::InitSolver(const MRef<MMathNode>& tree, const MMap<uint32, MVector<MRef<MMathNode>>>& executionFlow)
+void Solver::InitSolver(const Ref<MathNode>& tree, const Map<uint32, Vector<Ref<MathNode>>>& executionFlow)
 {
     mTree = tree;
     mExecutionFlow = executionFlow;
 }
 
-MNumber MSolver::SolveTree()
+Number Solver::SolveTree()
 {
     return mExecutionFlow.size() == 0 ? RecursiveSolve(mTree) : ExecutionSolve();
 }
 
-MNumber MSolver::RecursiveSolve(const MRef<MMathNode>& node)
+Number Solver::RecursiveSolve(const Ref<MathNode>& node)
 {
     switch(node->type)
     {
@@ -29,11 +29,11 @@ MNumber MSolver::RecursiveSolve(const MRef<MMathNode>& node)
                 // Since the idoneity of each node is checked in the parser,
                 // it is safe to instantiate [0] and [1], from the children.
                 MTH_ASSERT(node->children.size() == 2, "What kind of sorcery is this?!");
-                MRef<MMathNode> leftChild  = node->children[0];
-                MRef<MMathNode> rightChild = node->children[1];
+                Ref<MathNode> leftChild  = node->children[0];
+                Ref<MathNode> rightChild = node->children[1];
 
-                MNumber left = RecursiveSolve(leftChild);
-                MNumber right = RecursiveSolve(rightChild);
+                Number left = RecursiveSolve(leftChild);
+                Number right = RecursiveSolve(rightChild);
 
                 // Get the function assigned to the math node.
                 FBinaryFunction function = std::any_cast<FBinaryFunction>(node->data);
@@ -41,7 +41,7 @@ MNumber MSolver::RecursiveSolve(const MRef<MMathNode>& node)
             }
             break;
         case EMathNodeType::Number:      
-            return std::any_cast<MNumber>(node->data);
+            return std::any_cast<Number>(node->data);
             break;
         default:
             MTH_ASSERT(false, "What kind of sorcery is this?!");
@@ -49,7 +49,7 @@ MNumber MSolver::RecursiveSolve(const MRef<MMathNode>& node)
     }
 }
 
-MNumber MSolver::ExecutionSolve()
+Number Solver::ExecutionSolve()
 {
     for (auto [order, operations] : mExecutionFlow)
     {
@@ -63,18 +63,18 @@ MNumber MSolver::ExecutionSolve()
             // both children of number type.
 
 			MTH_ASSERT(operation->children.size() == 2, "What kind of sorcery is this?!");
-			MRef<MMathNode> leftChild = operation->children[0];
-			MRef<MMathNode> rightChild = operation->children[1];
+			Ref<MathNode> leftChild = operation->children[0];
+			Ref<MathNode> rightChild = operation->children[1];
 
 			MTH_ASSERT(leftChild->type  == EMathNodeType::Number, "What kind of sorcery is this?!");
 			MTH_ASSERT(rightChild->type == EMathNodeType::Number, "What kind of sorcery is this?!");
-            MNumber left  = std::any_cast<MNumber>( leftChild->data);
-            MNumber right = std::any_cast<MNumber>(rightChild->data);
+            Number left  = std::any_cast<Number>( leftChild->data);
+            Number right = std::any_cast<Number>(rightChild->data);
 
             FBinaryFunction function = std::any_cast<FBinaryFunction>(operation->data);
-            MNumber operationResult = function(left, right);
+            Number operationResult = function(left, right);
 
-            MRef<MMathNode> newNode = Mathematica::MakeRef<MMathNode>();
+            Ref<MathNode> newNode = Mathematica::MakeRef<MathNode>();
             newNode->type = EMathNodeType::Number;
             newNode->parent = operation->parent;
             newNode->data = operationResult;

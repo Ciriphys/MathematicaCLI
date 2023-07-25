@@ -5,7 +5,7 @@
 
 #include "Core/Number.h"
 
-MNumber::MNumber(int32 num, int32 den) : numerator(num), denominator(den), type(ENumberType::Real) 
+Number::Number(int32 num, int32 den) : numerator(num), denominator(den), type(ENumberType::Real) 
 {
     // TODO : This implementation does not include Real type numbers. For now the only allowed types are Integer and Rational.
     if (denominator == 1)
@@ -18,7 +18,7 @@ MNumber::MNumber(int32 num, int32 den) : numerator(num), denominator(den), type(
     }
 }
 
-MNumber::MNumber(const MString& strNumber)
+Number::Number(const String& strNumber)
 {
     // TODO : Add support for fractions and real numbers.
     numerator = std::atoi(strNumber.c_str());
@@ -29,53 +29,53 @@ MNumber::MNumber(const MString& strNumber)
     type = ENumberType::Integer;
 }
 
-double MNumber::RawNumerical()
+double Number::RawNumerical()
 {
     return (double)numerator / (double)denominator;
 }
 
-MNumber MNumber::LowestTerms()
+Number Number::LowestTerms()
 {
     int32 gcd = Mathematica::Integer::GreatestCommonDivisor(numerator, denominator);
     return { numerator / gcd, denominator / gcd };
 }
 
-MNumber MNumber::operator+(MNumber other)
+Number Number::operator+(Number other)
 {
     return Mathematica::Operation::Add(*this, other);
 }
 
-MNumber MNumber::operator-(MNumber other)
+Number Number::operator-(Number other)
 {
     return Mathematica::Operation::Subtract(*this, other);
 }
 
-MNumber MNumber::operator*(MNumber other)
+Number Number::operator*(Number other)
 {
     return Mathematica::Operation::Multiply(*this, other);
 }
 
-MNumber MNumber::operator/(MNumber other)
+Number Number::operator/(Number other)
 {
     return Mathematica::Operation::Divide(*this, other);
 }
 
-void MNumber::operator+=(MNumber other)
+void Number::operator+=(Number other)
 {
     *this = Mathematica::Operation::Add(*this, other);
 }
 
-void MNumber::operator-=(MNumber other)
+void Number::operator-=(Number other)
 {
     *this = Mathematica::Operation::Subtract(*this, other);
 }
 
-void MNumber::operator*=(MNumber other)
+void Number::operator*=(Number other)
 {
     *this = Mathematica::Operation::Multiply(*this, other);
 }
 
-void MNumber::operator/=(MNumber other)
+void Number::operator/=(Number other)
 {
     *this = Mathematica::Operation::Divide(*this, other);
 }

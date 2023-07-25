@@ -6,28 +6,28 @@
 
 #include "Utility/Types.h"
 
-class MParser
+class Parser
 {
 public:
-    MParser();
+    Parser();
 
-    void InitParser(const MVector<MLexiconToken>& tokens, const MMap<uint32, MHashMap<EPriority, MVector<uint32>>>& opIndexes, const MHashMap<uint32, MPair<uint32, MVector<MPair<uint32, uint32>>>>& scopeCounter);
+    void InitParser(const Vector<LexiconToken>& tokens, const Map<uint32, HashMap<EPriority, Vector<uint32>>>& opIndexes, const HashMap<uint32, Pair<uint32, Vector<Pair<uint32, uint32>>>>& scopeCounter);
 
-    MMap<uint32, MVector<MRef<MMathNode>>> GetExecutionFlow() const { return mExecutionFlow; }
+    Map<uint32, Vector<Ref<MathNode>>> GetExecutionFlow() const { return mExecutionFlow; }
 
-    MRef<MMathNode> GenerateTree();
+    Ref<MathNode> GenerateTree();
 
 private: 
-    void GenerateWrappedNodes(MHashMap<EPriority, MVector<uint32>>& scopeData, EPriority priority);
-    void GenerateNodes(const MVector<MLexiconToken>& tokens);
+    void GenerateWrappedNodes(HashMap<EPriority, Vector<uint32>>& scopeData, EPriority priority);
+    void GenerateNodes(const Vector<LexiconToken>& tokens);
 
-    MHashMap<uint32, MPair<uint32, MVector<MPair<uint32, uint32>>>> mScopeCounter;
-    MMap<uint32, MHashMap<EPriority, MVector<uint32>>> mOperationIndexes;
-    MVector<MRef<MMathNode>> mNodes;
+    HashMap<uint32, Pair<uint32, Vector<Pair<uint32, uint32>>>> mScopeCounter;
+    Map<uint32, HashMap<EPriority, Vector<uint32>>> mOperationIndexes;
+    Vector<Ref<MathNode>> mNodes;
 
-    MMap<uint32, MVector<MRef<MMathNode>>> mExecutionFlow;
+    Map<uint32, Vector<Ref<MathNode>>> mExecutionFlow;
 
-    MRef<MMathNode> mTree;
+    Ref<MathNode> mTree;
 
 	uint32 mFirstIndex;
     uint32 mExecutionIndex;

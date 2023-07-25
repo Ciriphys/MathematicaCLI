@@ -5,19 +5,19 @@
 #include "Core/MathNode.h"
 #include "Core/Number.h"
 
-class MSolver
+class Solver
 {
 public:
-    MSolver() = default;
-    void InitSolver(const MRef<MMathNode>& tree);
-    void InitSolver(const MRef<MMathNode>& tree, const MMap<uint32, MVector<MRef<MMathNode>>>& executionFlow);
+    Solver() = default;
+    void InitSolver(const Ref<MathNode>& tree);
+    void InitSolver(const Ref<MathNode>& tree, const Map<uint32, Vector<Ref<MathNode>>>& executionFlow);
 
-    MNumber SolveTree();
+    Number SolveTree();
 
 private:
-    MNumber RecursiveSolve(const MRef<MMathNode>& node);
-    MNumber ExecutionSolve();
+    Number RecursiveSolve(const Ref<MathNode>& node);
+    Number ExecutionSolve();
 
-	MMap<uint32, MVector<MRef<MMathNode>>> mExecutionFlow;
-    MRef<MMathNode> mTree;
+	Map<uint32, Vector<Ref<MathNode>>> mExecutionFlow;
+    Ref<MathNode> mTree;
 };

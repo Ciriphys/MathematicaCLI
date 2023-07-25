@@ -11,48 +11,48 @@ namespace Mathematica
 {
     namespace Operation
     {
-        MNumber Add(const MNumber& a, const MNumber& b)
+        Number Add(const Number& a, const Number& b)
         {
             int32 commonDenominator = Integer::LeastCommonMultiple(a.denominator, b.denominator);
             int32 numeratorA = a.numerator * commonDenominator / a.denominator;
             int32 numeratorB = b.numerator * commonDenominator / b.denominator;
 
-            MNumber result = {numeratorA + numeratorB, commonDenominator};
+            Number result = {numeratorA + numeratorB, commonDenominator};
             return result.LowestTerms();
         }
 
-        MNumber Subtract(const MNumber& a, const MNumber& b)
+        Number Subtract(const Number& a, const Number& b)
         {
             int32 commonDenominator = Integer::LeastCommonMultiple(a.denominator, b.denominator);
             int32 numeratorA = a.numerator * commonDenominator / a.denominator;
             int32 numeratorB = b.numerator * commonDenominator / b.denominator;
 
-            MNumber result = {numeratorA - numeratorB, commonDenominator};
+            Number result = {numeratorA - numeratorB, commonDenominator};
             return result.LowestTerms();
         }
 
-        MNumber Multiply(const MNumber& a, const MNumber& b)
+        Number Multiply(const Number& a, const Number& b)
         {
             int32 numerator = a.numerator * b.numerator;
             int32 denominator = a.denominator * b.denominator;
             
-            MNumber result = { numerator, denominator };
+            Number result = { numerator, denominator };
             return result.LowestTerms();
         }
 
 
-        MNumber Divide(const MNumber& a, const MNumber& b)
+        Number Divide(const Number& a, const Number& b)
         {
             int32 numerator = a.numerator * b.denominator;
             int32 denominator = a.denominator * b.numerator;
             
             MTH_ASSERT(denominator != 0, "DomainError: Cannot divide by zero!");
 
-            MNumber result = { numerator, denominator };
+            Number result = { numerator, denominator };
             return result.LowestTerms();
         }
 
-        MNumber Mod(const MNumber& a, const MNumber& b)
+        Number Mod(const Number& a, const Number& b)
         {
             // TODO : Implement Mod function.
             MTH_ASSERT(a.type != ENumberType::Integer || b.type != ENumberType::Integer, "Both numbers must be integers to perform Mod!");

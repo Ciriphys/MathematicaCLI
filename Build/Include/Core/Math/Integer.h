@@ -11,9 +11,9 @@ namespace Mathematica
         int32 GreatestCommonDivisor(int32 a, int32 b);
 
         // Prime numbers
-        MHashMap<int32, int32> Factorize(int32 n);
+        HashMap<int32, int32> Factorize(int32 n);
         bool IsPrime(int32 n);
         // Sieve of Erathosthenes
-        MVector<int32> SoE (int32 max); 
+        Vector<int32> SoE (int32 max); 
     }
 }

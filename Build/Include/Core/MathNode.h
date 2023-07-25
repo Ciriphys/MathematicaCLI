@@ -18,16 +18,16 @@ enum class EMathNodeType : int32
 };
 
 // This struct behaves like a node of a tree.
-struct MMathNode : public IIdentifiable
+struct MathNode : public Identifiable
 {
-    using PointerType = MRef<MMathNode>;
-    using ChildrenType = MVector<PointerType>;
+    using PointerType = Ref<MathNode>;
+    using ChildrenType = Vector<PointerType>;
 
     PointerType parent;
     ChildrenType children;
 
-    MAny data;
+    Any data;
     EMathNodeType type;
 
-    MMathNode(PointerType __parent = nullptr, ChildrenType __children = {}, MAny __data = {}, EMathNodeType __type = EMathNodeType::None);
+    MathNode(PointerType __parent = nullptr, ChildrenType __children = {}, Any __data = {}, EMathNodeType __type = EMathNodeType::None);
 };

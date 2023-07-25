@@ -6,28 +6,28 @@
 
 #include "Utility/Types.h"
 
-class MApplication 
+class Application 
 { 
     public:
-        static MApplication* Get();
+        static Application* Get();
         void LoadArguments(int32 argc, char** argv);
         void Run();
         int32 Abort();
 
-        ~MApplication() = default;
+        ~Application() = default;
 
-        void Alert(MString alert);
+        void Alert(String alert);
 
         void RefreshAPI();
 
-        MRef<MLexer> GetLexer() const { return mLexer; }
-        MRef<MParser> GetParser() const { return mParser; }
-        MRef<MSolver> GetSolveEngine() const { return mSolveEngine; }
+        Ref<Lexer> GetLexer() const { return mLexer; }
+        Ref<Parser> GetParser() const { return mParser; }
+        Ref<Solver> GetSolveEngine() const { return mSolveEngine; }
 
-        MHashMap<MString, MVector<MString>> GetCommands() const { return mCommands; }
+        HashMap<String, Vector<String>> GetCommands() const { return mCommands; }
 
     private:
-        MApplication();
+        Application();
 
         void Execute();
         void TypeMode();
@@ -37,14 +37,14 @@ class MApplication
         bool bRunning = true;
         bool bTypeMode = true;
 
-        MVector<MString> mArguments;
-        MHashMap<MString, MVector<MString>> mCommands;
+        Vector<String> mArguments;
+        HashMap<String, Vector<String>> mCommands;
 
-        MRef<MLexer> mLexer;
-        MRef<MParser> mParser;
-        MRef<MSolver> mSolveEngine;
+        Ref<Lexer> mLexer;
+        Ref<Parser> mParser;
+        Ref<Solver> mSolveEngine;
 
-        static MApplication* sInstance;
+        static Application* sInstance;
 };
 
 namespace Mathematica
@@ -55,10 +55,10 @@ namespace Mathematica
         void Solve();
         void About();
 
-        void DisplayAlert(MString alert, MString title = "Mathematica CLI Alert:");
+        void DisplayAlert(String alert, String title = "Mathematica CLI Alert:");
         void DisplayExitMessage();
 
-        void Unknown(MString command);
+        void Unknown(String command);
 
         void WaitKey();
     }

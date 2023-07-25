@@ -3,42 +3,42 @@
 #include "Utility/Utils.h"
 #include "Utility/Random.h"
 
-MRandom* MRandom::sInstance = nullptr;
-MRandomDevice MRandom::mRandomDevice;
-MMersenneTwister MRandom::mMersenneTwister;
+RandomEngine* RandomEngine::sInstance = nullptr;
+RandomDevice RandomEngine::mRandomDevice;
+MersenneTwister RandomEngine::mMersenneTwister;
 
-void MRandom::Init()
+void RandomEngine::Init()
 {
-	if (!sInstance) new MRandom();
+	if (!sInstance) new RandomEngine();
 	return;
 }
 
-int32 MRandom::Int(int32 minRange, int32 maxRange)
+int32 RandomEngine::Int(int32 minRange, int32 maxRange)
 {
-	MTH_ASSERT(sInstance, "MRandom instance has not been initialized. Please call MRandom::Init().");
+	MTH_ASSERT(sInstance, "RandomEngine instance has not been initialized. Please call RandomEngine::Init().");
 
 	std::uniform_int_distribution<int32> uniformDistribution(minRange, maxRange);
 	return uniformDistribution(mMersenneTwister);
 }
 
-uint32 MRandom::UnsignedInt(uint32 minRange, uint32 maxRange)
+uint32 RandomEngine::UnsignedInt(uint32 minRange, uint32 maxRange)
 {
-	MTH_ASSERT(sInstance, "MRandom instance has not been initialized. Please call MRandom::Init().");
+	MTH_ASSERT(sInstance, "RandomEngine instance has not been initialized. Please call RandomEngine::Init().");
 
 	std::uniform_int_distribution<uint32> uniformDistribution(minRange, maxRange);
 	return uniformDistribution(mMersenneTwister);
 }
 
-double MRandom::Double(double minRange, double maxRange)
+float64 RandomEngine::Double(float64 minRange, float64 maxRange)
 {
-	MTH_ASSERT(sInstance, "MRandom instance has not been initialized. Please call MRandom::Init().");
+	MTH_ASSERT(sInstance, "RandomEngine instance has not been initialized. Please call RandomEngine::Init().");
 
 	std::uniform_real_distribution<double> uniformDistribution(minRange, maxRange);
 	return uniformDistribution(mMersenneTwister);
 }
 
-MRandom::MRandom()
+RandomEngine::RandomEngine()
 {
 	sInstance = this;
-	mMersenneTwister = MMersenneTwister(mRandomDevice());
+	mMersenneTwister = MersenneTwister(mRandomDevice());
 }

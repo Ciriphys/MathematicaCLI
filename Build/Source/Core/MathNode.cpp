@@ -2,10 +2,10 @@
 
 #include "Core/MathNode.h"
 
-MMathNode::MMathNode(
+MathNode::MathNode(
     PointerType __parent,
     ChildrenType __children,
-    MAny __data,
+    Any __data,
     EMathNodeType __type
 ) :
 parent(__parent),

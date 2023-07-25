@@ -7,21 +7,21 @@ namespace Mathematica
 {
 	namespace Convert
 	{
-		MString IntToHexString(uint32 number, uint32 length)
+		String IntToHexString(uint32 number, uint32 length)
 		{
 			return IntToBaseString(number, 16, length);
 		}
 
-		MString IntToOctString(uint32 number, uint32 length)
+		String IntToOctString(uint32 number, uint32 length)
 		{
 			return IntToBaseString(number, 8, length);
 		}
 
-		MString IntToBaseString(uint32 number, uint32 base, uint32 length)
+		String IntToBaseString(uint32 number, uint32 base, uint32 length)
 		{
 			MTH_ASSERT(base < 36, "ConversionError: Base is too large!");
 
-			MString result(length, '0');
+			String result(length, '0');
 
 			int32 counter = length - 1;
 			while (number != 0)

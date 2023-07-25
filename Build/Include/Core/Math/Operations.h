@@ -1,16 +1,16 @@
 #pragma once
 
-struct MNumber;
+struct Number;
 
 namespace Mathematica 
 {
     namespace Operation
     {
-        MNumber Add      (const MNumber& a, const MNumber& b);
-        MNumber Subtract (const MNumber& a, const MNumber& b);
-        MNumber Multiply (const MNumber& a, const MNumber& b);
-        MNumber Divide   (const MNumber& a, const MNumber& b);
+        Number Add      (const Number& a, const Number& b);
+        Number Subtract (const Number& a, const Number& b);
+        Number Multiply (const Number& a, const Number& b);
+        Number Divide   (const Number& a, const Number& b);
 
-        MNumber Mod      (const MNumber& a, const MNumber& b);
+        Number Mod      (const Number& a, const Number& b);
     }
 }
