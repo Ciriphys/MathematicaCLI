@@ -20,7 +20,7 @@ constexpr auto MTH_PROJECT_PATH = "MathematicaCLI/";
 #define MTH_ADDRESS_OF(x) (void*)&x
 #define MTH_UINT_ADDRESS_OF(x) *(uint32*)MTH_ADDRESS_OF(x)
 
-constexpr auto MTH_VERSION = "Version 0.0.10a";
+constexpr auto MTH_VERSION = "Version 0.0.11a";
 constexpr auto MTH_NO_MESSAGE = "No message provided.";
 constexpr auto MTH_FLOAT32_EPSILON = 1.192092896e-07F;
 

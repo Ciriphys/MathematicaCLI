@@ -5,6 +5,8 @@
 #include "Utility/Utils.h"
 #include "Utility/Random.h"
 
+#include "Core/Math/Integer.h"
+
 Application* Application::sInstance = nullptr;
 
 Application* Application::Get() 
@@ -193,7 +195,26 @@ void Mathematica::AppCommand::Solve()
 
 		alertText << "Result: " << Stringify(result) << "\n";
 		alertText.precision(6);
-		alertText << std::fixed << "Decimal value: " << result.RawNumerical();
+		alertText << std::fixed << "Decimal value: " << result.RawNumerical() << "\n";
+
+		if (result.type == ENumberType::Integer)
+		{
+			bool primality = Mathematica::Integer::IsPrime(result);
+
+			if (!primality)
+			{
+				alertText << "Factorization: ";
+				auto factors = Mathematica::Integer::Factorize(result);
+				for (auto [factor, exponent] : factors)
+				{
+					alertText << factor;
+					if (exponent != 1) alertText << "^" << exponent;
+					alertText << ((--factors.end())->first != factor ? " * " : "\n");
+				}
+			}
+			
+			alertText << "Is prime? " << (primality ? "Yes\n" : "No\n");
+		}
 
 		Mathematica::AppCommand::DisplayAlert(alertText.str(), "Result of equation: " + equation);
 		app->RefreshAPI();
@@ -220,7 +241,7 @@ void Mathematica::AppCommand::DisplayAlert(String alert, String title)
 {
 	Mathematica::ClearScreen();
 	std::cout << "==== " << title << " ====" << std::endl;
-	std::cout << alert << std::endl;
+	std::cout << alert;
 
 	WaitKey();
 	return;

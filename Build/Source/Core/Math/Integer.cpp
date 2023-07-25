@@ -1,6 +1,7 @@
 #include "mthpch.h"
 
 #include "Core/Math/Integer.h"
+#include "Core/Number.h"
 
 #include "Utility/Utils.h"
 
@@ -36,7 +37,7 @@ namespace Mathematica
 		{
             if (n < 2) return false;
 
-            for (int32 i = 0; i * i < n; i++)
+            for (int32 i = 2; i * i <= n; i++)
             {
                 if (n % i == 0) return false;
             }
@@ -44,12 +45,18 @@ namespace Mathematica
             return true;
 		}
 
-        HashMap<int32, int32> Factorize(int32 n)
+        bool IsPrime(Number n)
         {
-            auto soe = SoE(Mathematica::Cast<int32>(sqrt(n)));
-            HashMap<int32, int32> result;
+			MTH_ASSERT(n.type == ENumberType::Integer, "DomainError: Cannot factorize a non-integer number!");
+			return IsPrime(n.numerator);
+        }
 
-            for (int32 i = 0; i < soe.size(); i++)
+        Map<int32, int32> Factorize(int32 n)
+        {
+            auto soe = SoE(n);
+            Map<int32, int32> result;
+
+            for (int32 i = 0; i < soe.size() && n > 1; i++)
             {
                 int32 currentPrime = soe[i];
 
@@ -69,12 +76,13 @@ namespace Mathematica
                 }
             }
 
-            if (result.empty())
-            {
-                result[n] = 1;
-            }
-
             return result;
+        }
+
+        Map<int32, int32> Factorize(Number n)
+        {
+            MTH_ASSERT(n.type == ENumberType::Integer, "DomainError: Cannot factorize a non-integer number!");
+            return Factorize(n.numerator);
         }
 
         Vector<int32> SoE(int32 max)
