@@ -1,9 +1,11 @@
 #include "mthpch.h"
 
-#include "Core/Number.h"
-#include "Core/Parser.h"
+#include "Core/Utility/Utils.h"
+#include "Core/Utility/Timer.h"
 
-#include "Utility/Utils.h"
+#include "Core/Math/Number.h"
+
+#include "Core/Parser.h"
 
 Parser::Parser()
 {
@@ -23,6 +25,8 @@ void Parser::InitParser(const Vector<LexiconToken>& tokens, const Map<uint32, Ha
 // REFACTOR : Use bit masks for type to improve readability.
 void Parser::GenerateWrappedNodes(HashMap<EPriority, Vector<uint32>>& scopeData, EPriority priority)
 {
+	MTH_PROFILE_FUNCTION();
+
 	Vector<uint32> indexes = scopeData[priority];
 
 	for (auto index : indexes)
@@ -133,6 +137,8 @@ void Parser::GenerateNodes(const Vector<LexiconToken>& tokens)
 
 Ref<MathNode> Parser::GenerateTree()
 {
+	MTH_PROFILE_FUNCTION();
+
 	for (auto it = mOperationIndexes.rbegin(); it != mOperationIndexes.rend(); it++)
 	{
 		auto scopeIndex = it->first;

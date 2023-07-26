@@ -23,6 +23,22 @@ using Stack = std::stack<T>;
 template<typename F, typename S>
 using Pair = std::pair<F, S>;
 
+// Files
+using OutFile = std::ofstream;
+using InFile = std::ifstream;
+using File = std::fstream;
+
+// Chrono
+template<typename D>
+using TimePoint = std::chrono::time_point<D>;
+
+using HRClock = std::chrono::high_resolution_clock;
+using SteadyClock = std::chrono::steady_clock;
+
+using Nanoseconds  = std::chrono::nanoseconds;
+using Milliseconds = std::chrono::milliseconds;
+using Microseconds = std::chrono::microseconds;
+
 // Miscellaneous
 using MersenneTwister = std::mt19937;
 using RandomDevice = std::random_device;

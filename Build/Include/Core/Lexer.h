@@ -2,7 +2,7 @@
 
 #include "Core/LexiconToken.h"
 
-#include "Utility/Types.h"
+#include "Core/Utility/Types.h"
 
 enum class EPriority : int32
 {

@@ -2,12 +2,15 @@
 
 #include "Core/Lexer.h"
 
-#include "Utility/Utils.h"
+#include "Core/Utility/Utils.h"
+#include "Core/Utility/Timer.h"
 
 Lexer::Lexer() : mTokens({}), mOperationIndexes({}) {}
 
 void Lexer::GenerateTokens(String equation)
 {
+	MTH_PROFILE_FUNCTION();
+
 	mTokens = {};
 	mOperationIndexes = {};
 

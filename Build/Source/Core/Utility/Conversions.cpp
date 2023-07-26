@@ -1,7 +1,7 @@
 #include "mthpch.h"
 
-#include "Utility/Conversions.h"
-#include "Utility/Utils.h"
+#include "Core/Utility/Conversions.h"
+#include "Core/Utility/Utils.h"
 
 namespace Mathematica
 {

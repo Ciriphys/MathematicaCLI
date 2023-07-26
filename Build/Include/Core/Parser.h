@@ -4,7 +4,7 @@
 #include "Core/MathNode.h"
 #include "Core/Lexer.h"
 
-#include "Utility/Types.h"
+#include "Core/Utility/Types.h"
 
 class Parser
 {

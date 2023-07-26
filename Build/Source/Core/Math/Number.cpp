@@ -3,10 +3,9 @@
 #include "Core/Math/Operations.h"
 #include "Core/Math/Rational.h"
 #include "Core/Math/Integer.h"
+#include "Core/Math/Number.h"
 
-#include "Core/Number.h"
-
-#include "Utility/Conversions.h"
+#include "Core/Utility/Conversions.h"
 
 Number::Number(int32 num, int32 den) : numerator(num), denominator(den), type(ENumberType::Real)
 {
@@ -94,4 +93,34 @@ void Number::operator*=(Number other)
 void Number::operator/=(Number other)
 {
     *this = Mathematica::Operation::Divide(*this, other);
+}
+
+bool Number::operator==(Number other)
+{
+    return numerator * other.denominator == denominator * other.numerator;
+}
+
+bool Number::operator!=(Number other)
+{
+    return !(*this == other);
+}
+
+bool Number::operator>=(Number other)
+{
+    return numerator * other.denominator >= denominator * other.numerator;
+}
+
+bool Number::operator<=(Number other)
+{
+    return numerator * other.denominator <= denominator * other.numerator;
+}
+
+bool Number::operator>(Number other)
+{
+    return numerator * other.denominator > denominator * other.numerator;
+}
+
+bool Number::operator<(Number other)
+{
+    return numerator * other.denominator < denominator * other.numerator;
 }

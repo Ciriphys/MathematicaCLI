@@ -1,6 +1,7 @@
 #include "mthpch.h"
 
-#include "Utility/Utils.h"
+#include "Core/Utility/Timer.h"
+#include "Core/Utility/Utils.h"
 
 #include "Core/Solver.h"
 
@@ -17,11 +18,15 @@ void Solver::InitSolver(const Ref<MathNode>& tree, const Map<uint32, Vector<Ref<
 
 Number Solver::SolveTree()
 {
+    MTH_PROFILE_FUNCTION();
+
     return mExecutionFlow.size() == 0 ? RecursiveSolve(mTree) : ExecutionSolve();
 }
 
 Number Solver::RecursiveSolve(const Ref<MathNode>& node)
 {
+    MTH_PROFILE_FUNCTION();
+
     switch(node->type)
     {
         case EMathNodeType::BinaryFunction:
@@ -52,6 +57,8 @@ Number Solver::RecursiveSolve(const Ref<MathNode>& node)
 
 Number Solver::ExecutionSolve()
 {
+    MTH_PROFILE_FUNCTION();
+
     for (auto [order, operations] : mExecutionFlow)
     {
         for (auto operation : operations)

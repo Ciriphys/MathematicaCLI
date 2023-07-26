@@ -3,9 +3,9 @@
 #include "Core/Math/Operations.h"
 #include "Core/Math/Integer.h"
 
-#include "Core/Number.h"
+#include "Core/Math/Number.h"
 
-#include "Utility/Types.h"
+#include "Core/Utility/Types.h"
 
 namespace Mathematica
 {

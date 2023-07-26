@@ -2,7 +2,7 @@
 
 #include "Core/Identifiable.h"
 
-#include "Utility/Utils.h"
+#include "Core/Utility/Utils.h"
 
 // This definition might vary.
 enum class ENumberType : int32
@@ -35,6 +35,13 @@ struct Number : public Identifiable
 	void operator-=(Number other);
 	void operator*=(Number other);
 	void operator/=(Number other);
+
+    bool operator==(Number other);
+    bool operator!=(Number other);
+    bool operator>=(Number other);
+    bool operator<=(Number other);
+    bool operator> (Number other);
+    bool operator< (Number other);
 
     float32 RawNumerical();
 

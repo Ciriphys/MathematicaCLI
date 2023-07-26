@@ -524,3 +524,5 @@ Makefile
 
 # ===== Other =====
 *.txt
+Build/ProfilerLogs/
+*.json

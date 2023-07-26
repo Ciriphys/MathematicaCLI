@@ -1,7 +1,7 @@
 #include "mthpch.h"
 
-#include "Utility/Utils.h"
-#include "Utility/Random.h"
+#include "Core/Utility/Utils.h"
+#include "Core/Utility/Random.h"
 
 RandomEngine* RandomEngine::sInstance = nullptr;
 RandomDevice RandomEngine::mRandomDevice;

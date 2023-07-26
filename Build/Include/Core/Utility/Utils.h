@@ -1,12 +1,12 @@
 #pragma once
 
-#include "Utility/Types.h"
+#include "Core/Utility/Types.h"
 
 #ifdef MTH_DEBUG 
 #define MTH_ASSERT(expression, message) if(!(expression)) Mathematica::Assert(#expression, Mathematica::RelativeToBuildPath(__FILE__).c_str(), __FUNCTION__, __LINE__, message)
 #define MTH_DEBUG_INFO(function) DisplayFunctionInfo(#function, __FUNCTION__); function
 #else 
-#define MTH_ASSERT(expression, message) throw message
+#define MTH_ASSERT(expression, message)
 #define MTH_DEBUG_INFO(function) function;
 #endif
 
@@ -17,10 +17,21 @@ constexpr auto MTH_PROJECT_PATH = "MathematicaCLI/";
 #endif
 
 #define MTH_UNUSED(x) Mathematica::Cast<void>(x)
-#define MTH_ADDRESS_OF(x) (void*)&x
-#define MTH_UINT_ADDRESS_OF(x) *(uint32*)MTH_ADDRESS_OF(x)
+#define MTH_ADDRESS_OF(x) Mathematica::Recast<void*>(&x)
+#define MTH_UINT_ADDRESS_OF(x) *Mathematica::Recast<uint32*>MTH_ADDRESS_OF(x)
 
-constexpr auto MTH_VERSION = "Version 0.0.11a";
+#ifdef MTH_USE_PROFILER
+#define MTH_PROFILE_SCOPE(name) Timer timer##__LINE__(name)
+#define MTH_PROFILE_FUNCTION() MTH_PROFILE_SCOPE(__FUNCSIG__)
+#define MTH_PROFILE_BEGIN(name) Profiler::Get().BeginProfile(name);
+#define MTH_PROFILE_END() Profiler::Get().EndProfile();
+#else 
+#define MTH_PROFILE_SCOPE(name)
+#define MTH_PROFILE_FUNCTION()
+#define MTH_PROFILE_BEGIN(name)
+#define MTH_PROFILE_END()
+#endif 
+constexpr auto MTH_VERSION = "Version 0.0.12a";
 constexpr auto MTH_NO_MESSAGE = "No message provided.";
 constexpr auto MTH_FLOAT32_EPSILON = 1.192092896e-07F;
 
@@ -97,7 +108,9 @@ namespace Mathematica
 	// * This might change in the future.
 	void TransformToLower(String& string);
 	void TransformToUpper(String& string);
+
 	Vector<String> SeparateString(String string, char separetor = ' ');
+	void Replace(String& string, char what, char with);
 	void RemoveQuotes(String& string);
 
 	// === Token ===

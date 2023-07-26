@@ -2,8 +2,9 @@
 
 #include "CLI/Application.h"
 
-#include "Utility/Utils.h"
-#include "Utility/Random.h"
+#include "Core/Utility/Profiler.h"
+#include "Core/Utility/Random.h"
+#include "Core/Utility/Utils.h"
 
 #include "Core/Math/Integer.h"
 
@@ -118,6 +119,8 @@ void Application::RefreshAPI()
 
 Application::Application()
 {
+	MTH_PROFILE_BEGIN("Benchmark");
+
     sInstance = this;
 	RefreshAPI();
 
@@ -145,6 +148,8 @@ void Application::Run()
 
 int32 Application::Abort()
 {
+	MTH_PROFILE_END();
+
 	Mathematica::AppCommand::DisplayExitMessage();
     return 0;
 }
@@ -199,7 +204,7 @@ void Mathematica::AppCommand::Solve()
 
 		if (result.type == ENumberType::Integer)
 		{
-			bool primality = Mathematica::Integer::IsPrime(result);
+			bool primality = Mathematica::Integer::IsPrime(result) || result == 1;
 
 			if (!primality)
 			{
@@ -213,7 +218,7 @@ void Mathematica::AppCommand::Solve()
 				}
 			}
 			
-			alertText << "Is prime? " << (primality ? "Yes\n" : "No\n");
+			alertText << "Is prime? " << (primality && result != 1 ? "Yes\n" : "No\n");
 		}
 
 		Mathematica::AppCommand::DisplayAlert(alertText.str(), "Result of equation: " + equation);
@@ -270,7 +275,7 @@ void Mathematica::AppCommand::WaitKey()
 	#ifndef MTH_WIN
 		MTH_UNUSED(system("stty raw"));
 	#endif
-	std::cout << std::endl << std::endl;
+	std::cout << std::endl;
 	std::cout << "Press any key to close.";
 	#ifndef MTH_WIN
 		MTH_UNUSED(getchar());

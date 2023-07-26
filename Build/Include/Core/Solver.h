@@ -1,9 +1,10 @@
 #pragma once
 
-#include "Utility/Types.h"
+#include "Core/Utility/Types.h"
+
+#include "Core/Math/Number.h"
 
 #include "Core/MathNode.h"
-#include "Core/Number.h"
 
 class Solver
 {

@@ -1,9 +1,10 @@
 #include "mthpch.h"
 
-#include "Core/Math/Integer.h"
-#include "Core/Number.h"
+#include "Core/Utility/Utils.h"
 
-#include "Utility/Utils.h"
+#include "Core/Math/Integer.h"
+#include "Core/Math/Number.h"
+
 
 namespace Mathematica
 {

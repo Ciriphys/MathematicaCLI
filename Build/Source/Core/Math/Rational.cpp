@@ -2,7 +2,7 @@
 
 #include "Core/Math/Rational.h"
 
-#include "Core/Number.h"
+#include "Core/Math/Number.h"
 
 namespace Mathematica
 {

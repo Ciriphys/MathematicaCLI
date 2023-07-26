@@ -1,12 +1,12 @@
 #include "mthpch.h"
 
 #include "Core/Math/Operations.h"
+#include "Core/Math/Number.h"
 
 #include "Core/LexiconToken.h"
 #include "Core/MathNode.h"
-#include "Core/Number.h"
 
-#include "Utility/Utils.h"
+#include "Core/Utility/Utils.h"
 
 namespace Mathematica
 {
@@ -174,6 +174,17 @@ namespace Mathematica
 			result.push_back(currentSubstring);
 		}
 		return result;
+	}
+
+	void Replace(String& string, char what, char with)
+	{
+		for (char& character : string)
+		{
+			if (character == what)
+			{
+				character = with;
+			}
+		}
 	}
 
 	void DisplayTokenArray(const Vector<LexiconToken>& tokenArray, bool bInline)

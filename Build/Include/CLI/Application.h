@@ -4,7 +4,7 @@
 #include "Core/Parser.h"
 #include "Core/Lexer.h"
 
-#include "Utility/Types.h"
+#include "Core/Utility/Types.h"
 
 class Application 
 { 

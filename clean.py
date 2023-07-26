@@ -69,5 +69,6 @@ if __name__ == "__main__":
 
     RemoveFile("todo.txt")
     WrapperRemoveTree("Binaries/")
+    WrapperRemoveTree("Build/ProfilerLogs")
     print("Nothing left to clean. Halting")
     exit(0)
