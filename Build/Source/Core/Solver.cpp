@@ -1,9 +1,12 @@
 #include "mthpch.h"
 
+#include "Core/Utility/Profiler.h"
 #include "Core/Utility/Timer.h"
 #include "Core/Utility/Utils.h"
 
 #include "Core/Solver.h"
+
+Solver::Solver() : mExplanationSystem(ExplanationSystem::Get()) {}
 
 void Solver::InitSolver(const Ref<MathNode>& tree)
 {
@@ -61,10 +64,13 @@ Number Solver::ExecutionSolve()
 
     for (auto [order, operations] : mExecutionFlow)
     {
+        // TODO : Use threads to detach the explanation function and run in parallel.
+        mExplanationSystem.Explain(mTree);
+
         for (auto operation : operations)
         {
             // Since the execution flow is generated in the parser,
-            // it's safe to any_cast the children's data to MNumber.
+            // it's safe to any_cast the children's data to Number.
             // Also, this function creates a new result node with
             // number type, that overwrites the current node. 
             // This allows every following operation to have 

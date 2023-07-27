@@ -1,5 +1,6 @@
 #include "mthpch.h"
 
+#include "Core/Utility/Profiler.h"
 #include "Core/Utility/Utils.h"
 #include "Core/Utility/Timer.h"
 
@@ -79,6 +80,7 @@ void Parser::GenerateWrappedNodes(HashMap<EPriority, Vector<uint32>>& scopeData,
 
 		wrappedNode->children.push_back(leftNode);
 		wrappedNode->children.push_back(rightNode);
+		wrappedNode->scope = mCurrentScope;
 		leftNode->parent = wrappedNode;
 		rightNode->parent = wrappedNode;
 
@@ -141,14 +143,14 @@ Ref<MathNode> Parser::GenerateTree()
 
 	for (auto it = mOperationIndexes.rbegin(); it != mOperationIndexes.rend(); it++)
 	{
-		auto scopeIndex = it->first;
+		mCurrentScope = it->first;
 		auto scopeData = it->second;
 
 		GenerateWrappedNodes(scopeData, EPriority::High);
 		GenerateWrappedNodes(scopeData, EPriority::Medium);
 		GenerateWrappedNodes(scopeData, EPriority::Low);
 
-		auto parenthesesIndexes = mScopeCounter[scopeIndex].second;
+		auto parenthesesIndexes = mScopeCounter[mCurrentScope].second;
 
 		for (auto [first, second] : parenthesesIndexes)
 		{

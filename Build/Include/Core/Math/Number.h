@@ -4,7 +4,7 @@
 
 #include "Core/Utility/Utils.h"
 
-// This definition might vary.
+// NOTE : This definition might vary.
 enum class ENumberType : int32
 {
     Integer,
@@ -48,3 +48,10 @@ struct Number : public Identifiable
     Number LowestTerms(int32 num, int32 den);
     void LowestTerms();
 };
+
+// TODO : Move these functions somewhere else.
+namespace Mathematica
+{
+    Number Absolute(Number number);
+    int32 Sign(Number number);
+}

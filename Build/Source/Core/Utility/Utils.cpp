@@ -254,6 +254,22 @@ namespace Mathematica
 		return {};
 	}
 
+	char ToChar(FBinaryFunction address)
+	{
+		FBinaryFunction addAddress = &Mathematica::Operation::Add;
+		FBinaryFunction subtractAddress = &Mathematica::Operation::Subtract;
+		FBinaryFunction multiplyAddress = &Mathematica::Operation::Multiply;
+		FBinaryFunction divideAddress = &Mathematica::Operation::Divide;
+
+		if (address == addAddress)				return '+';
+		else if (address == subtractAddress)	return '-';
+		else if (address == multiplyAddress)	return '*';
+		else if (address == divideAddress)		return '/';
+
+		MTH_ASSERT(false, "What kind of sorcery is this?!");
+		return {};
+	}
+
 	String Stringify(FBinaryFunction address)
 	{
 		FBinaryFunction addAddress		= &Mathematica::Operation::Add;

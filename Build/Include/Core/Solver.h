@@ -4,12 +4,13 @@
 
 #include "Core/Math/Number.h"
 
+#include "Core/ExplanationSystem.h"
 #include "Core/MathNode.h"
 
 class Solver
 {
 public:
-    Solver() = default;
+    Solver();
     void InitSolver(const Ref<MathNode>& tree);
     void InitSolver(const Ref<MathNode>& tree, const Map<uint32, Vector<Ref<MathNode>>>& executionFlow);
 
@@ -20,5 +21,6 @@ private:
     Number ExecutionSolve();
 
 	Map<uint32, Vector<Ref<MathNode>>> mExecutionFlow;
+    ExplanationSystem& mExplanationSystem;
     Ref<MathNode> mTree;
 };

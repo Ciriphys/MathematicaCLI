@@ -32,8 +32,8 @@ namespace Mathematica
 
 		int32 Sign(float32 number)
 		{
-			MTH_ASSERT(number != 0, "DomainError: Zero is not in the domaain of Sign!");
-			return number > 1 ? 1 : -1;
+			MTH_ASSERT(number != 0, "DomainError: Zero is not in the domain of Sign!");
+			return number > 0 ? 1 : -1;
 		}
 
 		Number Farey(float32 number)

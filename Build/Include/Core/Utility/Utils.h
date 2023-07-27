@@ -14,24 +14,18 @@
 constexpr auto MTH_PROJECT_PATH = "MathematicaCLI\\";
 #else
 constexpr auto MTH_PROJECT_PATH = "MathematicaCLI/";
+
+#ifndef __FUNCSIG__
+#define __FUNCSIG__ __FUNCTION__
+#endif
+
 #endif
 
 #define MTH_UNUSED(x) Mathematica::Cast<void>(x)
 #define MTH_ADDRESS_OF(x) Mathematica::Recast<void*>(&x)
-#define MTH_UINT_ADDRESS_OF(x) *Mathematica::Recast<uint32*>MTH_ADDRESS_OF(x)
+#define MTH_UINT_ADDRESS_OF(x) Mathematica::Recast<uint32*>MTH_ADDRESS_OF(x)
 
-#ifdef MTH_USE_PROFILER
-#define MTH_PROFILE_SCOPE(name) Timer timer##__LINE__(name)
-#define MTH_PROFILE_FUNCTION() MTH_PROFILE_SCOPE(__FUNCSIG__)
-#define MTH_PROFILE_BEGIN(name) Profiler::Get().BeginProfile(name);
-#define MTH_PROFILE_END() Profiler::Get().EndProfile();
-#else 
-#define MTH_PROFILE_SCOPE(name)
-#define MTH_PROFILE_FUNCTION()
-#define MTH_PROFILE_BEGIN(name)
-#define MTH_PROFILE_END()
-#endif 
-constexpr auto MTH_VERSION = "Version 0.0.12a";
+constexpr auto MTH_VERSION = "Version 0.0.13a";
 constexpr auto MTH_NO_MESSAGE = "No message provided.";
 constexpr auto MTH_FLOAT32_EPSILON = 1.192092896e-07F;
 
@@ -101,6 +95,7 @@ namespace Mathematica
 
 	// === Functions ===
 	FBinaryFunction GetBinaryFunctionFromRawData(const String& data);
+	char   ToChar(FBinaryFunction address);
 	String Stringify(FBinaryFunction address);
 
 	// === String manipulation ===

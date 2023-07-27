@@ -30,5 +30,6 @@ private:
     Ref<MathNode> mTree;
 
 	uint32 mFirstIndex;
+    uint32 mCurrentScope;
     uint32 mExecutionIndex;
 };

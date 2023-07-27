@@ -2,6 +2,7 @@
 
 #include "Core/Lexer.h"
 
+#include "Core/Utility/Profiler.h"
 #include "Core/Utility/Utils.h"
 #include "Core/Utility/Timer.h"
 

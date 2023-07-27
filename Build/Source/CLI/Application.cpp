@@ -171,6 +171,7 @@ void Mathematica::AppCommand::Help()
 	return;
 }
 
+// REFACTOR : Refactor this function!
 void Mathematica::AppCommand::Solve()
 {
 	Mathematica::ClearScreen();
@@ -198,18 +199,32 @@ void Mathematica::AppCommand::Solve()
 
 		StringStream alertText;
 
-		alertText << "Result: " << Stringify(result) << "\n";
+		alertText << "Steps:\n";
+
+		for (auto step : ExplanationSystem::Get().GetSolution())
+		{
+			alertText << step << "\n";
+		}
+
+		alertText << "Done.\n\n";
+
+		alertText << "Result: " << Stringify(result) << "\n\n" << "Additional info:\n";
 		alertText.precision(6);
 		alertText << std::fixed << "Decimal value: " << result.RawNumerical() << "\n";
 
-		if (result.type == ENumberType::Integer)
+		if (result.type == ENumberType::Integer && result != 0)
 		{
-			bool primality = Mathematica::Integer::IsPrime(result) || result == 1;
+			bool primality = Mathematica::Integer::IsPrime(Mathematica::Absolute(result)) || result == 1;
 
 			if (!primality)
 			{
 				alertText << "Factorization: ";
-				auto factors = Mathematica::Integer::Factorize(result);
+				auto factors = Mathematica::Integer::Factorize(Mathematica::Absolute(result));
+				if (Mathematica::Sign(result) == -1)
+				{
+					alertText << "-1 * ";
+				}
+
 				for (auto [factor, exponent] : factors)
 				{
 					alertText << factor;
@@ -218,11 +233,12 @@ void Mathematica::AppCommand::Solve()
 				}
 			}
 			
-			alertText << "Is prime? " << (primality && result != 1 ? "Yes\n" : "No\n");
+			if(Mathematica::Sign(result) == 1) alertText << "Is prime? " << (primality && result != 1 ? "Yes\n" : "No\n");
 		}
 
 		Mathematica::AppCommand::DisplayAlert(alertText.str(), "Result of equation: " + equation);
 		app->RefreshAPI();
+		ExplanationSystem::Get().Flush();
 	}
 
 	return;

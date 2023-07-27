@@ -124,3 +124,17 @@ bool Number::operator<(Number other)
 {
     return numerator * other.denominator < denominator * other.numerator;
 }
+
+namespace Mathematica
+{
+    Number Absolute(Number number)
+    {
+        return Number(number.numerator > 0 ? number.numerator : -number.numerator, number.denominator > 0 ? number.denominator : -number.denominator);
+    }
+
+    int32 Sign(Number number)
+    {
+        MTH_ASSERT(number != 0, "DomainError: Zero is not in the domain of Sign!");
+        return number > 0 ? 1 : -1;
+    }
+}
