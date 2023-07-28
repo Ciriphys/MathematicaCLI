@@ -6,12 +6,12 @@
 #ifdef MTH_USE_PROFILER
 #define MTH_PROFILE_SCOPE(name) Timer timer##__LINE__(name)
 #define MTH_PROFILE_FUNCTION() MTH_PROFILE_SCOPE(__FUNCSIG__)
-#define MTH_PROFILE_BEGIN(name, ...) Profiler::Get().BeginProfile(name, __VA_ARGS__);
+#define MTH_PROFILE_BEGIN(...) Profiler::Get().BeginProfile(__VA_ARGS__);
 #define MTH_PROFILE_END() Profiler::Get().EndProfile();
 #else 
 #define MTH_PROFILE_SCOPE(name)
 #define MTH_PROFILE_FUNCTION()
-#define MTH_PROFILE_BEGIN(name, ...)
+#define MTH_PROFILE_BEGIN(...)
 #define MTH_PROFILE_END()
 #endif 
 
