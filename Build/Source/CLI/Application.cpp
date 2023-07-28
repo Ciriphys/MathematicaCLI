@@ -174,6 +174,8 @@ void Mathematica::AppCommand::Help()
 // REFACTOR : Refactor this function!
 void Mathematica::AppCommand::Solve()
 {
+	MTH_PROFILE_FUNCTION();
+
 	Mathematica::ClearScreen();
 	std::cout << "==== MathematicaCLI: Solve ====" << std::endl;
 

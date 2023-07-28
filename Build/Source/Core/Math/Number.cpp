@@ -6,6 +6,7 @@
 #include "Core/Math/Number.h"
 
 #include "Core/Utility/Conversions.h"
+#include "Core/Utility/Profiler.h"
 
 Number::Number(int32 num, int32 den) : numerator(num), denominator(den), type(ENumberType::Real)
 {
@@ -28,12 +29,20 @@ Number::Number(const String& strNumber)
 {
     // TODO : Add support for fractions and real numbers.
     float32 rawNumerical = Mathematica::Convert::StringToFloat32(strNumber);
-    Number fraction = Mathematica::Rational::Farey(rawNumerical);
 
-    numerator = fraction.numerator;
-    denominator = fraction.denominator;
-
-    type = ENumberType::Integer;
+    if (rawNumerical != Mathematica::Cast<int>(rawNumerical))
+    {
+        Number fraction = Mathematica::Rational::Farey(rawNumerical);
+		numerator = fraction.numerator;
+		denominator = fraction.denominator;
+        type = ENumberType::Rational;
+    }
+    else
+    {
+        numerator = Mathematica::Cast<int>(rawNumerical);
+        denominator = 1;
+        type = ENumberType::Integer;
+    }
 }
 
 float32 Number::RawNumerical()
@@ -129,11 +138,15 @@ namespace Mathematica
 {
     Number Absolute(Number number)
     {
+        MTH_PROFILE_FUNCTION();
+
         return Number(number.numerator > 0 ? number.numerator : -number.numerator, number.denominator > 0 ? number.denominator : -number.denominator);
     }
 
     int32 Sign(Number number)
     {
+        MTH_PROFILE_FUNCTION();
+
         MTH_ASSERT(number != 0, "DomainError: Zero is not in the domain of Sign!");
         return number > 0 ? 1 : -1;
     }

@@ -1,8 +1,9 @@
 #include "mthpch.h"
 
 #include "Core/Math/Rational.h"
-
 #include "Core/Math/Number.h"
+
+#include "Core/Utility/Profiler.h"
 
 namespace Mathematica
 {
@@ -10,6 +11,8 @@ namespace Mathematica
 	{
 		Number Average(Vector<Number> numbers)
 		{
+			MTH_PROFILE_FUNCTION();
+
 			Number result;
 
 			for (auto number : numbers)
@@ -22,22 +25,30 @@ namespace Mathematica
 
 		Number Average(Number first, Number second)
 		{
+			MTH_PROFILE_FUNCTION();
+
 			return (first + second) / 2;
 		}
 
 		Number Between(Number first, Number second)
 		{
+			MTH_PROFILE_FUNCTION();
+
 			return { first.numerator + second.numerator, first.denominator + second.denominator };
 		}
 
 		int32 Sign(float32 number)
 		{
+			MTH_PROFILE_FUNCTION();
+
 			MTH_ASSERT(number != 0, "DomainError: Zero is not in the domain of Sign!");
 			return number > 0 ? 1 : -1;
 		}
 
 		Number Farey(float32 number)
 		{	
+			MTH_PROFILE_FUNCTION();
+
 			Number lowerBound = { 0, 1 };
 			Number upperBound = { 1, 1 };
 			

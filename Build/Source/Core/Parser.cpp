@@ -107,6 +107,8 @@ void Parser::GenerateWrappedNodes(HashMap<EPriority, Vector<uint32>>& scopeData,
 
 void Parser::GenerateNodes(const Vector<LexiconToken>& tokens)
 {
+	MTH_PROFILE_FUNCTION();
+
 	for (auto token : tokens)
 	{
 		Ref<MathNode> currentNode = Mathematica::MakeRef<MathNode>();

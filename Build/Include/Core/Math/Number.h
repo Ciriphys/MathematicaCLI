@@ -17,7 +17,7 @@ enum class ENumberType : int32
 };
 
 // TODO : Add support for real numbers. Currently this definition is valid for rationals.
-struct Number : public Identifiable
+struct Number
 {
     int32 numerator;
     int32 denominator;
