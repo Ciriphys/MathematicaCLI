@@ -30,7 +30,7 @@ Number::Number(const String& strNumber)
     // TODO : Add support for fractions and real numbers.
     float32 rawNumerical = Mathematica::Convert::StringToFloat32(strNumber);
 
-    if (rawNumerical != Mathematica::Cast<int>(rawNumerical))
+    if (rawNumerical != Mathematica::Cast<int32>(rawNumerical))
     {
         Number fraction = Mathematica::Rational::Farey(rawNumerical);
 		numerator = fraction.numerator;
@@ -39,7 +39,7 @@ Number::Number(const String& strNumber)
     }
     else
     {
-        numerator = Mathematica::Cast<int>(rawNumerical);
+        numerator = Mathematica::Cast<int32>(rawNumerical);
         denominator = 1;
         type = ENumberType::Integer;
     }

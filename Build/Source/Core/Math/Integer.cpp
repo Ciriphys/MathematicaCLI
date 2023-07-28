@@ -40,8 +40,6 @@ namespace Mathematica
 
 		bool IsPrime(int32 n)
 		{
-            MTH_PROFILE_FUNCTION();
-
             if (n < 2) return false;
 
             for (int32 i = 2; i * i <= n; i++)
@@ -54,8 +52,24 @@ namespace Mathematica
 
         bool IsPrime(Number n)
         {
-            MTH_PROFILE_FUNCTION();
+			MTH_ASSERT(n.type == ENumberType::Integer, "DomainError: Cannot factorize a non-integer number!");
+			return IsPrime(n.numerator);
+        }
 
+        int32 Prime(int32 n)
+        {
+			if (n < 2) return n;
+
+			for (int32 i = 2; i * i <= n; i++)
+			{
+				if (n % i == 0) return i;
+			}
+
+			return n;
+        }
+
+        int32 Prime(Number n)
+        {
 			MTH_ASSERT(n.type == ENumberType::Integer, "DomainError: Cannot factorize a non-integer number!");
 			return IsPrime(n.numerator);
         }
@@ -63,28 +77,15 @@ namespace Mathematica
         Map<int32, int32> Factorize(int32 n)
         {
             MTH_PROFILE_FUNCTION();
-
-            auto soe = SoE(n);
+			
             Map<int32, int32> result;
+            int primeFactor = Prime(n);
 
-			for (int32 i = 0; i < soe.size() && n > 1; i++)
+            while (primeFactor != n)
             {
-                int32 currentPrime = soe[i];
-
-                if (n % currentPrime == 0)
-                {
-                    if (result.find(currentPrime) != result.end())
-                    {
-                        result[currentPrime]++;
-                    }
-                    else
-                    {
-                        result[currentPrime] = 1;
-                    }
-
-                    n /= currentPrime;
-                    i--;
-                }
+                result[n] = result.find(n) != result.end() ? result[n] + 1 : 1;
+                n /= primeFactor;
+                primeFactor = Prime(n);
             }
 
             return result;

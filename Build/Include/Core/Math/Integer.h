@@ -17,6 +17,9 @@ namespace Mathematica
         bool IsPrime(int32 n);
         bool IsPrime(Number n);
 
+		int32 Prime(int32 n);
+		int32 Prime(Number n);
+
         // Sieve of Erathosthenes
         Vector<int32> SoE (int32 max); 
     }
