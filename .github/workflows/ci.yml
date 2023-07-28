@@ -8,7 +8,7 @@ jobs:
         strategy:
             matrix:
                 os: [windows-latest]
-                build-configs: ["Debug", "Release"]
+                build-configs: ["Debug", "Release", "ProfilerDebug", "ProfilerRelease"]
         runs-on: ${{ matrix.os }}
         steps:
             - name: Checkout codebase
@@ -32,7 +32,7 @@ jobs:
         strategy:
             matrix:
                 os: [macos-latest]
-                build-configs: ["debug", "release"]
+                build-configs: ["debug", "release", "profilerdebug", "profilerrelease"]
         runs-on: ${{ matrix.os }}
         steps:
             - name: Checkout codebase
@@ -51,7 +51,7 @@ jobs:
       strategy:
           matrix:
               os: [ubuntu-latest]
-              build-configs: ["debug", "release"]
+              build-configs: ["debug", "release", "profilerdebug", "profilerrelease"]
       runs-on: ${{ matrix.os }} 
       steps: 
           - name: Checkout codebase

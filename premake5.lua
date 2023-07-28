@@ -1,6 +1,6 @@
 workspace "Mathematica"
     architecture "x64"
-    configurations { "Debug", "Release" }
+    configurations { "Debug", "Release", "ProfilerDebug", "ProfilerRelease" }
 
     output = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
@@ -30,11 +30,21 @@ workspace "Mathematica"
             defines { "MTH_MACOS" }
 
         filter { "configurations:Debug" }
+            defines { "MTH_DEBUG", "DEBUG", "MTH_CONFIG=\"Debug\"" }
+            optimize "Off"
+            symbols "On"
+
+        filter { "configurations:ProfilerDebug" }
             defines { "MTH_DEBUG", "DEBUG", "MTH_CONFIG=\"Debug\"", "MTH_USE_PROFILER" }
             optimize "Off"
             symbols "On"
         
         filter { "configurations:Release" }
+            defines { "MTH_RELEASE", "NDEBUG", "MTH_CONFIG=\"Release\"" }
+            optimize "On"
+            symbols "Default"
+
+        filter { "configurations:ProfilerRelease" }
             defines { "MTH_RELEASE", "NDEBUG", "MTH_CONFIG=\"Release\"", "MTH_USE_PROFILER" }
             optimize "On"
             symbols "Default"

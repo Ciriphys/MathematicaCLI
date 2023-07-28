@@ -290,6 +290,9 @@ void Mathematica::AppCommand::Unknown(String command)
 
 void Mathematica::AppCommand::WaitKey()
 {
+	using namespace std::chrono_literals;
+	std::this_thread::sleep_for(0.5s);
+
 	#ifndef MTH_WIN
 		MTH_UNUSED(system("stty raw"));
 	#endif
