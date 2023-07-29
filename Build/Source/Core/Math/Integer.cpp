@@ -83,10 +83,12 @@ namespace Mathematica
 
             while (primeFactor != n)
             {
-                result[n] = result.find(n) != result.end() ? result[n] + 1 : 1;
+                result[primeFactor] = result.find(primeFactor) != result.end() ? result[primeFactor] + 1 : 1;
                 n /= primeFactor;
                 primeFactor = Prime(n);
             }
+
+            result[primeFactor] = result.find(primeFactor) != result.end() ? result[primeFactor] + 1 : 1;
 
             return result;
         }
