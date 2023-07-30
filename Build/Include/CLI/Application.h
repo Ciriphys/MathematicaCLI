@@ -54,6 +54,7 @@ namespace Mathematica
         void Help();
         void Solve();
         void About();
+        void Test();
 
         void DisplayAlert(String alert, String title = "Mathematica CLI Alert:");
         void DisplayExitMessage();

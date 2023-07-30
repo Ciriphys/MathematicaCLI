@@ -11,7 +11,7 @@ namespace Mathematica
 {
     namespace Operation
     {
-        Number Add(const Number& a, const Number& b)
+        RationalNumber Add(const RationalNumber& a, const RationalNumber& b)
         {
             MTH_PROFILE_FUNCTION();
 
@@ -22,7 +22,7 @@ namespace Mathematica
             return { numeratorA + numeratorB, commonDenominator };
         }
 
-        Number Subtract(const Number& a, const Number& b)
+        RationalNumber Subtract(const RationalNumber& a, const RationalNumber& b)
         {
             MTH_PROFILE_FUNCTION();
 
@@ -33,7 +33,7 @@ namespace Mathematica
             return { numeratorA - numeratorB, commonDenominator };
         }
 
-        Number Multiply(const Number& a, const Number& b)
+        RationalNumber Multiply(const RationalNumber& a, const RationalNumber& b)
         {
             MTH_PROFILE_FUNCTION();
 
@@ -43,7 +43,7 @@ namespace Mathematica
             return { numerator, denominator };
         }
 
-        Number Divide(const Number& a, const Number& b)
+        RationalNumber Divide(const RationalNumber& a, const RationalNumber& b)
         {
             MTH_PROFILE_FUNCTION();
 
@@ -55,7 +55,7 @@ namespace Mathematica
             return { numerator, denominator };
         }
 
-        Number Mod(const Number& a, const Number& b)
+        RationalNumber Mod(const RationalNumber& a, const RationalNumber& b)
         {
             MTH_PROFILE_FUNCTION();
 

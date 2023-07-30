@@ -9,11 +9,11 @@ namespace Mathematica
 {
 	namespace Rational
 	{
-		Number Average(Vector<Number> numbers)
+		RationalNumber Average(Vector<RationalNumber> numbers)
 		{
 			MTH_PROFILE_FUNCTION();
 
-			Number result;
+			RationalNumber result;
 
 			for (auto number : numbers)
 			{
@@ -23,14 +23,14 @@ namespace Mathematica
 			return result / Mathematica::Cast<int32>(numbers.size());
 		}
 
-		Number Average(Number first, Number second)
+		RationalNumber Average(RationalNumber first, RationalNumber second)
 		{
 			MTH_PROFILE_FUNCTION();
 
 			return (first + second) / 2;
 		}
 
-		Number Between(Number first, Number second)
+		RationalNumber Between(RationalNumber first, RationalNumber second)
 		{
 			MTH_PROFILE_FUNCTION();
 
@@ -45,15 +45,15 @@ namespace Mathematica
 			return number > 0 ? 1 : -1;
 		}
 
-		Number Farey(float32 number)
+		RationalNumber Farey(float32 number)
 		{	
 			MTH_PROFILE_FUNCTION();
 
-			Number lowerBound = { 0, 1 };
-			Number upperBound = { 1, 1 };
+			RationalNumber lowerBound = { 0, 1 };
+			RationalNumber upperBound = { 1, 1 };
 			
 			float32 delta = abs(number) - abs(Mathematica::Cast<int32>(number));
-			Number between = Between(lowerBound, upperBound);
+			RationalNumber between = Between(lowerBound, upperBound);
 			float32 betweenValue = between.RawNumerical();
 
 			if (!delta) return { Mathematica::Cast<int32>(number), 1 };

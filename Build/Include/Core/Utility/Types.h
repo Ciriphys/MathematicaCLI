@@ -1,7 +1,7 @@
 #pragma once
 
 // Forward declarations
-struct Number;
+struct RationalNumber;
 
 // Data structures
 using String = std::string;
@@ -32,7 +32,6 @@ using File = std::fstream;
 template<typename D>
 using TimePoint = std::chrono::time_point<D>;
 
-using HRClock = std::chrono::high_resolution_clock;
 using SteadyClock = std::chrono::steady_clock;
 
 using Nanoseconds  = std::chrono::nanoseconds;
@@ -44,13 +43,17 @@ using MersenneTwister = std::mt19937;
 using RandomDevice = std::random_device;
 
 // Functions
-typedef Number(*FBinaryFunction)(const Number&, const Number&);
+typedef RationalNumber(*FBinaryFunction)(const RationalNumber&, const RationalNumber&);
 
 // Primitive types
 using uint64  = unsigned long long int;
 using uint32  = unsigned int;
+using uint16  = unsigned short;
+using uint8   = unsigned char;
 using int64   = long long int;
 using int32   = int;
+using int16	  = short;
+using int8	  = char;
 using float32 = float;
 using float64 = double;
 

@@ -50,7 +50,7 @@ namespace Mathematica
             return true;
 		}
 
-        bool IsPrime(Number n)
+        bool IsPrime(RationalNumber n)
         {
 			MTH_ASSERT(n.type == ENumberType::Integer, "DomainError: Cannot factorize a non-integer number!");
 			return IsPrime(n.numerator);
@@ -68,7 +68,7 @@ namespace Mathematica
 			return n;
         }
 
-        int32 Prime(Number n)
+        int32 Prime(RationalNumber n)
         {
 			MTH_ASSERT(n.type == ENumberType::Integer, "DomainError: Cannot factorize a non-integer number!");
 			return IsPrime(n.numerator);
@@ -93,7 +93,7 @@ namespace Mathematica
             return result;
         }
 
-        Map<int32, int32> Factorize(Number n)
+        Map<int32, int32> Factorize(RationalNumber n)
         {
             MTH_ASSERT(n.type == ENumberType::Integer, "DomainError: Cannot factorize a non-integer number!");
             return Factorize(n.numerator);

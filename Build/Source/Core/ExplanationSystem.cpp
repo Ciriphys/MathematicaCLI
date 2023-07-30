@@ -46,7 +46,7 @@ void ExplanationSystem::RecursiveExplain(Ref<MathNode> node)
 		mCurrentStep += node->scope != 0 ? ")" : "";
 		return;
 	case EMathNodeType::Number:
-		mCurrentStep += Mathematica::Stringify(Mathematica::AnyCast<Number>(node->data));
+		mCurrentStep += Mathematica::Stringify(Mathematica::AnyCast<RationalNumber>(node->data));
 		return;
 	default:
 		MTH_ASSERT(false, "What kind of sorcery is this?!");

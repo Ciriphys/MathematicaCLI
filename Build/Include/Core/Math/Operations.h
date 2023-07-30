@@ -1,16 +1,16 @@
 #pragma once
 
-struct Number;
+struct RationalNumber;
 
 namespace Mathematica 
 {
     namespace Operation
     {
-        Number Add      (const Number& a, const Number& b);
-        Number Subtract (const Number& a, const Number& b);
-        Number Multiply (const Number& a, const Number& b);
-        Number Divide   (const Number& a, const Number& b);
+        RationalNumber Add      (const RationalNumber& a, const RationalNumber& b);
+        RationalNumber Subtract (const RationalNumber& a, const RationalNumber& b);
+        RationalNumber Multiply (const RationalNumber& a, const RationalNumber& b);
+        RationalNumber Divide   (const RationalNumber& a, const RationalNumber& b);
 
-        Number Mod      (const Number& a, const Number& b);
+        RationalNumber Mod      (const RationalNumber& a, const RationalNumber& b);
     }
 }

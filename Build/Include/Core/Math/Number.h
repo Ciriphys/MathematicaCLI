@@ -17,41 +17,41 @@ enum class ENumberType : int32
 };
 
 // TODO : Add support for real numbers. Currently this definition is valid for rationals.
-struct Number
+struct RationalNumber
 {
     int32 numerator;
     int32 denominator;
     ENumberType type;
 
-    Number(int32 num = 0, int32 den = 1);
-    Number(const String& strNumber);
+    RationalNumber(int32 num = 0, int32 den = 1);
+    RationalNumber(const String& strNumber);
 
-    Number operator+(Number other);
-    Number operator-(Number other);
-    Number operator*(Number other);
-    Number operator/(Number other);
+    RationalNumber operator+(RationalNumber other);
+    RationalNumber operator-(RationalNumber other);
+    RationalNumber operator*(RationalNumber other);
+    RationalNumber operator/(RationalNumber other);
 
-	void operator+=(Number other);
-	void operator-=(Number other);
-	void operator*=(Number other);
-	void operator/=(Number other);
+	void operator+=(RationalNumber other);
+	void operator-=(RationalNumber other);
+	void operator*=(RationalNumber other);
+	void operator/=(RationalNumber other);
 
-    bool operator==(Number other);
-    bool operator!=(Number other);
-    bool operator>=(Number other);
-    bool operator<=(Number other);
-    bool operator> (Number other);
-    bool operator< (Number other);
+    bool operator==(RationalNumber other);
+    bool operator!=(RationalNumber other);
+    bool operator>=(RationalNumber other);
+    bool operator<=(RationalNumber other);
+    bool operator> (RationalNumber other);
+    bool operator< (RationalNumber other);
 
     float32 RawNumerical();
 
-    Number LowestTerms(int32 num, int32 den);
+    RationalNumber LowestTerms(int32 num, int32 den);
     void LowestTerms();
 };
 
 // TODO : Move these functions somewhere else.
 namespace Mathematica
 {
-    Number Absolute(Number number);
-    int32 Sign(Number number);
+    RationalNumber Absolute(RationalNumber number);
+    int32 Sign(RationalNumber number);
 }

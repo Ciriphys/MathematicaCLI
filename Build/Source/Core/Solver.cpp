@@ -19,14 +19,14 @@ void Solver::InitSolver(const Ref<MathNode>& tree, const Map<uint32, Vector<Ref<
     mExecutionFlow = executionFlow;
 }
 
-Number Solver::SolveTree()
+RationalNumber Solver::SolveTree()
 {
     MTH_PROFILE_FUNCTION();
 
     return mExecutionFlow.size() == 0 ? RecursiveSolve(mTree) : ExecutionSolve();
 }
 
-Number Solver::RecursiveSolve(const Ref<MathNode>& node)
+RationalNumber Solver::RecursiveSolve(const Ref<MathNode>& node)
 {
     MTH_PROFILE_FUNCTION();
 
@@ -40,8 +40,8 @@ Number Solver::RecursiveSolve(const Ref<MathNode>& node)
                 Ref<MathNode> leftChild  = node->children[0];
                 Ref<MathNode> rightChild = node->children[1];
 
-                Number left = RecursiveSolve(leftChild);
-                Number right = RecursiveSolve(rightChild);
+                RationalNumber left = RecursiveSolve(leftChild);
+                RationalNumber right = RecursiveSolve(rightChild);
 
                 // Get the function assigned to the math node.
                 FBinaryFunction function = Mathematica::AnyCast<FBinaryFunction>(node->data);
@@ -49,7 +49,7 @@ Number Solver::RecursiveSolve(const Ref<MathNode>& node)
             }
             break;
         case EMathNodeType::Number:      
-            return Mathematica::AnyCast<Number>(node->data);
+            return Mathematica::AnyCast<RationalNumber>(node->data);
             break;
         default:
             MTH_ASSERT(false, "What kind of sorcery is this?!");
@@ -58,7 +58,7 @@ Number Solver::RecursiveSolve(const Ref<MathNode>& node)
     }
 }
 
-Number Solver::ExecutionSolve()
+RationalNumber Solver::ExecutionSolve()
 {
     MTH_PROFILE_FUNCTION();
 
@@ -82,11 +82,11 @@ Number Solver::ExecutionSolve()
 
 			MTH_ASSERT(leftChild->type  == EMathNodeType::Number, "What kind of sorcery is this?!");
 			MTH_ASSERT(rightChild->type == EMathNodeType::Number, "What kind of sorcery is this?!");
-            Number left  = Mathematica::AnyCast<Number>( leftChild->data);
-            Number right = Mathematica::AnyCast<Number>(rightChild->data);
+            RationalNumber left  = Mathematica::AnyCast<RationalNumber>( leftChild->data);
+            RationalNumber right = Mathematica::AnyCast<RationalNumber>(rightChild->data);
 
             FBinaryFunction function = Mathematica::AnyCast<FBinaryFunction>(operation->data);
-            Number operationResult = function(left, right);
+            RationalNumber operationResult = function(left, right);
 
             Ref<MathNode> newNode = Mathematica::MakeRef<MathNode>();
             newNode->type = EMathNodeType::Number;

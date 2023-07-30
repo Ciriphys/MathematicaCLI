@@ -8,7 +8,7 @@
 #include "Core/Utility/Conversions.h"
 #include "Core/Utility/Profiler.h"
 
-Number::Number(int32 num, int32 den) : numerator(num), denominator(den), type(ENumberType::Real)
+RationalNumber::RationalNumber(int32 num, int32 den) : numerator(num), denominator(den), type(ENumberType::Real)
 {
     MTH_ASSERT(denominator != 0, "NumberInitError: Cannot divide by zero!");
 
@@ -25,14 +25,14 @@ Number::Number(int32 num, int32 den) : numerator(num), denominator(den), type(EN
     }
 }
 
-Number::Number(const String& strNumber)
+RationalNumber::RationalNumber(const String& strNumber)
 {
     // TODO : Add support for fractions and real numbers.
     float32 rawNumerical = Mathematica::Convert::StringToFloat32(strNumber);
 
     if (rawNumerical != Mathematica::Cast<int32>(rawNumerical))
     {
-        Number fraction = Mathematica::Rational::Farey(rawNumerical);
+        RationalNumber fraction = Mathematica::Rational::Farey(rawNumerical);
 		numerator = fraction.numerator;
 		denominator = fraction.denominator;
         type = ENumberType::Rational;
@@ -45,18 +45,18 @@ Number::Number(const String& strNumber)
     }
 }
 
-float32 Number::RawNumerical()
+float32 RationalNumber::RawNumerical()
 {
     return (float32)numerator / (float32)denominator;
 }
 
-Number Number::LowestTerms(int32 numerator, int32 denominator)
+RationalNumber RationalNumber::LowestTerms(int32 numerator, int32 denominator)
 {
     int32 gcd = Mathematica::Integer::GreatestCommonDivisor(numerator, denominator);
     return { numerator / gcd, denominator / gcd};
 }
 
-void Number::LowestTerms()
+void RationalNumber::LowestTerms()
 {
     int32 gcd = Mathematica::Integer::GreatestCommonDivisor(numerator, denominator);
     
@@ -64,86 +64,86 @@ void Number::LowestTerms()
     denominator /= gcd;
 }
 
-Number Number::operator+(Number other)
+RationalNumber RationalNumber::operator+(RationalNumber other)
 {
     return Mathematica::Operation::Add(*this, other);
 }
 
-Number Number::operator-(Number other)
+RationalNumber RationalNumber::operator-(RationalNumber other)
 {
     return Mathematica::Operation::Subtract(*this, other);
 }
 
-Number Number::operator*(Number other)
+RationalNumber RationalNumber::operator*(RationalNumber other)
 {
     return Mathematica::Operation::Multiply(*this, other);
 }
 
-Number Number::operator/(Number other)
+RationalNumber RationalNumber::operator/(RationalNumber other)
 {
     return Mathematica::Operation::Divide(*this, other);
 }
 
-void Number::operator+=(Number other)
+void RationalNumber::operator+=(RationalNumber other)
 {
     *this = Mathematica::Operation::Add(*this, other);
 }
 
-void Number::operator-=(Number other)
+void RationalNumber::operator-=(RationalNumber other)
 {
     *this = Mathematica::Operation::Subtract(*this, other);
 }
 
-void Number::operator*=(Number other)
+void RationalNumber::operator*=(RationalNumber other)
 {
     *this = Mathematica::Operation::Multiply(*this, other);
 }
 
-void Number::operator/=(Number other)
+void RationalNumber::operator/=(RationalNumber other)
 {
     *this = Mathematica::Operation::Divide(*this, other);
 }
 
-bool Number::operator==(Number other)
+bool RationalNumber::operator==(RationalNumber other)
 {
     return numerator * other.denominator == denominator * other.numerator;
 }
 
-bool Number::operator!=(Number other)
+bool RationalNumber::operator!=(RationalNumber other)
 {
     return !(*this == other);
 }
 
-bool Number::operator>=(Number other)
+bool RationalNumber::operator>=(RationalNumber other)
 {
     return numerator * other.denominator >= denominator * other.numerator;
 }
 
-bool Number::operator<=(Number other)
+bool RationalNumber::operator<=(RationalNumber other)
 {
     return numerator * other.denominator <= denominator * other.numerator;
 }
 
-bool Number::operator>(Number other)
+bool RationalNumber::operator>(RationalNumber other)
 {
     return numerator * other.denominator > denominator * other.numerator;
 }
 
-bool Number::operator<(Number other)
+bool RationalNumber::operator<(RationalNumber other)
 {
     return numerator * other.denominator < denominator * other.numerator;
 }
 
 namespace Mathematica
 {
-    Number Absolute(Number number)
+    RationalNumber Absolute(RationalNumber number)
     {
         MTH_PROFILE_FUNCTION();
 
-        return Number(number.numerator > 0 ? number.numerator : -number.numerator, number.denominator > 0 ? number.denominator : -number.denominator);
+        return RationalNumber(number.numerator > 0 ? number.numerator : -number.numerator, number.denominator > 0 ? number.denominator : -number.denominator);
     }
 
-    int32 Sign(Number number)
+    int32 Sign(RationalNumber number)
     {
         MTH_PROFILE_FUNCTION();
 

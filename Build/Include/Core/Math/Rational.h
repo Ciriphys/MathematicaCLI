@@ -6,14 +6,14 @@ namespace Mathematica
 {
 	namespace Rational
 	{
-		Number Average(Vector<Number> numbers);
-		Number Average(Number first, Number second);
+		RationalNumber Average(Vector<RationalNumber> numbers);
+		RationalNumber Average(RationalNumber first, RationalNumber second);
 
-		Number Between(Number first, Number second);
+		RationalNumber Between(RationalNumber first, RationalNumber second);
 
 		// TODO : Move this function somewhere else.
 		int32 Sign(float32 number);
 
-		Number Farey(float32 number);
+		RationalNumber Farey(float32 number);
 	}
 }

@@ -25,9 +25,20 @@ constexpr auto MTH_PROJECT_PATH = "MathematicaCLI/";
 #define MTH_ADDRESS_OF(x) Mathematica::Recast<void*>(&x)
 #define MTH_UINT_ADDRESS_OF(x) Mathematica::Recast<uint32*>MTH_ADDRESS_OF(x)
 
+#define MTH_HIGH_WORD(x) Mathematica::Cast<uint8>((x >> 8) & MTH_WORD_MASK)	
+#define MTH_LOW_WORD(x)	Mathematica::Cast<uint8>(x & MTH_WORD_MASK)
+#define MTH_HIGH_DWORD(x) Mathematica::Cast<uint16>((x >> 16) & MTH_DWORD_MASK)
+#define MTH_LOW_DWORD(x) Mathematica::Cast<uint16>(x & MTH_DWORD_MASK)
+#define MTH_HIGH_QWORD(x) Mathematica::Cast<uint32>((x >> 32) & MTH_QWORD_MASK)
+#define MTH_LOW_QWORD(x) Mathematica::Cast<uint32>(x & MTH_QWORD_MASK)
+
 constexpr auto MTH_VERSION = "Version 0.0.13a";
 constexpr auto MTH_NO_MESSAGE = "No message provided.";
 constexpr auto MTH_FLOAT32_EPSILON = 1.192092896e-07F;
+
+constexpr auto MTH_QWORD_MASK = 0xffffffff;
+constexpr auto MTH_DWORD_MASK = 0xffff;
+constexpr auto MTH_WORD_MASK = 0xff;
 
 enum class ELexiconTokenType;
 enum class EMathNodeType;
@@ -116,5 +127,5 @@ namespace Mathematica
 	// === Tree ===
 	void DisplayParsedTree(const Ref<MathNode>& node);
 	String Stringify(EMathNodeType type);
-	String Stringify(Number number);
+	String Stringify(RationalNumber number);
 };

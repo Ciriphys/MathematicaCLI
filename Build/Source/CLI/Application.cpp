@@ -36,6 +36,10 @@ void Application::Execute()
 		{
 			bRunning = false;
 		}
+		else if (command == "--test")
+		{
+			Mathematica::AppCommand::Test();
+		}
 		else
 		{
 			Mathematica::AppCommand::Unknown(command);
@@ -254,7 +258,14 @@ void Mathematica::AppCommand::About()
 	std::cout << " * To learn more, visit https://github.com/Ciridev/MathematicaCLI." << std::endl;
 
 	WaitKey();
+	return;
+}
 
+void Mathematica::AppCommand::Test()
+{
+	Mathematica::ClearScreen();
+
+	WaitKey();
 	return;
 }
 
@@ -282,7 +293,6 @@ void Mathematica::AppCommand::Unknown(String command)
 	std::cout << "An unknown command has been passed (" << command <<"). Check for mistakes!" << std::endl;
 
 	WaitKey();
-
 	return;
 }
 

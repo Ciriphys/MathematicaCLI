@@ -87,7 +87,7 @@ namespace Mathematica
 		}
 	}
 
-	String Stringify(Number number)
+	String Stringify(RationalNumber number)
 	{
 		StringStream stringStream;
 		stringStream << number.numerator;
@@ -117,7 +117,7 @@ namespace Mathematica
 
 		try
 		{
-			data = Stringify(Mathematica::AnyCast<Number>(node->data));
+			data = Stringify(Mathematica::AnyCast<RationalNumber>(node->data));
 		}
 		catch (...)
 		{

@@ -14,11 +14,11 @@ public:
     void InitSolver(const Ref<MathNode>& tree);
     void InitSolver(const Ref<MathNode>& tree, const Map<uint32, Vector<Ref<MathNode>>>& executionFlow);
 
-    Number SolveTree();
+    RationalNumber SolveTree();
 
 private:
-    Number RecursiveSolve(const Ref<MathNode>& node);
-    Number ExecutionSolve();
+    RationalNumber RecursiveSolve(const Ref<MathNode>& node);
+    RationalNumber ExecutionSolve();
 
 	Map<uint32, Vector<Ref<MathNode>>> mExecutionFlow;
     ExplanationSystem& mExplanationSystem;

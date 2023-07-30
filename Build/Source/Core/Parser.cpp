@@ -117,7 +117,7 @@ void Parser::GenerateNodes(const Vector<LexiconToken>& tokens)
 		switch (token.type)
 		{
 		case ELexiconTokenType::Number:
-			currentNode->data = Number(token.data);
+			currentNode->data = RationalNumber(token.data);
 			currentNode->type = EMathNodeType::Number;
 			break;
 		case ELexiconTokenType::BinaryFunction:
