@@ -131,9 +131,9 @@ Application::Application()
 	RandomEngine::Init();
 }
 
-void Application::LoadArguments(int32 argc, char** argv)
+void Application::LoadArguments(Int32 argc, char** argv)
 {
-    for(int32 i = 1; i < argc; i++)
+    for(Int32 i = 1; i < argc; i++)
     {
         mArguments.push_back(argv[i]);
     }
@@ -150,7 +150,7 @@ void Application::Run()
     Abort();
 }
 
-int32 Application::Abort()
+Int32 Application::Abort()
 {
 	MTH_PROFILE_END();
 

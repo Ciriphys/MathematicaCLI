@@ -12,8 +12,8 @@ namespace Mathematica
 		RationalNumber Between(RationalNumber first, RationalNumber second);
 
 		// TODO : Move this function somewhere else.
-		int32 Sign(float32 number);
+		Int32 Sign(Float32 number);
 
-		RationalNumber Farey(float32 number);
+		RationalNumber Farey(Float32 number);
 	}
 }

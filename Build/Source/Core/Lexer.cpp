@@ -6,7 +6,16 @@
 #include "Core/Utility/Utils.h"
 #include "Core/Utility/Timer.h"
 
-Lexer::Lexer() : mTokens({}), mOperationIndexes({}) {}
+namespace Mathematica
+{
+	const Map<String, String> functionMacros = 
+	{
+		{ "sqrt", "SquareRoot" }, 
+		{ "cbrt", "CubeRoot" }
+	};
+}
+
+Lexer::Lexer() : mTokens({}), mOperationIndexes({}), mFunctionMacros({}) {}
 
 void Lexer::GenerateTokens(String equation)
 {
@@ -15,17 +24,22 @@ void Lexer::GenerateTokens(String equation)
 	mTokens = {};
 	mOperationIndexes = {};
 
-	Mathematica::RemoveQuotes(equation);
+	Vector<LexiconToken> tokenQueue = {};
 
-	uint32 parenthesesCount = 0;
+	Mathematica::RemoveQuotes(equation);
+	equation = PreliminaryProcess(equation);
+
+	UInt32 parenthesesCount = 0;
 	bool invertSign = false;
 	bool skipMarker = false;
 
+	auto macrosIterator = mFunctionMacros.begin();
+
 	auto isAnOperation = [](const char c) -> bool
 	{
-		const char operations[] = { '+', '-', '*', '/' };
+		const char operations[] = { '+', '-', '*', '/'};
 
-		for (int32 i = 0; i < 4; i++)
+		for (Int32 i = 0; i < 4; i++)
 		{
 			if (c == operations[i])
 			{
@@ -40,7 +54,7 @@ void Lexer::GenerateTokens(String equation)
 	{
 		const char parentheses[] = { '(', '[', '{', ')', ']', '}' };
 
-		for (int32 i = 0; i < 6; i++)
+		for (Int32 i = 0; i < 6; i++)
 		{
 			if (c == parentheses[i])
 			{
@@ -53,9 +67,9 @@ void Lexer::GenerateTokens(String equation)
 
 	// Check if a substring contains both numbers and operations.
 	String currentSubstring = "";
-	for (auto currentChar : equation)
+	for (UInt32 i = 0; i < equation.length(); i++)
 	{
-		if (currentChar == ' ') continue;
+		char currentChar = equation[i];
 
 		if (!(currentChar < 48 || currentChar > 57) || currentChar == '.') // <--- Check if it is a number
 		{
@@ -109,11 +123,11 @@ void Lexer::GenerateTokens(String equation)
 				// Set the priority of such operation.
 				if (currentChar == '+' || currentChar == '-')
 				{
-					mOperationIndexes[parenthesesCount][EPriority::Low].push_back(Mathematica::Cast<uint32>(mTokens.size() - 1));
+					mOperationIndexes[parenthesesCount][EPriority::Low].push_back(Mathematica::Cast<UInt32>(mTokens.size() - 1));
 				}
 				else
 				{
-					mOperationIndexes[parenthesesCount][EPriority::Medium].push_back(Mathematica::Cast<uint32>(mTokens.size() - 1));
+					mOperationIndexes[parenthesesCount][EPriority::Medium].push_back(Mathematica::Cast<UInt32>(mTokens.size() - 1));
 				}
 			}
 			else
@@ -138,7 +152,7 @@ void Lexer::GenerateTokens(String equation)
 				{
 					// If so, create a multiplication token.
 					mTokens.emplace_back("*", ELexiconTokenType::BinaryFunction);
-					mOperationIndexes[parenthesesCount][EPriority::Medium].push_back(Mathematica::Cast<uint32>(mTokens.size() - 1));
+					mOperationIndexes[parenthesesCount][EPriority::Medium].push_back(Mathematica::Cast<UInt32>(mTokens.size() - 1));
 				}
 				mTokens.emplace_back("#", ELexiconTokenType::WrapperStart);
 				parenthesesCount++;
@@ -147,13 +161,13 @@ void Lexer::GenerateTokens(String equation)
 				if (mScopeCounter.find(parenthesesCount) != mScopeCounter.end())
 				{
 					mScopeCounter[parenthesesCount].first++;
-					mScopeCounter[parenthesesCount].second.emplace_back(mTokens.size() - 1, (uint32)0);
+					mScopeCounter[parenthesesCount].second.emplace_back(mTokens.size() - 1, (UInt32)0);
 				}
 				else
 				{
-					Vector<Pair<uint32, uint32>> parLocation;
-					parLocation.emplace_back(mTokens.size() - 1, Mathematica::Cast<uint32>(0));
-					Pair<uint32, Vector<Pair<uint32, uint32>>> scopeCount = { Mathematica::Cast<uint32>(1), parLocation };
+					Vector<Pair<UInt32, UInt32>> parLocation;
+					parLocation.emplace_back(mTokens.size() - 1, Mathematica::Cast<UInt32>(0));
+					Pair<UInt32, Vector<Pair<UInt32, UInt32>>> scopeCount = { Mathematica::Cast<UInt32>(1), parLocation };
 					mScopeCounter[parenthesesCount] = scopeCount;
 				}
 			}
@@ -164,6 +178,15 @@ void Lexer::GenerateTokens(String equation)
 				parenthesesCount--;
 			}
 			currentSubstring = "";
+		}
+		else if (currentChar == '$')
+		{
+			Pair<UInt32, String> storedMetadata = macrosIterator->second;
+
+			i = storedMetadata.first;
+			mTokens.emplace_back(storedMetadata.second, ELexiconTokenType::Macro);
+			mOperationIndexes[parenthesesCount][EPriority::Macro].push_back(Mathematica::Cast<UInt32>(mTokens.size() - 1));
+			macrosIterator++;
 		}
 		else
 		{
@@ -178,7 +201,8 @@ void Lexer::GenerateTokens(String equation)
 		invertSign = false;
 	}
 
-	MTH_ASSERT(parenthesesCount == 0, "Syntax error: parentheses mismatch found!");
+	MTH_ASSERT(parenthesesCount == 0, "SyntaxError: parentheses mismatch found!");
+	MTH_ASSERT(macrosIterator == mFunctionMacros.end(), "SyntaxError: Some macros were not generated!");
 }
 
 String Lexer::StringifyNumberToken(String string, bool invertSign)
@@ -206,6 +230,52 @@ String Lexer::StringifyNumberToken(String string, bool invertSign)
 	number = number != "0" && invertSign ? "-" + number : number; 
 
 	return number;
+}
+
+String Lexer::PreliminaryProcess(String equation)
+{
+	String result = "";
+
+	Int32 offset = 0;
+	Int32 counter = 0;
+	bool bStoreIndex = false;
+	
+	// TODO : Allow for nested inputs like sqrtsqrt2 without parentheses.
+	for (UInt32 i = 0; i < equation.length(); i++)
+	{
+		char currentChar = equation[i];
+
+		if (currentChar == ' ') continue;
+
+		if (Mathematica::IsLetter(currentChar))
+		{
+			if (!bStoreIndex)
+			{
+				for (auto [token, name] : Mathematica::functionMacros)
+				{
+					if (Mathematica::FindAt(equation, token, i))
+					{
+						result += '$';
+						bStoreIndex = true;
+						mFunctionMacros[i + counter] = { 0, name };
+						offset = token.length();
+					}
+				}
+			}
+		}
+		else
+		{
+			if (bStoreIndex)
+			{
+				bStoreIndex = false;
+				mFunctionMacros[i - offset + counter - 1].first = i + counter++;
+			}
+		}
+
+		result += currentChar;
+	}
+
+	return result;
 }
 
 // REFACTOR : Change C-like casts into C++-like casts.

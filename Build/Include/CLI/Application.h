@@ -10,9 +10,9 @@ class Application
 { 
     public:
         static Application* Get();
-        void LoadArguments(int32 argc, char** argv);
+        void LoadArguments(Int32 argc, char** argv);
         void Run();
-        int32 Abort();
+        Int32 Abort();
 
         ~Application() = default;
 

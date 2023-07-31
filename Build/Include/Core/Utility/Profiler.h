@@ -18,12 +18,12 @@
 struct ProfileInformation
 {
 	String name;
-	int32 start;
-	int32 end;
-	int32 duration;
+	Int32 start;
+	Int32 end;
+	Int32 duration;
 
-	int32 processId;
-	int32 threadId;
+	Int32 processId;
+	Int32 threadId;
 };
 
 struct ProfilerSession
@@ -47,5 +47,5 @@ private:
 
 	Scope<ProfilerSession> mCurrentSession;
 	OutFile mOutputFile;
-	int32 mProfileCount;
+	Int32 mProfileCount;
 };

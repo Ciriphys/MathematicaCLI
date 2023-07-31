@@ -13,35 +13,35 @@ void RandomEngine::Init()
 	return;
 }
 
-int32 RandomEngine::Int(int32 minRange, int32 maxRange)
+Int32 RandomEngine::Int(Int32 minRange, Int32 maxRange)
 {
 	MTH_ASSERT(sInstance, "RandomEngine instance has not been initialized. Please invoke RandomEngine::Init().");
 
-	std::uniform_int_distribution<int32> uniformDistribution(minRange, maxRange);
+	std::uniform_int_distribution<Int32> uniformDistribution(minRange, maxRange);
 	return uniformDistribution(mMersenneTwister);
 }
 
-uint32 RandomEngine::UnsignedInt(uint32 minRange, uint32 maxRange)
+UInt32 RandomEngine::UnsignedInt(UInt32 minRange, UInt32 maxRange)
 {
 	MTH_ASSERT(sInstance, "RandomEngine instance has not been initialized. Please invoke RandomEngine::Init().");
 
-	std::uniform_int_distribution<uint32> uniformDistribution(minRange, maxRange);
+	std::uniform_int_distribution<UInt32> uniformDistribution(minRange, maxRange);
 	return uniformDistribution(mMersenneTwister);
 }
 
-float32 RandomEngine::Float(float32 minRange, float32 maxRange)
+Float32 RandomEngine::Float(Float32 minRange, Float32 maxRange)
 {
 	MTH_ASSERT(sInstance, "RandomEngine instance has not been initialized. Please invoke RandomEngine::Init().");
 
-	std::uniform_real_distribution<float32> uniformDistribution(minRange, maxRange);
+	std::uniform_real_distribution<Float32> uniformDistribution(minRange, maxRange);
 	return uniformDistribution(mMersenneTwister);
 }
 
-float64 RandomEngine::Double(float64 minRange, float64 maxRange)
+Float64 RandomEngine::Double(Float64 minRange, Float64 maxRange)
 {
 	MTH_ASSERT(sInstance, "RandomEngine instance has not been initialized. Please invoke RandomEngine::Init().");
 
-	std::uniform_real_distribution<float64> uniformDistribution(minRange, maxRange);
+	std::uniform_real_distribution<Float64> uniformDistribution(minRange, maxRange);
 	return uniformDistribution(mMersenneTwister);
 }
 

@@ -7,20 +7,20 @@ namespace Mathematica
     namespace Integer
     {
         // Integer functions
-        int32 LeastCommonMultiple(int32 a, int32 b);
-        int32 GreatestCommonDivisor(int32 a, int32 b);
+        Int32 LeastCommonMultiple(Int32 a, Int32 b);
+        Int32 GreatestCommonDivisor(Int32 a, Int32 b);
 
         // Prime numbers
-        Map<int32, int32> Factorize(int32 n);
-        Map<int32, int32> Factorize(RationalNumber n);
+        Map<Int32, Int32> Factorize(Int32 n);
+        Map<Int32, Int32> Factorize(RationalNumber n);
 
-        bool IsPrime(int32 n);
+        bool IsPrime(Int32 n);
         bool IsPrime(RationalNumber n);
 
-		int32 Prime(int32 n);
-		int32 Prime(RationalNumber n);
+		Int32 Prime(Int32 n);
+		Int32 Prime(RationalNumber n);
 
         // Sieve of Erathosthenes
-        Vector<int32> SoE (int32 max); 
+        Vector<Int32> SoE (Int32 max); 
     }
 }

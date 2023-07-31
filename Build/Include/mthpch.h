@@ -14,7 +14,7 @@
 #include <sstream>
 #include <vector>
 #include <string>
-#include <stack>
+#include <array>
 #include <cmath>
 #include <any>
 #include <map>

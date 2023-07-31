@@ -4,11 +4,12 @@
 
 #include "Core/Utility/Types.h"
 
-enum class EPriority : int32
+enum class EPriority : Int32
 {
 	Low, 
 	Medium,
-	High
+	High,
+	Macro
 };
 
 class Lexer
@@ -19,15 +20,19 @@ public:
 	void GenerateTokens(String equation);
 
 	Vector<LexiconToken> GetTokens() const { return mTokens; }
-	Map<uint32, HashMap<EPriority, Vector<uint32>>> GetOperationIndex() const { return mOperationIndexes; }
-	HashMap<uint32, Pair<uint32, Vector<Pair<uint32, uint32>>>> GetScopeCounter() const { return mScopeCounter; }
+	Map<UInt32, HashMap<EPriority, Vector<UInt32>>> GetOperationIndex() const { return mOperationIndexes; }
+	HashMap<UInt32, Pair<UInt32, Vector<Pair<UInt32, UInt32>>>> GetScopeCounter() const { return mScopeCounter; }
 
 private:
 	String StringifyNumberToken(String string, bool invertSign);
+	String PreliminaryProcess(String equation);
 
 	Vector<LexiconToken> mTokens;
-	Map<uint32, HashMap<EPriority, Vector<uint32>>> mOperationIndexes;
-	HashMap<uint32, Pair<uint32, Vector<Pair<uint32, uint32>>>> mScopeCounter;
+
+	// Token Metadata
+	Map<UInt32, HashMap<EPriority, Vector<UInt32>>> mOperationIndexes;
+	HashMap<UInt32, Pair<UInt32, Vector<Pair<UInt32, UInt32>>>> mScopeCounter;
+	Map<UInt32, Pair<UInt32, String>> mFunctionMacros;
 };
 
 // NOTE : Making Lexer and Parser friends is potentially useful. Maybe in the future I'll change that.

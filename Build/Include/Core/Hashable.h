@@ -7,7 +7,7 @@ class Hashable
 {
 public:
 	Hashable(); 
-	uint32 GetHash() const { return mHash; }
+	UInt32 GetHash() const { return mHash; }
 
 	virtual void Rehash() = 0;
 
@@ -18,9 +18,9 @@ protected:
 	void HashField(T field);
 
 private:
-	void Hash(uint32 seed);
+	void Hash(UInt32 seed);
 
-	uint32 mHash;
+	UInt32 mHash;
 };
 
 template<typename T>
@@ -30,7 +30,7 @@ inline void Hashable::HashField(T field)
 }
 
 template<>
-inline void Hashable::HashField(uint32 field)
+inline void Hashable::HashField(UInt32 field)
 {
 	Hash(field);
 }
@@ -38,10 +38,10 @@ inline void Hashable::HashField(uint32 field)
 template<>
 inline void Hashable::HashField(String field)
 {
-	uint32 hashNumber = 0;
+	UInt32 hashNumber = 0;
 
-	const uint16 magicHigh = 0xaf13;
-	const uint16 magicLow = 0x4b71;
+	const UInt16 magicHigh = 0xaf13;
+	const UInt16 magicLow = 0x4b71;
 
 	for (auto c : field) hashNumber += c * magicHigh - magicLow / c;
 

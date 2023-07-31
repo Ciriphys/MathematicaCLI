@@ -15,9 +15,9 @@ namespace Mathematica
         {
             MTH_PROFILE_FUNCTION();
 
-            int32 commonDenominator = Integer::LeastCommonMultiple(a.denominator, b.denominator);
-            int32 numeratorA = a.numerator * commonDenominator / a.denominator;
-            int32 numeratorB = b.numerator * commonDenominator / b.denominator;
+            Int32 commonDenominator = Integer::LeastCommonMultiple(a.denominator, b.denominator);
+            Int32 numeratorA = a.numerator * commonDenominator / a.denominator;
+            Int32 numeratorB = b.numerator * commonDenominator / b.denominator;
 
             return { numeratorA + numeratorB, commonDenominator };
         }
@@ -26,9 +26,9 @@ namespace Mathematica
         {
             MTH_PROFILE_FUNCTION();
 
-            int32 commonDenominator = Integer::LeastCommonMultiple(a.denominator, b.denominator);
-            int32 numeratorA = a.numerator * commonDenominator / a.denominator;
-            int32 numeratorB = b.numerator * commonDenominator / b.denominator;
+            Int32 commonDenominator = Integer::LeastCommonMultiple(a.denominator, b.denominator);
+            Int32 numeratorA = a.numerator * commonDenominator / a.denominator;
+            Int32 numeratorB = b.numerator * commonDenominator / b.denominator;
 
             return { numeratorA - numeratorB, commonDenominator };
         }
@@ -37,8 +37,8 @@ namespace Mathematica
         {
             MTH_PROFILE_FUNCTION();
 
-            int32 numerator = a.numerator * b.numerator;
-            int32 denominator = a.denominator * b.denominator;
+            Int32 numerator = a.numerator * b.numerator;
+            Int32 denominator = a.denominator * b.denominator;
             
             return { numerator, denominator };
         }
@@ -47,8 +47,8 @@ namespace Mathematica
         {
             MTH_PROFILE_FUNCTION();
 
-            int32 numerator = a.numerator * b.denominator;
-            int32 denominator = a.denominator * b.numerator;
+            Int32 numerator = a.numerator * b.denominator;
+            Int32 denominator = a.denominator * b.numerator;
             
             MTH_ASSERT(denominator != 0, "DomainError: Cannot divide by zero!");
 

@@ -4,12 +4,13 @@
 
 #include "Core/Utility/Utils.h"
 
-enum class ELexiconTokenType : int32
+enum class ELexiconTokenType : Int32
 {
 	Number,
 	BinaryFunction,
 	WrapperStart, 
 	WrapperEnd,
+	Macro,
 
 	Unknown
 };

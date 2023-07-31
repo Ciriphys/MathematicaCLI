@@ -10,7 +10,7 @@
 
 namespace Mathematica
 {
-	void Assert(const char* expression, const char* file, const char* function, int32 line, const char* message)
+	void Assert(const char* expression, const char* file, const char* function, Int32 line, const char* message)
 	{
 		printf("Assertion failed (%s) in file %s,\nin function %s, at line %d:\n%s", expression, file, function, line, message);
 		abort();
@@ -25,7 +25,7 @@ namespace Mathematica
 	{
 		String path;
 		String prjPath = MTH_PROJECT_PATH;
-		uint64 index = file.find(prjPath) + prjPath.length();
+		UInt64 index = file.find(prjPath) + prjPath.length();
 		path = file.substr(index);
 
 		return path;
@@ -44,7 +44,7 @@ namespace Mathematica
 	{
 		for (auto& c : string)
 		{
-			if ((int32)c >= 65 && (int32)c <= 90)
+			if ((Int32)c >= 65 && (Int32)c <= 90)
 			{
 				c += 32;
 			}
@@ -55,11 +55,23 @@ namespace Mathematica
 	{
 		for (auto& c : string)
 		{
-			if ((int32)c >= 97 && (int32)c <= 122)
+			if ((Int32)c >= 97 && (Int32)c <= 122)
 			{
 				c -= 32;
 			}
 		}
+	}
+
+	bool IsLetter(char Char)
+	{
+		return (Char >= 0x41 && Char <= 0x5a) || (Char >= 0x61 && Char <= 0x7a);
+	}
+
+	bool FindAt(String string, String substr, UInt32 where)
+	{
+		if (where + substr.length() > string.length()) return false;
+		for (UInt32 i = 0; i < substr.length(); i++) if (string[where + i] != substr[i]) return false;
+		return true;
 	}
 
 	String Stringify(ELexiconTokenType type)
@@ -217,22 +229,22 @@ namespace Mathematica
 		std::cout << "]" << std::endl << std::endl;
 	}
 
-	int32 Max(int32 a, int32 b)
+	Int32 Max(Int32 a, Int32 b)
 	{
 		return a > b ? a : b;
 	}
 
-	int32 Min(int32 a, int32 b)
+	Int32 Min(Int32 a, Int32 b)
 	{
 		return a < b ? a : b;
 	}
 
-	uint32 Max(uint32 a, uint32 b)
+	UInt32 Max(UInt32 a, UInt32 b)
 	{
 		return a > b ? a : b;
 	}
 
-	uint32 Min(uint32 a, uint32 b)
+	UInt32 Min(UInt32 a, UInt32 b)
 	{
 		return a < b ? a : b;
 	}

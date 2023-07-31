@@ -20,7 +20,7 @@ namespace Mathematica
 				result += number;
 			}
 
-			return result / Mathematica::Cast<int32>(numbers.size());
+			return result / Mathematica::Cast<Int32>(numbers.size());
 		}
 
 		RationalNumber Average(RationalNumber first, RationalNumber second)
@@ -37,7 +37,7 @@ namespace Mathematica
 			return { first.numerator + second.numerator, first.denominator + second.denominator };
 		}
 
-		int32 Sign(float32 number)
+		Int32 Sign(Float32 number)
 		{
 			MTH_PROFILE_FUNCTION();
 
@@ -45,18 +45,18 @@ namespace Mathematica
 			return number > 0 ? 1 : -1;
 		}
 
-		RationalNumber Farey(float32 number)
+		RationalNumber Farey(Float32 number)
 		{	
 			MTH_PROFILE_FUNCTION();
 
 			RationalNumber lowerBound = { 0, 1 };
 			RationalNumber upperBound = { 1, 1 };
 			
-			float32 delta = abs(number) - abs(Mathematica::Cast<int32>(number));
+			Float32 delta = abs(number) - abs(Mathematica::Cast<Int32>(number));
 			RationalNumber between = Between(lowerBound, upperBound);
-			float32 betweenValue = between.RawNumerical();
+			Float32 betweenValue = between.RawNumerical();
 
-			if (!delta) return { Mathematica::Cast<int32>(number), 1 };
+			if (!delta) return { Mathematica::Cast<Int32>(number), 1 };
 
 			while (abs(betweenValue - delta) > MTH_FLOAT32_EPSILON)
 			{
@@ -74,7 +74,7 @@ namespace Mathematica
 			}
 
 			between.numerator *= Mathematica::Rational::Sign(number);
-			return abs(number) < 1 ? between : between + Mathematica::Cast<int32>(number);
+			return abs(number) < 1 ? between : between + Mathematica::Cast<Int32>(number);
 		}
 	}
 }

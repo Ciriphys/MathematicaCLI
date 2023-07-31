@@ -7,7 +7,7 @@ MathNode::MathNode(
     ChildrenType __children,
     Any __data,
     EMathNodeType __type,
-    int32 __scope
+    Int32 __scope
 ) :
 parent(__parent),
 children(__children),

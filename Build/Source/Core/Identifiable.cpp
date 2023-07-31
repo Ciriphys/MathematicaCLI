@@ -12,12 +12,12 @@ Identifiable::Identifiable()
 
 String Identifiable::GenerateUUID()
 {
-	uint32 first     = RandomEngine::UnsignedInt(0, 0xffffffff);		
-	uint32 second    = RandomEngine::UnsignedInt(0, 0xffff);			
-	uint32 third	 = RandomEngine::UnsignedInt(0, 0xffff);			
-	uint32 fourth	 = RandomEngine::UnsignedInt(0, 0xffff);
-	uint32 fifth	 = RandomEngine::UnsignedInt(0, 0xffffffff);
-	uint32 sixth	 = RandomEngine::UnsignedInt(0, 0xffff);
+	UInt32 first     = RandomEngine::UnsignedInt(0, 0xffffffff);		
+	UInt32 second    = RandomEngine::UnsignedInt(0, 0xffff);			
+	UInt32 third	 = RandomEngine::UnsignedInt(0, 0xffff);			
+	UInt32 fourth	 = RandomEngine::UnsignedInt(0, 0xffff);
+	UInt32 fifth	 = RandomEngine::UnsignedInt(0, 0xffffffff);
+	UInt32 sixth	 = RandomEngine::UnsignedInt(0, 0xffff);
 
 	StringStream UUID;
 	UUID << Mathematica::Convert::Uint32ToHexString(first, 8) << "-";

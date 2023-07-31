@@ -4,7 +4,7 @@
 
 #include "Core/Utility/Types.h"
 
-enum class EMathNodeType : int32
+enum class EMathNodeType : Int32
 {
     Number, 
     BinaryFunction,
@@ -13,6 +13,8 @@ enum class EMathNodeType : int32
     WrapEnd,
 
     Wrapper,
+
+    Macro,
 
     None
 };
@@ -23,7 +25,7 @@ struct MathNode : public Identifiable
     using PointerType = Ref<MathNode>;
     using ChildrenType = Vector<PointerType>;
 
-    int32 scope;
+    Int32 scope;
 
     PointerType parent;
     ChildrenType children;
@@ -36,6 +38,6 @@ struct MathNode : public Identifiable
         ChildrenType __children = {},
         Any __data = {},
         EMathNodeType __type = EMathNodeType::None,
-        int32 __scope = -1
+        Int32 __scope = -1
     );
 };

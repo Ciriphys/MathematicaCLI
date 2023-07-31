@@ -1,29 +1,32 @@
 #pragma once
 
 #include "Core/Identifiable.h"
+#include "Core/Hashable.h"
 
 #include "Core/Utility/Utils.h"
 
 // NOTE : This definition might vary.
-enum class ENumberType : int32
+enum class ENumberType : Int32
 {
     Integer,
     Rational,
-    Real,
-    Complex,
-
-    AngleDegrees,
-    AngleRadians
 };
 
-// TODO : Add support for real numbers. Currently this definition is valid for rationals.
+enum class ESubset : Int32
+{
+	Integer,
+	Rational,
+	Irrational,
+	Real,
+};
+
 struct RationalNumber
 {
-    int32 numerator;
-    int32 denominator;
+    Int32 numerator;
+    Int32 denominator;
     ENumberType type;
 
-    RationalNumber(int32 num = 0, int32 den = 1);
+    RationalNumber(Int32 num = 1, Int32 den = 1);
     RationalNumber(const String& strNumber);
 
     RationalNumber operator+(RationalNumber other);
@@ -43,15 +46,83 @@ struct RationalNumber
     bool operator> (RationalNumber other);
     bool operator< (RationalNumber other);
 
-    float32 RawNumerical();
+    Float32 RawNumerical();
 
-    RationalNumber LowestTerms(int32 num, int32 den);
+    RationalNumber LowestTerms(Int32 num, Int32 den);
     void LowestTerms();
+};
+
+struct IrrationalNumber : public Hashable
+{
+	struct Data
+	{
+		String functionName;
+		RationalNumber argument;
+
+		Data(RationalNumber arg, String funcName = "") : argument(arg), functionName(funcName) {}
+		// EFunctionType functionType; <--- It might be usefult to implement this in the future.
+	};
+
+	Data numerator;
+	Data denominator;
+
+	IrrationalNumber(Data num = {1}, Data den = {1});
+	IrrationalNumber(const String& constantName);
+
+	IrrationalNumber operator+(IrrationalNumber other);
+	IrrationalNumber operator-(IrrationalNumber other);
+	IrrationalNumber operator*(IrrationalNumber other);
+	IrrationalNumber operator/(IrrationalNumber other);
+
+	void operator+=(IrrationalNumber other);
+	void operator-=(IrrationalNumber other);
+	void operator*=(IrrationalNumber other);
+	void operator/=(IrrationalNumber other);
+
+	bool operator==(IrrationalNumber other);
+	bool operator!=(IrrationalNumber other);
+	bool operator>=(IrrationalNumber other);
+	bool operator<=(IrrationalNumber other);
+	bool operator> (IrrationalNumber other);
+	bool operator< (IrrationalNumber other);
+
+	virtual void Rehash() override;
+
+	Float32 RawNumerical();
+};
+
+struct RealNumber
+{
+	RationalNumber rationalCoefficient;
+	IrrationalNumber irrationalCoefficient;
+	ESubset type;
+
+	RealNumber(RationalNumber rational = {}, IrrationalNumber irrational = {});
+	RealNumber(const String& strNumber);
+
+	RealNumber operator+(RealNumber other);
+	RealNumber operator-(RealNumber other);
+	RealNumber operator*(RealNumber other);
+	RealNumber operator/(RealNumber other);
+
+	void operator+=(RealNumber other);
+	void operator-=(RealNumber other);
+	void operator*=(RealNumber other);
+	void operator/=(RealNumber other);
+
+	bool operator==(RealNumber other);
+	bool operator!=(RealNumber other);
+	bool operator>=(RealNumber other);
+	bool operator<=(RealNumber other);
+	bool operator> (RealNumber other);
+	bool operator< (RealNumber other);
+
+	Float32 RawNumerical();
 };
 
 // TODO : Move these functions somewhere else.
 namespace Mathematica
 {
     RationalNumber Absolute(RationalNumber number);
-    int32 Sign(RationalNumber number);
+    Int32 Sign(RationalNumber number);
 }

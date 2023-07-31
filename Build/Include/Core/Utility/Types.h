@@ -11,14 +11,14 @@ using Any = std::any;
 template<typename T>
 using Vector = std::vector<T>;
 
+template<typename T, size_t S>
+using Array = std::array<T, S>;
+
 template<typename K, typename V>
 using HashMap = std::unordered_map<K, V>;
 
 template<typename K, typename V>
 using Map = std::map<K, V>;
-
-template<typename T>
-using Stack = std::stack<T>;
 
 template<typename F, typename S>
 using Pair = std::pair<F, S>;
@@ -46,16 +46,16 @@ using RandomDevice = std::random_device;
 typedef RationalNumber(*FBinaryFunction)(const RationalNumber&, const RationalNumber&);
 
 // Primitive types
-using uint64  = unsigned long long int;
-using uint32  = unsigned int;
-using uint16  = unsigned short;
-using uint8   = unsigned char;
-using int64   = long long int;
-using int32   = int;
-using int16	  = short;
-using int8	  = char;
-using float32 = float;
-using float64 = double;
+using UInt64  = unsigned long long int;
+using UInt32  = unsigned int;
+using UInt16  = unsigned short;
+using UInt8   = unsigned char;
+using Int64   = long long int;
+using Int32   = int;
+using Int16	  = short;
+using Int8	  = char;
+using Float32 = float;
+using Float64 = double;
 
 // Smart pointers
 template<typename T>

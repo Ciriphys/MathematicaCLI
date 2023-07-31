@@ -13,7 +13,7 @@ void Solver::InitSolver(const Ref<MathNode>& tree)
     mTree = tree;
 }
 
-void Solver::InitSolver(const Ref<MathNode>& tree, const Map<uint32, Vector<Ref<MathNode>>>& executionFlow)
+void Solver::InitSolver(const Ref<MathNode>& tree, const Map<UInt32, Vector<Ref<MathNode>>>& executionFlow)
 {
     mTree = tree;
     mExecutionFlow = executionFlow;

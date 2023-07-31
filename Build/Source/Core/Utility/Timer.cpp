@@ -23,9 +23,9 @@ void Timer::Stop()
 {
 	TimePoint<SteadyClock> endTimepoint = SteadyClock::now();
 
-	int32 start = std::chrono::time_point_cast<Microseconds>(mStartTimepoint).time_since_epoch().count();
-	int32 end = std::chrono::time_point_cast<Microseconds>(endTimepoint).time_since_epoch().count();
-	int32 duration = end - start;
+	Int32 start = std::chrono::time_point_cast<Microseconds>(mStartTimepoint).time_since_epoch().count();
+	Int32 end = std::chrono::time_point_cast<Microseconds>(endTimepoint).time_since_epoch().count();
+	Int32 duration = end - start;
 
 	// TODO : Add process and thread id.
 	// TODO : Open the WriteProfile on a different thread to allow faster performance.

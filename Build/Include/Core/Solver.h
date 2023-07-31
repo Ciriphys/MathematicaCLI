@@ -12,7 +12,7 @@ class Solver
 public:
     Solver();
     void InitSolver(const Ref<MathNode>& tree);
-    void InitSolver(const Ref<MathNode>& tree, const Map<uint32, Vector<Ref<MathNode>>>& executionFlow);
+    void InitSolver(const Ref<MathNode>& tree, const Map<UInt32, Vector<Ref<MathNode>>>& executionFlow);
 
     RationalNumber SolveTree();
 
@@ -20,7 +20,7 @@ private:
     RationalNumber RecursiveSolve(const Ref<MathNode>& node);
     RationalNumber ExecutionSolve();
 
-	Map<uint32, Vector<Ref<MathNode>>> mExecutionFlow;
+	Map<UInt32, Vector<Ref<MathNode>>> mExecutionFlow;
     ExplanationSystem& mExplanationSystem;
     Ref<MathNode> mTree;
 };

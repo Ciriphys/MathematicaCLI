@@ -23,16 +23,16 @@ constexpr auto MTH_PROJECT_PATH = "MathematicaCLI/";
 
 #define MTH_UNUSED(x) Mathematica::Cast<void>(x)
 #define MTH_ADDRESS_OF(x) Mathematica::Recast<void*>(&x)
-#define MTH_UINT_ADDRESS_OF(x) Mathematica::Recast<uint32*>MTH_ADDRESS_OF(x)
+#define MTH_UINT_ADDRESS_OF(x) Mathematica::Recast<UInt32*>MTH_ADDRESS_OF(x)
 
-#define MTH_HIGH_WORD(x) Mathematica::Cast<uint8>((x >> 8) & MTH_WORD_MASK)	
-#define MTH_LOW_WORD(x)	Mathematica::Cast<uint8>(x & MTH_WORD_MASK)
-#define MTH_HIGH_DWORD(x) Mathematica::Cast<uint16>((x >> 16) & MTH_DWORD_MASK)
-#define MTH_LOW_DWORD(x) Mathematica::Cast<uint16>(x & MTH_DWORD_MASK)
-#define MTH_HIGH_QWORD(x) Mathematica::Cast<uint32>((x >> 32) & MTH_QWORD_MASK)
-#define MTH_LOW_QWORD(x) Mathematica::Cast<uint32>(x & MTH_QWORD_MASK)
+#define MTH_HIGH_WORD(x) Mathematica::Cast<UInt8>((x >> 8) & MTH_WORD_MASK)	
+#define MTH_LOW_WORD(x)	Mathematica::Cast<UInt8>(x & MTH_WORD_MASK)
+#define MTH_HIGH_DWORD(x) Mathematica::Cast<UInt16>((x >> 16) & MTH_DWORD_MASK)
+#define MTH_LOW_DWORD(x) Mathematica::Cast<UInt16>(x & MTH_DWORD_MASK)
+#define MTH_HIGH_QWORD(x) Mathematica::Cast<UInt32>((x >> 32) & MTH_QWORD_MASK)
+#define MTH_LOW_QWORD(x) Mathematica::Cast<UInt32>(x & MTH_QWORD_MASK)
 
-constexpr auto MTH_VERSION = "Version 0.0.13a";
+constexpr auto MTH_VERSION = "Version 0.0.14a";
 constexpr auto MTH_NO_MESSAGE = "No message provided.";
 constexpr auto MTH_FLOAT32_EPSILON = 1.192092896e-07F;
 
@@ -89,17 +89,17 @@ namespace Mathematica
 	}
 
 	// === Debug and files ===
-	void Assert(const char* expression, const char* file, const char* function, int32 line, const char* message);
+	void Assert(const char* expression, const char* file, const char* function, Int32 line, const char* message);
 	void DisplayFunctionInfo(const char* functionName, const char* callerFunction);
 	String RelativeToBuildPath(String file);
 
 	// === Miscellaneous ===
 	void ClearScreen();
 	// TODO : Add implementations for Number as well.
-	int32 Max(int32 a, int32 b);
-	int32 Min(int32 a, int32 b);
-	uint32 Max(uint32 a, uint32 b);
-	uint32 Min(uint32 a, uint32 b);
+	Int32 Max(Int32 a, Int32 b);
+	Int32 Min(Int32 a, Int32 b);
+	UInt32 Max(UInt32 a, UInt32 b);
+	UInt32 Min(UInt32 a, UInt32 b);
 
 	template<typename T>
 	void Swap(T& a, T& b);
@@ -114,6 +114,9 @@ namespace Mathematica
 	// * This might change in the future.
 	void TransformToLower(String& string);
 	void TransformToUpper(String& string);
+
+	bool IsLetter(char Char);
+	bool FindAt(String string, String substr, UInt32 where);
 
 	Vector<String> SeparateString(String string, char separetor = ' ');
 	void Replace(String& string, char what, char with);

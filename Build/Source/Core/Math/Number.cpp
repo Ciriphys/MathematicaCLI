@@ -8,29 +8,24 @@
 #include "Core/Utility/Conversions.h"
 #include "Core/Utility/Profiler.h"
 
-RationalNumber::RationalNumber(int32 num, int32 den) : numerator(num), denominator(den), type(ENumberType::Real)
+RationalNumber::RationalNumber(Int32 num, Int32 den) : numerator(num), denominator(den), type(ENumberType::Rational)
 {
     MTH_ASSERT(denominator != 0, "NumberInitError: Cannot divide by zero!");
 
     LowestTerms();
 
-    // TODO : This implementation does not include Real type numbers. For now the only allowed types are Integer and Rational.
     if (denominator == 1)
     {
         type = ENumberType::Integer;
-    }
-    else
-    {
-        type = ENumberType::Rational;
     }
 }
 
 RationalNumber::RationalNumber(const String& strNumber)
 {
     // TODO : Add support for fractions and real numbers.
-    float32 rawNumerical = Mathematica::Convert::StringToFloat32(strNumber);
+    Float32 rawNumerical = Mathematica::Convert::StringToFloat32(strNumber);
 
-    if (rawNumerical != Mathematica::Cast<int32>(rawNumerical))
+    if (rawNumerical != Mathematica::Cast<Int32>(rawNumerical))
     {
         RationalNumber fraction = Mathematica::Rational::Farey(rawNumerical);
 		numerator = fraction.numerator;
@@ -39,26 +34,26 @@ RationalNumber::RationalNumber(const String& strNumber)
     }
     else
     {
-        numerator = Mathematica::Cast<int32>(rawNumerical);
+        numerator = Mathematica::Cast<Int32>(rawNumerical);
         denominator = 1;
         type = ENumberType::Integer;
     }
 }
 
-float32 RationalNumber::RawNumerical()
+Float32 RationalNumber::RawNumerical()
 {
-    return (float32)numerator / (float32)denominator;
+    return (Float32)numerator / (Float32)denominator;
 }
 
-RationalNumber RationalNumber::LowestTerms(int32 numerator, int32 denominator)
+RationalNumber RationalNumber::LowestTerms(Int32 numerator, Int32 denominator)
 {
-    int32 gcd = Mathematica::Integer::GreatestCommonDivisor(numerator, denominator);
+    Int32 gcd = Mathematica::Integer::GreatestCommonDivisor(numerator, denominator);
     return { numerator / gcd, denominator / gcd};
 }
 
 void RationalNumber::LowestTerms()
 {
-    int32 gcd = Mathematica::Integer::GreatestCommonDivisor(numerator, denominator);
+    Int32 gcd = Mathematica::Integer::GreatestCommonDivisor(numerator, denominator);
     
     numerator /= gcd;
     denominator /= gcd;
@@ -143,11 +138,196 @@ namespace Mathematica
         return RationalNumber(number.numerator > 0 ? number.numerator : -number.numerator, number.denominator > 0 ? number.denominator : -number.denominator);
     }
 
-    int32 Sign(RationalNumber number)
+    Int32 Sign(RationalNumber number)
     {
         MTH_PROFILE_FUNCTION();
 
         MTH_ASSERT(number != 0, "DomainError: Zero is not in the domain of Sign!");
         return number > 0 ? 1 : -1;
     }
+}
+
+// === Irrational Numbers ===
+
+IrrationalNumber::IrrationalNumber(Data num, Data den) 
+    : numerator   (num), 
+      denominator (den)
+{}
+
+IrrationalNumber::IrrationalNumber(const String& constantName) 
+    : numerator   (IrrationalNumber::Data{1}),
+      denominator (IrrationalNumber::Data{1})
+{}
+
+IrrationalNumber IrrationalNumber::operator+(IrrationalNumber other)
+{
+    return IrrationalNumber();
+}
+
+IrrationalNumber IrrationalNumber::operator-(IrrationalNumber other)
+{
+    return IrrationalNumber();
+}
+
+IrrationalNumber IrrationalNumber::operator*(IrrationalNumber other)
+{
+    return IrrationalNumber();
+}
+
+IrrationalNumber IrrationalNumber::operator/(IrrationalNumber other)
+{
+    return IrrationalNumber();
+}
+
+void IrrationalNumber::operator+=(IrrationalNumber other)
+{
+}
+
+void IrrationalNumber::operator-=(IrrationalNumber other)
+{
+}
+
+void IrrationalNumber::operator*=(IrrationalNumber other)
+{
+}
+
+void IrrationalNumber::operator/=(IrrationalNumber other)
+{
+}
+
+bool IrrationalNumber::operator==(IrrationalNumber other)
+{
+    return false;
+}
+
+bool IrrationalNumber::operator!=(IrrationalNumber other)
+{
+    return false;
+}
+
+bool IrrationalNumber::operator>=(IrrationalNumber other)
+{
+    return false;
+}
+
+bool IrrationalNumber::operator<=(IrrationalNumber other)
+{
+    return false;
+}
+
+bool IrrationalNumber::operator>(IrrationalNumber other)
+{
+    return false;
+}
+
+bool IrrationalNumber::operator<(IrrationalNumber other)
+{
+    return false;
+}
+
+void IrrationalNumber::Rehash()
+{
+    HashField(numerator.functionName);
+    HashField(denominator.functionName);
+	HashField(numerator.argument);
+	HashField(denominator.argument);
+}
+
+Float32 IrrationalNumber::RawNumerical()
+{
+    return Float32();
+}
+
+RealNumber::RealNumber(RationalNumber rational, IrrationalNumber irrational)
+{
+    rationalCoefficient = rational;
+    irrationalCoefficient = irrational;
+
+    if (rationalCoefficient == RationalNumber{})
+    {
+        type = ESubset::Irrational;
+    }
+    else if (irrationalCoefficient == IrrationalNumber{})
+    {
+        type = rationalCoefficient.type == ENumberType::Integer ? ESubset::Integer : ESubset::Rational;
+    }
+    else
+    {
+        type = ESubset::Real;
+    }
+}
+
+RealNumber::RealNumber(const String& strNumber)
+{
+}
+
+RealNumber RealNumber::operator+(RealNumber other)
+{
+    return RealNumber();
+}
+
+RealNumber RealNumber::operator-(RealNumber other)
+{
+    return RealNumber();
+}
+
+RealNumber RealNumber::operator*(RealNumber other)
+{
+    return RealNumber();
+}
+
+RealNumber RealNumber::operator/(RealNumber other)
+{
+    return RealNumber();
+}
+
+void RealNumber::operator+=(RealNumber other)
+{
+}
+
+void RealNumber::operator-=(RealNumber other)
+{
+}
+
+void RealNumber::operator*=(RealNumber other)
+{
+}
+
+void RealNumber::operator/=(RealNumber other)
+{
+}
+
+bool RealNumber::operator==(RealNumber other)
+{
+    return rationalCoefficient == other.rationalCoefficient && irrationalCoefficient == other.irrationalCoefficient;
+}
+
+bool RealNumber::operator!=(RealNumber other)
+{
+    return false;
+}
+
+bool RealNumber::operator>=(RealNumber other)
+{
+    return false;
+}
+
+bool RealNumber::operator<=(RealNumber other)
+{
+    return false;
+}
+
+bool RealNumber::operator>(RealNumber other)
+{
+    return false;
+}
+
+bool RealNumber::operator<(RealNumber other)
+{
+    return false;
+}
+
+Float32 RealNumber::RawNumerical()
+{
+    return Float32();
 }
