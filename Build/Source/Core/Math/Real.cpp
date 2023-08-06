@@ -78,6 +78,7 @@ namespace Mathematica
 					RealNumber multiplication;
 
 					multiplication.rationalCoefficient = aReal.rationalCoefficient * bReal.rationalCoefficient;
+					multiplication.irrationalCoefficients.pop_back();
 
 					for (auto irrational : aReal.irrationalCoefficients) multiplication.irrationalCoefficients.push_back(irrational);
 					for (auto irrational : bReal.irrationalCoefficients) multiplication.irrationalCoefficients.push_back(irrational);
@@ -86,7 +87,7 @@ namespace Mathematica
 				}
 			}
 
-			return MathExpression();
+			return result;
 		}
 
 		MathExpression Divide(const MathExpression& a, const MathExpression& b)

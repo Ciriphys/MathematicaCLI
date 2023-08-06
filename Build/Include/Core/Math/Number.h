@@ -97,8 +97,8 @@ struct IrrationalNumber : public Hashable
 
 struct IrrationalPart : public Vector<IrrationalNumber>, public Hashable
 {
-	IrrationalPart() {}
-	IrrationalPart(size_t count, const IrrationalNumber& val) : Vector<IrrationalNumber>(count, val) {}
+	IrrationalPart() { Rehash(); }
+	IrrationalPart(size_t count, const IrrationalNumber& val) : Vector<IrrationalNumber>(count, val) { Rehash(); }
 
 	virtual void Rehash() override;
 };
@@ -162,7 +162,17 @@ namespace Mathematica
 }
 
 template<>
+inline void Hashable::HashField(RationalNumber field)
+{
+	Hash(field.numerator);
+	Hash(field.denominator);
+}
+
+template<>
 inline void Hashable::HashField(IrrationalNumber field)
 {
-	field.Rehash();
+	HashField(field.numerator.functionName);
+	HashField(field.denominator.functionName);
+	HashField(field.numerator.argument);
+	HashField(field.denominator.argument);
 }

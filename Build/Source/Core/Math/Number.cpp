@@ -377,7 +377,7 @@ const RealNumber& MathExpression::operator[](UInt64 position) const
 
 void IrrationalPart::Rehash()
 {
-    for (auto& irrational : *this)
+   for (auto& irrational : *this)
     {
         HashField(irrational);
     }

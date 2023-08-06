@@ -267,11 +267,33 @@ void Mathematica::AppCommand::Test()
 {
 	Mathematica::ClearScreen();
 
-	MathExpression a = MathExpression(Vector<RealNumber>(1, RealNumber(RationalNumber(), IrrationalPart(1, IrrationalNumber(IrrationalNumber::Data(2, "SquareRoot"))))));
-	MathExpression b = { RealNumber{} };
-	
-	MathExpression result = Mathematica::Real::Add(a, b);
+	IrrationalPart aIrr;
+	aIrr.emplace_back(IrrationalNumber::Data(RationalNumber(2), "SquareRoot"));
 
+	IrrationalPart bIrr;
+	bIrr.emplace_back(IrrationalNumber::Data(RationalNumber(2), "CubeRoot"));
+
+	MathExpression a;
+
+	a.expression.emplace_back(RationalNumber(), aIrr);
+	a.expression.emplace_back();
+
+	a.expression[0].irrationalCoefficients.Rehash();
+	a.expression[1].irrationalCoefficients.Rehash();
+
+	a.size = 2;
+
+	MathExpression b;
+	b.expression.emplace_back();
+	b.expression.emplace_back(RationalNumber(), bIrr);
+
+	b.size = 2;
+	
+	b.expression[0].irrationalCoefficients.Rehash();
+	b.expression[1].irrationalCoefficients.Rehash();
+
+	MathExpression result = Mathematica::Real::Multiply(a, b);
+	 
 	WaitKey();
 	return;
 }
