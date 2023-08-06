@@ -81,6 +81,7 @@ void Lexer::GenerateTokens(String equation)
 			{
 				// If so, create a multiplication token.
 				mTokens.emplace_back("*", ELexiconTokenType::BinaryFunction);
+				mOperationIndexes[parenthesesCount][EPriority::Medium].push_back(Mathematica::Cast<UInt32>(mTokens.size() - 1));
 			}
 
 			currentSubstring += currentChar;
@@ -181,6 +182,25 @@ void Lexer::GenerateTokens(String equation)
 		}
 		else if (currentChar == '$')
 		{
+			// Check if the previous token was a closing parenthesis.
+			if (!mTokens.empty() && mTokens.back().type == ELexiconTokenType::WrapperEnd)
+			{
+				// If so, create a multiplication token.
+				mTokens.emplace_back("*", ELexiconTokenType::BinaryFunction);
+				mOperationIndexes[parenthesesCount][EPriority::Medium].push_back(Mathematica::Cast<UInt32>(mTokens.size() - 1));
+			}
+
+			// Check if currentSubsubstring is not empty. If so, it means it is a number, so append to mTokens.
+			// Also, such number is multiplied to the actual macro as a coefficient, so generate a multiplication and its metadata.
+			if (!currentSubstring.empty())
+			{
+				mTokens.emplace_back(StringifyNumberToken(currentSubstring, invertSign), ELexiconTokenType::Number);
+				mTokens.emplace_back("*", ELexiconTokenType::BinaryFunction);
+				mOperationIndexes[parenthesesCount][EPriority::Medium].push_back(Mathematica::Cast<UInt32>(mTokens.size() - 1));
+				invertSign = false;
+				currentSubstring = "";
+			}
+
 			Pair<UInt32, String> storedMetadata = macrosIterator->second;
 
 			i = storedMetadata.first;

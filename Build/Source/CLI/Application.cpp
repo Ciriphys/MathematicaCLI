@@ -7,6 +7,8 @@
 #include "Core/Utility/Utils.h"
 
 #include "Core/Math/Integer.h"
+#include "Core/Math/Number.h"
+#include "Core/Math/Real.h"
 
 Application* Application::sInstance = nullptr;
 
@@ -264,6 +266,11 @@ void Mathematica::AppCommand::About()
 void Mathematica::AppCommand::Test()
 {
 	Mathematica::ClearScreen();
+
+	MathExpression a = MathExpression(Vector<RealNumber>(1, RealNumber(RationalNumber(), IrrationalPart(1, IrrationalNumber(IrrationalNumber::Data(2, "SquareRoot"))))));
+	MathExpression b = { RealNumber{} };
+	
+	MathExpression result = Mathematica::Real::Add(a, b);
 
 	WaitKey();
 	return;

@@ -79,6 +79,26 @@ RationalNumber RationalNumber::operator/(RationalNumber other)
     return Mathematica::Operation::Divide(*this, other);
 }
 
+const RationalNumber& RationalNumber::operator+(RationalNumber other) const
+{
+    return Mathematica::Operation::Add(*this, other);
+}
+
+const RationalNumber& RationalNumber::operator-(RationalNumber other) const
+{
+    return Mathematica::Operation::Subtract(*this, other);
+}
+
+const RationalNumber& RationalNumber::operator*(RationalNumber other) const
+{
+    return Mathematica::Operation::Multiply(*this, other);
+}
+
+const RationalNumber& RationalNumber::operator/(RationalNumber other) const
+{
+    return Mathematica::Operation::Divide(*this, other);
+}
+
 void RationalNumber::operator+=(RationalNumber other)
 {
     *this = Mathematica::Operation::Add(*this, other);
@@ -238,23 +258,26 @@ Float32 IrrationalNumber::RawNumerical()
     return Float32();
 }
 
-RealNumber::RealNumber(RationalNumber rational, IrrationalNumber irrational)
+RealNumber::RealNumber(RationalNumber rational, IrrationalPart irrational)
 {
     rationalCoefficient = rational;
-    irrationalCoefficient = irrational;
+    irrationalCoefficients = irrational;
 
     if (rationalCoefficient == RationalNumber{})
     {
         type = ESubset::Irrational;
     }
-    else if (irrationalCoefficient == IrrationalNumber{})
+
+    if (irrationalCoefficients.size() == 0)
     {
-        type = rationalCoefficient.type == ENumberType::Integer ? ESubset::Integer : ESubset::Rational;
+        irrationalCoefficients.emplace_back(IrrationalNumber{});
+        type = ESubset::Rational;
     }
-    else
+
+    if (rationalCoefficient != RationalNumber{} && (irrationalCoefficients.size() > 0 && irrationalCoefficients[0] != IrrationalNumber{}))
     {
         type = ESubset::Real;
-    }
+	}
 }
 
 RealNumber::RealNumber(const String& strNumber)
@@ -283,6 +306,7 @@ RealNumber RealNumber::operator/(RealNumber other)
 
 void RealNumber::operator+=(RealNumber other)
 {
+
 }
 
 void RealNumber::operator-=(RealNumber other)
@@ -299,7 +323,7 @@ void RealNumber::operator/=(RealNumber other)
 
 bool RealNumber::operator==(RealNumber other)
 {
-    return rationalCoefficient == other.rationalCoefficient && irrationalCoefficient == other.irrationalCoefficient;
+    return rationalCoefficient == other.rationalCoefficient;
 }
 
 bool RealNumber::operator!=(RealNumber other)
@@ -330,4 +354,31 @@ bool RealNumber::operator<(RealNumber other)
 Float32 RealNumber::RawNumerical()
 {
     return Float32();
+}
+
+MathExpression::MathExpression(Vector<RealNumber> expression) : expression(expression), size(expression.size()) {}
+
+MathExpression::MathExpression(RealNumber real) : size(1ull)
+{
+    expression.push_back(real);
+}
+
+RealNumber& MathExpression::operator[](UInt64 position)
+{
+	MTH_ASSERT(position < size, "Vector subscript out of range!");
+	return expression[position];
+}
+
+const RealNumber& MathExpression::operator[](UInt64 position) const
+{
+	MTH_ASSERT(position < size, "Vector subscript out of range!");
+	return expression[position];
+}
+
+void IrrationalPart::Rehash()
+{
+    for (auto& irrational : *this)
+    {
+        HashField(irrational);
+    }
 }

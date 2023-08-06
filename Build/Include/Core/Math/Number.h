@@ -14,7 +14,6 @@ enum class ENumberType : Int32
 
 enum class ESubset : Int32
 {
-	Integer,
 	Rational,
 	Irrational,
 	Real,
@@ -33,6 +32,11 @@ struct RationalNumber
     RationalNumber operator-(RationalNumber other);
     RationalNumber operator*(RationalNumber other);
     RationalNumber operator/(RationalNumber other);
+
+	const RationalNumber& operator+(RationalNumber other) const;
+	const RationalNumber& operator-(RationalNumber other) const;
+	const RationalNumber& operator*(RationalNumber other) const;
+	const RationalNumber& operator/(RationalNumber other) const;
 
 	void operator+=(RationalNumber other);
 	void operator-=(RationalNumber other);
@@ -91,13 +95,22 @@ struct IrrationalNumber : public Hashable
 	Float32 RawNumerical();
 };
 
+struct IrrationalPart : public Vector<IrrationalNumber>, public Hashable
+{
+	IrrationalPart() {}
+	IrrationalPart(size_t count, const IrrationalNumber& val) : Vector<IrrationalNumber>(count, val) {}
+
+	virtual void Rehash() override;
+};
+
 struct RealNumber
 {
 	RationalNumber rationalCoefficient;
-	IrrationalNumber irrationalCoefficient;
+	IrrationalPart irrationalCoefficients;
 	ESubset type;
 
-	RealNumber(RationalNumber rational = {}, IrrationalNumber irrational = {});
+	// TODO : Change to irrational part.
+	RealNumber(RationalNumber rational = {}, IrrationalPart irrational = {});
 	RealNumber(const String& strNumber);
 
 	RealNumber operator+(RealNumber other);
@@ -120,9 +133,36 @@ struct RealNumber
 	Float32 RawNumerical();
 };
 
+struct MathExpression
+{
+	Vector<RealNumber> expression;
+
+	MathExpression(Vector<RealNumber> expression = {});
+	MathExpression(RealNumber real);
+
+	Vector<RealNumber>::iterator begin() { return expression.begin(); }
+	Vector<RealNumber>::iterator end() { return expression.end(); }
+
+	Vector<RealNumber>::const_iterator begin() const { return expression.begin(); }
+	Vector<RealNumber>::const_iterator end() const { return expression.end(); }
+
+	UInt64 size;
+
+	RealNumber& operator[] (UInt64 position);
+	const RealNumber& operator[] (UInt64 position) const;
+
+	// NOTE : Adding an initializer list constructor might be useful.
+};
+
 // TODO : Move these functions somewhere else.
 namespace Mathematica
 {
     RationalNumber Absolute(RationalNumber number);
     Int32 Sign(RationalNumber number);
+}
+
+template<>
+inline void Hashable::HashField(IrrationalNumber field)
+{
+	field.Rehash();
 }
