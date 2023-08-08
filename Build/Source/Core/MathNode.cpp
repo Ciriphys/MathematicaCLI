@@ -15,5 +15,4 @@ data(__data),
 type(__type),
 scope(__scope)
 {
-
 }

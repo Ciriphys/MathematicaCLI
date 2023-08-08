@@ -14,20 +14,25 @@ workspace "Mathematica"
         objdir      ( "Binaries/Objects/" .. output .. "/%{prj.name}" )
 
         files { "Build/Source/**.cpp", "Build/Include/**.h" }
-        includedirs { "Build/Source/CLI", "Build/Source/Core", "Build/Include", "Build/Include/CLI", }
+        includedirs { "Build/Source/CLI", "Build/Source/Core", "Build/Include", "Build/Include/CLI" }
 
-        pchheader "mthpch.h"
+        pchheader "Include/mthpch.h"
         pchsource "Build/Source/mthpch.cpp"
 
         filter "system:Windows"
             staticruntime "On"
             systemversion "latest"
             system "windows"
-            defines { "MTH_WIN" }
+            defines { "MTH_WIN", "MTH_PLATFORM=\"Windows\"" }
 
-        filter "system:Mac"     
+        filter "system:Macosx"     
             system "macosx"
-            defines { "MTH_MACOS" }
+            defines { "MTH_MACOS", "MTH_PLATFORM=\"Apple\"" }
+
+        filter "system:Linux"
+            pic "On"
+            system "linux"
+            defines { "MTH_LINUX", "MTH_PLATFORM=\"Linux\"" }
 
         filter { "configurations:Debug" }
             defines { "MTH_DEBUG", "DEBUG", "MTH_CONFIG=\"Debug\"" }

@@ -7,8 +7,7 @@ Mathematics is a world of beauty and its abstractness may be difficult for most 
 is a problem for the century and this project is a way to address it.
 
 # Platforms
-MathematicaCLI is built for Windows, macOS and Linux. However, Windows and macOS are the only platforms I can test regularly,
-Linux is only tested through [GitHub Actions](https://github.com/ZeXo-Softwares/MathematicaCLI/actions).
+MathematicaCLI is built for Windows, macOS and Linux. Despite this, Windows and macOS are tested regularly, whereas linux is currently only tested through [GitHub Actions](https://github.com/ZeXo-Softwares/MathematicaCLI/actions).
 
 # Getting started
 MathematicaCLI uses [premake5](https://premake.github.io) to build the source, and for now, a binary source of such program is distributed with the source code.

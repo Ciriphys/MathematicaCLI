@@ -256,6 +256,7 @@ void Mathematica::AppCommand::About()
 	std::cout << "==== About MathematicaCLI: ====" << std::endl;
 	std::cout << " * Written by Ciridev with <3" << std::endl;
 	std::cout << " * " << MTH_VERSION << std::endl;
+    std::cout << " * System: " << MTH_PLATFORM << std::endl;
 	std::cout << " * Distributed under the MIT License." << std::endl;
 	std::cout << " * To learn more, visit https://github.com/Ciridev/MathematicaCLI." << std::endl;
 
@@ -330,16 +331,13 @@ void Mathematica::AppCommand::WaitKey()
 	using namespace std::chrono_literals;
 	std::this_thread::sleep_for(0.5s);
 
-	#ifndef MTH_WIN
-		MTH_UNUSED(system("stty raw"));
-	#endif
-	std::cout << std::endl;
-	std::cout << "Press any key to close.";
-	#ifndef MTH_WIN
-		MTH_UNUSED(getchar());
-		MTH_UNUSED(system("stty cooked"));
-	#endif
-	#ifdef MTH_WIN
-		MTH_UNUSED(_getch());
-	#endif
+    #ifdef MTH_WIN
+        std::cout << std::endl << "Press any key to continue" << std::endl;
+        MTH_UNUSED(_getch());
+    #else
+        std::cout << std::endl << "Press enter to continue" << std::endl;
+        MTH_UNUSED(std::cin.get());
+    #endif
+    
+    return;
 }
