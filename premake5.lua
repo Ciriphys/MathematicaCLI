@@ -16,23 +16,29 @@ workspace "Mathematica"
         files { "Build/Source/**.cpp", "Build/Include/**.h" }
         includedirs { "Build/Source/CLI", "Build/Source/Core", "Build/Include", "Build/Include/CLI" }
 
-        pchheader "Include/mthpch.h"
-        pchsource "Build/Source/mthpch.cpp"
-
         filter "system:Windows"
             staticruntime "On"
             systemversion "latest"
             system "windows"
             defines { "MTH_WIN", "MTH_PLATFORM=\"Windows\"" }
 
+            pchheader "mthpch.h"
+            pchsource "Build/Source/mthpch.cpp"
+
         filter "system:Macosx"     
             system "macosx"
             defines { "MTH_MACOS", "MTH_PLATFORM=\"Apple\"" }
+
+            pchheader "Include/mthpch.h"
+            pchsource "Build/Source/mthpch.cpp"
 
         filter "system:Linux"
             pic "On"
             system "linux"
             defines { "MTH_LINUX", "MTH_PLATFORM=\"Linux\"" }
+
+            pchheader "mthpch.h"
+            pchsource "Build/Source/mthpch.cpp"
 
         filter { "configurations:Debug" }
             defines { "MTH_DEBUG", "DEBUG", "MTH_CONFIG=\"Debug\"" }
