@@ -1,9 +1,20 @@
 import platform
 import os
 
+def XCodeSetPCHLocation():
+    filedata = ""
+    with open("Build/Mathematica.xcodeproj/project.pbxproj", "r") as file:
+        filedata = file.read()
+    
+    filedata = filedata.replace("GCC_PREFIX_HEADER = mthpch.h", "GCC_PREFIX_HEADER = Include/mthpch.h")
+
+    with open("Build/Mathematica.xcodeproj/project.pbxproj", "w+") as file:
+        file.write(filedata)
+
 if __name__ == "__main__":
     system = platform.system()
     command = ""
+    selection = ""
 
     if system == "Darwin":
         selection = input("Enter the action (gmake2 ~ Makefile | xcode4 ~ XCode): ")
@@ -18,3 +29,6 @@ if __name__ == "__main__":
 
     print(command)
     os.system(command)
+    
+    if selection == "xcode4":
+        XCodeSetPCHLocation()
