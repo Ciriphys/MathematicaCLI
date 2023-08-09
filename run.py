@@ -1,3 +1,5 @@
+# Run script used to launch the program.
+
 import platform
 import os
 
