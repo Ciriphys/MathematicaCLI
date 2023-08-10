@@ -22,8 +22,8 @@ constexpr auto MTH_PROJECT_PATH = "MathematicaCLI/";
 #endif
 
 #define MTH_UNUSED(x) Mathematica::Cast<void>(x)
-#define MTH_ADDRESS_OF(x) Mathematica::Recast<void*>(&x)
-#define MTH_UINT_ADDRESS_OF(x) Mathematica::Recast<UInt32*>MTH_ADDRESS_OF(x)
+#define MTH_ADDRESS_OF(x) Mathematica::Cast<void*>(&x)
+#define MTH_UINT_ADDRESS_OF(x) Mathematica::Cast<UInt32*>(MTH_ADDRESS_OF(x))
 
 #define MTH_HIGH_WORD(x) Mathematica::Cast<UInt8>((x >> 8) & MTH_WORD_MASK)	
 #define MTH_LOW_WORD(x)	Mathematica::Cast<UInt8>(x & MTH_WORD_MASK)

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Core/MathNode.h"
+
 #include "Core/Utility/Utils.h"
 #include "Core/Utility/Types.h"
 
@@ -47,3 +49,12 @@ inline void Hashable::HashField(String field)
 
 	Hash(hashNumber);
 }
+
+template<>
+inline void Hashable::HashField(Ref<MathNode> field)
+{
+	Hash(*MTH_UINT_ADDRESS_OF(field->data));
+
+	for (Ref<MathNode> child : field->children) HashField(child);
+}
+

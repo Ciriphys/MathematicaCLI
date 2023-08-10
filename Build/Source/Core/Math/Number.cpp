@@ -5,8 +5,11 @@
 #include "Core/Math/Integer.h"
 #include "Core/Math/Number.h"
 
+#include "Core/MathNode.h"
+
 #include "Core/Utility/Conversions.h"
 #include "Core/Utility/Profiler.h"
+#include "Core/Utility/Utils.h"
 
 RationalNumber::RationalNumber(Int32 num, Int32 den) : numerator(num), denominator(den), type(ENumberType::Rational)
 {
@@ -169,15 +172,33 @@ namespace Mathematica
 
 // === Irrational Numbers ===
 
-IrrationalNumber::IrrationalNumber(Data num, Data den) 
+IrrationalNumber::IrrationalNumber(Ref<MathNode> num, Ref<MathNode> den)
     : numerator   (num), 
       denominator (den)
-{}
+{
+    if (numerator == Mathematica::MakeRef<MathNode>())
+    {
+		numerator->data = RationalNumber{};
+		numerator->type = EMathNodeType::Number;
+    }
+
+	if (denominator == Mathematica::MakeRef<MathNode>())
+	{
+        denominator->data = RationalNumber{};
+        denominator->type = EMathNodeType::Number;
+	}
+}
 
 IrrationalNumber::IrrationalNumber(const String& constantName) 
-    : numerator   (IrrationalNumber::Data{1}),
-      denominator (IrrationalNumber::Data{1})
-{}
+    : numerator   (Mathematica::MakeRef<MathNode>()),
+      denominator (Mathematica::MakeRef<MathNode>())
+{
+	numerator->data = RationalNumber{};
+	numerator->type = EMathNodeType::Number;
+
+    denominator->data = RationalNumber{};
+    denominator->type = EMathNodeType::Number;
+}
 
 IrrationalNumber IrrationalNumber::operator+(IrrationalNumber other)
 {
@@ -247,10 +268,7 @@ bool IrrationalNumber::operator<(IrrationalNumber other)
 
 void IrrationalNumber::Rehash()
 {
-    HashField(numerator.functionName);
-    HashField(denominator.functionName);
-	HashField(numerator.argument);
-	HashField(denominator.argument);
+
 }
 
 Float32 IrrationalNumber::RawNumerical()
@@ -268,13 +286,13 @@ RealNumber::RealNumber(RationalNumber rational, IrrationalPart irrational)
         type = ESubset::Irrational;
     }
 
-    if (irrationalCoefficients.size() == 0)
+    if (irrationalCoefficients.Size() == 0)
     {
-        irrationalCoefficients.emplace_back(IrrationalNumber{});
+        irrationalCoefficients.EmplaceBack(IrrationalNumber{});
         type = ESubset::Rational;
     }
 
-    if (rationalCoefficient != RationalNumber{} && (irrationalCoefficients.size() > 0 && irrationalCoefficients[0] != IrrationalNumber{}))
+    if (rationalCoefficient != RationalNumber{} && (irrationalCoefficients.Size() > 0/*&& irrationalCoefficients[0] != IrrationalNumber{})*/))
     {
         type = ESubset::Real;
 	}
@@ -356,29 +374,28 @@ Float32 RealNumber::RawNumerical()
     return Float32();
 }
 
-MathExpression::MathExpression(Vector<RealNumber> expression) : expression(expression), size(expression.size()) {}
-
-MathExpression::MathExpression(RealNumber real) : size(1ull)
-{
-    expression.push_back(real);
-}
-
-RealNumber& MathExpression::operator[](UInt64 position)
-{
-	MTH_ASSERT(position < size, "Vector subscript out of range!");
-	return expression[position];
-}
-
-const RealNumber& MathExpression::operator[](UInt64 position) const
-{
-	MTH_ASSERT(position < size, "Vector subscript out of range!");
-	return expression[position];
-}
-
 void IrrationalPart::Rehash()
 {
    for (auto& irrational : *this)
-    {
+   {
         HashField(irrational);
-    }
+   }
+}
+
+void IrrationalPart::PushBack(const IrrationalNumber& what)
+{
+    push_back(what);
+    Rehash();
+}
+
+void IrrationalPart::PushBack(IrrationalNumber&& what)
+{
+	push_back(static_cast<IrrationalNumber&&>(what));
+	Rehash();
+}
+
+void IrrationalPart::PopBack()
+{
+    pop_back();
+    Rehash();
 }

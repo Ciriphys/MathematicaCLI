@@ -268,33 +268,35 @@ void Mathematica::AppCommand::Test()
 {
 	Mathematica::ClearScreen();
 
-	IrrationalPart aIrr;
-	aIrr.emplace_back(IrrationalNumber::Data(RationalNumber(2), "SquareRoot"));
+	Ref<MathNode> add = Mathematica::MakeRef<MathNode>();
+	Ref<MathNode> left = Mathematica::MakeRef<MathNode>();
+	Ref<MathNode> right = Mathematica::MakeRef<MathNode>();
 
-	IrrationalPart bIrr;
-	bIrr.emplace_back(IrrationalNumber::Data(RationalNumber(2), "CubeRoot"));
+	left->data = RationalNumber(2);
+	right->data = RationalNumber(3);
 
-	MathExpression a;
+	add->data = &Mathematica::Absolute;
+	add->children.push_back(left);
+	add->children.push_back(right);
 
-	a.expression.emplace_back(RationalNumber(), aIrr);
-	a.expression.emplace_back();
+	Ref<MathNode> add2 = Mathematica::MakeRef<MathNode>();
+	Ref<MathNode> left2 = Mathematica::MakeRef<MathNode>();
+	Ref<MathNode> right2 = Mathematica::MakeRef<MathNode>();
 
-	a.expression[0].irrationalCoefficients.Rehash();
-	a.expression[1].irrationalCoefficients.Rehash();
+	left2->data = RationalNumber(2);
+	right2->data = RationalNumber(3);
 
-	a.size = 2;
+	add2->data = &Mathematica::Absolute;
+	add2->children.push_back(left2);
+	add2->children.push_back(right2);
 
-	MathExpression b;
-	b.expression.emplace_back();
-	b.expression.emplace_back(RationalNumber(), bIrr);
-
-	b.size = 2;
-	
-	b.expression[0].irrationalCoefficients.Rehash();
-	b.expression[1].irrationalCoefficients.Rehash();
-
-	MathExpression result = Mathematica::Real::Multiply(a, b);
+	IrrationalPart ip, ip2;
+	ip.EmplaceBack(add);
+	ip2.EmplaceBack(add2);
 	 
+	std::cout << ip.GetHash() << std::endl;
+	std::cout << ip2.GetHash() << std::endl;
+
 	WaitKey();
 	return;
 }

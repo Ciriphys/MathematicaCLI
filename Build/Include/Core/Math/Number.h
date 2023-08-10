@@ -2,6 +2,7 @@
 
 #include "Core/Identifiable.h"
 #include "Core/Hashable.h"
+#include "Core/MathNode.h"
 
 #include "Core/Utility/Utils.h"
 
@@ -58,19 +59,10 @@ struct RationalNumber
 
 struct IrrationalNumber : public Hashable
 {
-	struct Data
-	{
-		String functionName;
-		RationalNumber argument;
+	Ref<MathNode> numerator;
+	Ref<MathNode> denominator;
 
-		Data(RationalNumber arg, String funcName = "") : argument(arg), functionName(funcName) {}
-		// EFunctionType functionType; <--- It might be usefult to implement this in the future.
-	};
-
-	Data numerator;
-	Data denominator;
-
-	IrrationalNumber(Data num = {1}, Data den = {1});
+	IrrationalNumber(Ref<MathNode> num = Mathematica::MakeRef<MathNode>(), Ref<MathNode> den = Mathematica::MakeRef<MathNode>());
 	IrrationalNumber(const String& constantName);
 
 	IrrationalNumber operator+(IrrationalNumber other);
@@ -95,10 +87,23 @@ struct IrrationalNumber : public Hashable
 	Float32 RawNumerical();
 };
 
-struct IrrationalPart : public Vector<IrrationalNumber>, public Hashable
+struct IrrationalPart : private Vector<IrrationalNumber>, public Hashable
 {
-	IrrationalPart() { Rehash(); }
+	IrrationalPart() {}
 	IrrationalPart(size_t count, const IrrationalNumber& val) : Vector<IrrationalNumber>(count, val) { Rehash(); }
+
+	template<typename ...Args>
+	inline decltype(auto) EmplaceBack(Args&&... args)
+	{
+		emplace_back(std::forward<Args>(args)...);
+		Rehash();
+	}
+
+	void PushBack(const IrrationalNumber& what);
+	void PushBack(IrrationalNumber&& what);
+
+	void PopBack();
+	UInt64 Size() const { return size(); }
 
 	virtual void Rehash() override;
 };
@@ -135,23 +140,11 @@ struct RealNumber
 
 struct MathExpression
 {
-	Vector<RealNumber> expression;
+	Vector<RealNumber> numerator;
+	Vector<RealNumber> denominator;
 
-	MathExpression(Vector<RealNumber> expression = {});
+	MathExpression(Vector<RealNumber> num = {}, Vector<RealNumber> den = { {} }) {}
 	MathExpression(RealNumber real);
-
-	Vector<RealNumber>::iterator begin() { return expression.begin(); }
-	Vector<RealNumber>::iterator end() { return expression.end(); }
-
-	Vector<RealNumber>::const_iterator begin() const { return expression.begin(); }
-	Vector<RealNumber>::const_iterator end() const { return expression.end(); }
-
-	UInt64 size;
-
-	RealNumber& operator[] (UInt64 position);
-	const RealNumber& operator[] (UInt64 position) const;
-
-	// NOTE : Adding an initializer list constructor might be useful.
 };
 
 // TODO : Move these functions somewhere else.
@@ -171,8 +164,6 @@ inline void Hashable::HashField(RationalNumber field)
 template<>
 inline void Hashable::HashField(IrrationalNumber field)
 {
-	HashField(field.numerator.functionName);
-	HashField(field.denominator.functionName);
-	HashField(field.numerator.argument);
-	HashField(field.denominator.argument);
+	HashField(field.numerator);
+	HashField(field.denominator);
 }
