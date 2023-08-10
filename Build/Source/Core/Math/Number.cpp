@@ -276,23 +276,23 @@ Float32 IrrationalNumber::RawNumerical()
     return Float32();
 }
 
-RealNumber::RealNumber(RationalNumber rational, IrrationalPart irrational)
+RealNumber::RealNumber(RationalNumber rational, IrrationalPart irrational) : type(ESubset::Real)
 {
-    rationalCoefficient = rational;
-    irrationalCoefficients = irrational;
+    this->rational = rational;
+    this->irrational = irrational;
 
-    if (rationalCoefficient == RationalNumber{})
+    if (this->rational == RationalNumber{})
     {
         type = ESubset::Irrational;
     }
 
-    if (irrationalCoefficients.Size() == 0)
+    if (this->irrational.Size() == 0)
     {
-        irrationalCoefficients.EmplaceBack(IrrationalNumber{});
+        irrational.EmplaceBack(IrrationalNumber{});
         type = ESubset::Rational;
     }
 
-    if (rationalCoefficient != RationalNumber{} && (irrationalCoefficients.Size() > 0/*&& irrationalCoefficients[0] != IrrationalNumber{})*/))
+    if (this->rational != RationalNumber{} && (this->irrational.Size() > 0/*&& irrationalCoefficients[0] != IrrationalNumber{})*/))
     {
         type = ESubset::Real;
 	}
@@ -341,7 +341,7 @@ void RealNumber::operator/=(RealNumber other)
 
 bool RealNumber::operator==(RealNumber other)
 {
-    return rationalCoefficient == other.rationalCoefficient;
+    return rational == other.rational;
 }
 
 bool RealNumber::operator!=(RealNumber other)
@@ -398,4 +398,12 @@ void IrrationalPart::PopBack()
 {
     pop_back();
     Rehash();
+}
+
+MathExpression::MathExpression(Vector<RealNumber> num, Vector<RealNumber> den)
+{
+}
+
+MathExpression::MathExpression(RealNumber real)
+{
 }

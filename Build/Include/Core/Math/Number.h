@@ -89,6 +89,10 @@ struct IrrationalNumber : public Hashable
 
 struct IrrationalPart : private Vector<IrrationalNumber>, public Hashable
 {
+	using IteratorType = Vector<IrrationalNumber>::iterator;
+	using ConstIteratorType = Vector<IrrationalNumber>::const_iterator;
+	using Super = Vector<IrrationalNumber>;
+
 	IrrationalPart() {}
 	IrrationalPart(size_t count, const IrrationalNumber& val) : Vector<IrrationalNumber>(count, val) { Rehash(); }
 
@@ -98,6 +102,12 @@ struct IrrationalPart : private Vector<IrrationalNumber>, public Hashable
 		emplace_back(std::forward<Args>(args)...);
 		Rehash();
 	}
+
+	IteratorType begin() { return Super::begin(); }
+	IteratorType end()   { return Super::end(); }
+
+	ConstIteratorType begin() const { return Super::begin(); }
+	ConstIteratorType end() const   { return Super::end(); }
 
 	void PushBack(const IrrationalNumber& what);
 	void PushBack(IrrationalNumber&& what);
@@ -110,8 +120,8 @@ struct IrrationalPart : private Vector<IrrationalNumber>, public Hashable
 
 struct RealNumber
 {
-	RationalNumber rationalCoefficient;
-	IrrationalPart irrationalCoefficients;
+	RationalNumber rational;
+	IrrationalPart irrational;
 	ESubset type;
 
 	// TODO : Change to irrational part.
@@ -143,7 +153,7 @@ struct MathExpression
 	Vector<RealNumber> numerator;
 	Vector<RealNumber> denominator;
 
-	MathExpression(Vector<RealNumber> num = {}, Vector<RealNumber> den = { {} }) {}
+	MathExpression(Vector<RealNumber> num = {}, Vector<RealNumber> den = { {} });
 	MathExpression(RealNumber real);
 };
 

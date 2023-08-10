@@ -53,8 +53,7 @@ inline void Hashable::HashField(String field)
 template<>
 inline void Hashable::HashField(Ref<MathNode> field)
 {
-	Hash(*MTH_UINT_ADDRESS_OF(field->data));
+	Hash(*MTH_UINT_ADDRESS_OF(field));
 
 	for (Ref<MathNode> child : field->children) HashField(child);
 }
-

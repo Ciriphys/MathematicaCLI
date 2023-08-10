@@ -6,9 +6,15 @@ namespace Mathematica
 {	
 	namespace Real
 	{
-		MathExpression Add(const MathExpression& a, const MathExpression& b);
-		MathExpression Subtract(const MathExpression& a, const MathExpression& b);
-		MathExpression Multiply(const MathExpression& a, const MathExpression& b);
-		MathExpression Divide(const MathExpression& a, const MathExpression& b);
+		namespace Operation
+		{
+			MathExpression Add(const MathExpression& first, const MathExpression& second);
+			MathExpression Subtract(const MathExpression& first, const MathExpression& second);
+			MathExpression Multiply(const MathExpression& first, const MathExpression& second);
+			MathExpression Divide(const MathExpression& first, const MathExpression& second);
+		}
+
+		Vector<RealNumber> ExecuteSimplify(const Vector<RealNumber>& expression);
+		Vector<RealNumber> ExecuteMultiply(const Vector<RealNumber>& first, const Vector<RealNumber>& second);
 	}
 }
