@@ -32,7 +32,7 @@ constexpr auto MTH_PROJECT_PATH = "MathematicaCLI/";
 #define MTH_HIGH_QWORD(x) Mathematica::Cast<UInt32>((x >> 32) & MTH_QWORD_MASK)
 #define MTH_LOW_QWORD(x) Mathematica::Cast<UInt32>(x & MTH_QWORD_MASK)
 
-constexpr auto MTH_VERSION = "Version 0.0.15a";
+constexpr auto MTH_VERSION = "Version 0.0.16a";
 constexpr auto MTH_NO_MESSAGE = "No message provided.";
 constexpr auto MTH_FLOAT32_EPSILON = 1.192092896e-07F;
 

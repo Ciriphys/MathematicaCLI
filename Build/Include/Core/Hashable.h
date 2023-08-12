@@ -26,9 +26,21 @@ private:
 };
 
 template<typename HashableObject>
+struct HashBinding
+{
+	UInt64 operator()(const HashableObject& first) const
+	{
+		return Mathematica::Cast<UInt64>(first.GetHash());
+	}
+};
+
+template<typename HashableObject>
 struct CompareHashable
 {
-    bool operator()(const HashableObject& first, const HashableObject& second) const;
+	bool operator()(const HashableObject& first, const HashableObject& second) const
+	{
+		return Hashable::Compare(first, second);
+	}
 };
 
 template<typename T>

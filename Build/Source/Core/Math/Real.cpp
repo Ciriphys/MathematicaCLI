@@ -38,25 +38,25 @@ namespace Mathematica
 				for (auto secondReal : second)
 				{
 					RealNumber multiplication;
-					HashMap<IrrationalNumber, Int32, CompareHashable<IrrationalNumber>> symbolCounter;
+					HashMap<IrrationalNumber, Int32, HashBinding<IrrationalNumber>, CompareHashable<IrrationalNumber>> symbolCounter;
 
 					multiplication.rational = firstReal.rational * secondReal.rational;
 
-					//for (auto irrational : firstReal.irrational) symbolCounter[irrational] = symbolCounter.find(irrational) == symbolCounter.end() ? 0 : symbolCounter[irrational] + 1;
-					//for (auto irrational : secondReal.irrational) symbolCounter[irrational] = symbolCounter.find(irrational) == symbolCounter.end() ? 0 : symbolCounter[irrational] + 1;
+					for (auto irrational : firstReal.irrational) symbolCounter[irrational] = symbolCounter.find(irrational) == symbolCounter.end() ? 0 : symbolCounter[irrational] + 1;
+					for (auto irrational : secondReal.irrational) symbolCounter[irrational] = symbolCounter.find(irrational) == symbolCounter.end() ? 0 : symbolCounter[irrational] + 1;
 
-					//for (auto [irrational, count] : symbolCounter)
-					//{
-					//	String functionName = Mathematica::Stringify(Mathematica::AnyCast<FBinaryFunction>(irrational.numerator->data));
-					//
-					//	if (functionName == "Raise")
-					//	{
-					//		RationalNumber argument = Mathematica::AnyCast<RealNumber>(irrational.numerator->children[0]).rational;
-					//		RationalNumber exponent = Mathematica::AnyCast<RealNumber>(irrational.numerator->children[1]).rational;
-					//
-					//		// TODO : Function left unfinished.
-					//	}
-					//}
+					for (auto [irrational, count] : symbolCounter)
+					{
+						String functionName = Mathematica::Stringify(Mathematica::AnyCast<FBinaryFunction>(irrational.numerator->data));
+
+						if (functionName == "Raise")
+						{
+							RationalNumber argument = Mathematica::AnyCast<RealNumber>(irrational.numerator->children[0]).rational;
+							RationalNumber exponent = Mathematica::AnyCast<RealNumber>(irrational.numerator->children[1]).rational;
+
+							// TODO : Function left unfinished.
+						}
+					}
 
 					if (multiplication.irrational.Size() == 0) multiplication.irrational.EmplaceBack();
 					result.push_back(multiplication);
