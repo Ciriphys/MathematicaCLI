@@ -65,23 +65,8 @@ struct IrrationalNumber : public Hashable
 	IrrationalNumber(Ref<MathNode> num = Mathematica::MakeRef<MathNode>(), Ref<MathNode> den = Mathematica::MakeRef<MathNode>());
 	IrrationalNumber(const String& constantName);
 
-	IrrationalNumber operator+(IrrationalNumber other);
-	IrrationalNumber operator-(IrrationalNumber other);
-	IrrationalNumber operator*(IrrationalNumber other);
-	IrrationalNumber operator/(IrrationalNumber other);
-
-	void operator+=(IrrationalNumber other);
-	void operator-=(IrrationalNumber other);
-	void operator*=(IrrationalNumber other);
-	void operator/=(IrrationalNumber other);
-
-	bool operator==(IrrationalNumber other);
-	bool operator!=(IrrationalNumber other);
-	bool operator>=(IrrationalNumber other);
-	bool operator<=(IrrationalNumber other);
-	bool operator> (IrrationalNumber other);
-	bool operator< (IrrationalNumber other);
-
+    bool operator==(const IrrationalNumber& other);
+    
 	virtual void Rehash() override;
 
 	Float32 RawNumerical();
@@ -89,9 +74,9 @@ struct IrrationalNumber : public Hashable
 
 struct IrrationalPart : private Vector<IrrationalNumber>, public Hashable
 {
-	using IteratorType = Vector<IrrationalNumber>::iterator;
-	using ConstIteratorType = Vector<IrrationalNumber>::const_iterator;
-	using Super = Vector<IrrationalNumber>;
+    using Super = Vector<IrrationalNumber>;
+	using IteratorType = Super::iterator;
+	using ConstIteratorType = Super::const_iterator;
 
 	IrrationalPart() {}
 	IrrationalPart(size_t count, const IrrationalNumber& val) : Vector<IrrationalNumber>(count, val) { Rehash(); }
@@ -127,23 +112,6 @@ struct RealNumber
 	// TODO : Change to irrational part.
 	RealNumber(RationalNumber rational = {}, IrrationalPart irrational = {});
 	RealNumber(const String& strNumber);
-
-	RealNumber operator+(RealNumber other);
-	RealNumber operator-(RealNumber other);
-	RealNumber operator*(RealNumber other);
-	RealNumber operator/(RealNumber other);
-
-	void operator+=(RealNumber other);
-	void operator-=(RealNumber other);
-	void operator*=(RealNumber other);
-	void operator/=(RealNumber other);
-
-	bool operator==(RealNumber other);
-	bool operator!=(RealNumber other);
-	bool operator>=(RealNumber other);
-	bool operator<=(RealNumber other);
-	bool operator> (RealNumber other);
-	bool operator< (RealNumber other);
 
 	Float32 RawNumerical();
 };

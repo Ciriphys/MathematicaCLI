@@ -286,7 +286,7 @@ void Mathematica::AppCommand::Test()
 	left2->data = RationalNumber(2);
 	right2->data = RationalNumber(3);
 
-	add2->data = &Mathematica::Absolute;
+	add2->data = &Mathematica::IsLetter;
 	add2->children.push_back(left2);
 	add2->children.push_back(right2);
 

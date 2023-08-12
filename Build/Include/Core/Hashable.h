@@ -25,10 +25,16 @@ private:
 	UInt32 mHash;
 };
 
+template<typename HashableObject>
+struct CompareHashable
+{
+    bool operator()(const HashableObject& first, const HashableObject& second) const;
+};
+
 template<typename T>
 inline void Hashable::HashField(T field)
 {
-	MTH_ASSERT(false, "HashError: To use Hashable with this type, you have to implement your own hash function!");
+	throw "HashError: To use Hashable with this type, you have to implement your own hash function!";
 }
 
 template<>
@@ -53,7 +59,7 @@ inline void Hashable::HashField(String field)
 template<>
 inline void Hashable::HashField(Ref<MathNode> field)
 {
-	Hash(*MTH_UINT_ADDRESS_OF(field));
-
+    Hash(*MTH_UINT_ADDRESS_OF(field->data));
+    
 	for (Ref<MathNode> child : field->children) HashField(child);
 }

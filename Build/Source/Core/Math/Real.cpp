@@ -38,7 +38,7 @@ namespace Mathematica
 				for (auto secondReal : second)
 				{
 					RealNumber multiplication;
-					//HashMap<IrrationalNumber, Int32> symbolCounter;
+					HashMap<IrrationalNumber, Int32, CompareHashable<IrrationalNumber>> symbolCounter;
 
 					multiplication.rational = firstReal.rational * secondReal.rational;
 

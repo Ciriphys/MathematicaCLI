@@ -36,7 +36,7 @@ namespace Mathematica
 #ifdef MTH_WIN
 		MTH_UNUSED(system("cls"));
 #else
-        for(Int32 i = 0; i < 50; i++) std::cout << std::endl;
+        MTH_UNUSED(system("clear"));
 #endif
 	}
 

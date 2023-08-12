@@ -32,3 +32,9 @@ void Hashable::Hash(UInt32 seed)
 	mHash *= ((Mathematica::Cast<UInt32>(seedLow) << 16) | seedHigh);
 	return;
 }
+
+template<typename HashableObject>
+bool CompareHashable<HashableObject>::operator()(const HashableObject& first, const HashableObject& second) const
+{
+    return Hashable::Compare(first, second);
+}

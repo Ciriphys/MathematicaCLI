@@ -14,8 +14,8 @@ using Vector = std::vector<T>;
 template<typename T, size_t S>
 using Array = std::array<T, S>;
 
-template<typename K, typename V>
-using HashMap = std::unordered_map<K, V>;
+template<typename... Args>
+using HashMap = std::unordered_map<Args...>;
 
 template<typename K, typename V>
 using Map = std::map<K, V>;

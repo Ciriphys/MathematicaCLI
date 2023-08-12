@@ -200,70 +200,9 @@ IrrationalNumber::IrrationalNumber(const String& constantName)
     denominator->type = EMathNodeType::Number;
 }
 
-IrrationalNumber IrrationalNumber::operator+(IrrationalNumber other)
+bool IrrationalNumber::operator==(const IrrationalNumber& other)
 {
-    return IrrationalNumber();
-}
-
-IrrationalNumber IrrationalNumber::operator-(IrrationalNumber other)
-{
-    return IrrationalNumber();
-}
-
-IrrationalNumber IrrationalNumber::operator*(IrrationalNumber other)
-{
-    return IrrationalNumber();
-}
-
-IrrationalNumber IrrationalNumber::operator/(IrrationalNumber other)
-{
-    return IrrationalNumber();
-}
-
-void IrrationalNumber::operator+=(IrrationalNumber other)
-{
-}
-
-void IrrationalNumber::operator-=(IrrationalNumber other)
-{
-}
-
-void IrrationalNumber::operator*=(IrrationalNumber other)
-{
-}
-
-void IrrationalNumber::operator/=(IrrationalNumber other)
-{
-}
-
-bool IrrationalNumber::operator==(IrrationalNumber other)
-{
-    return false;
-}
-
-bool IrrationalNumber::operator!=(IrrationalNumber other)
-{
-    return false;
-}
-
-bool IrrationalNumber::operator>=(IrrationalNumber other)
-{
-    return false;
-}
-
-bool IrrationalNumber::operator<=(IrrationalNumber other)
-{
-    return false;
-}
-
-bool IrrationalNumber::operator>(IrrationalNumber other)
-{
-    return false;
-}
-
-bool IrrationalNumber::operator<(IrrationalNumber other)
-{
-    return false;
+    return Hashable::Compare(*this, other);
 }
 
 void IrrationalNumber::Rehash()
@@ -300,73 +239,6 @@ RealNumber::RealNumber(RationalNumber rational, IrrationalPart irrational) : typ
 
 RealNumber::RealNumber(const String& strNumber)
 {
-}
-
-RealNumber RealNumber::operator+(RealNumber other)
-{
-    return RealNumber();
-}
-
-RealNumber RealNumber::operator-(RealNumber other)
-{
-    return RealNumber();
-}
-
-RealNumber RealNumber::operator*(RealNumber other)
-{
-    return RealNumber();
-}
-
-RealNumber RealNumber::operator/(RealNumber other)
-{
-    return RealNumber();
-}
-
-void RealNumber::operator+=(RealNumber other)
-{
-
-}
-
-void RealNumber::operator-=(RealNumber other)
-{
-}
-
-void RealNumber::operator*=(RealNumber other)
-{
-}
-
-void RealNumber::operator/=(RealNumber other)
-{
-}
-
-bool RealNumber::operator==(RealNumber other)
-{
-    return rational == other.rational;
-}
-
-bool RealNumber::operator!=(RealNumber other)
-{
-    return false;
-}
-
-bool RealNumber::operator>=(RealNumber other)
-{
-    return false;
-}
-
-bool RealNumber::operator<=(RealNumber other)
-{
-    return false;
-}
-
-bool RealNumber::operator>(RealNumber other)
-{
-    return false;
-}
-
-bool RealNumber::operator<(RealNumber other)
-{
-    return false;
 }
 
 Float32 RealNumber::RawNumerical()
