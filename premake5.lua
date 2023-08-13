@@ -1,6 +1,6 @@
 workspace "Mathematica"
     architecture "x64"
-    configurations { "Debug", "Release", "Distribution", "ProfilerDebug", "ProfilerRelease", "ProfilerDistribution" }
+    configurations { "Debug", "Release", "Distribution", "ProfilerDebug", "ProfilerRelease", "ProfilerDistribution", }
 
     output = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
@@ -40,7 +40,7 @@ workspace "Mathematica"
             symbols "On"
 
         filter { "configurations:ProfilerDebug" }
-            defines { "MTH_DEBUG", "DEBUG", "MTH_CONFIG=\"Debug\"", "MTH_USE_PROFILER" }
+            defines { "MTH_DEBUG", "DEBUG", "MTH_CONFIG=\"Debug\"", "MTH_ENABLE_PROFILER" }
             optimize "Debug"
             symbols "On"
         
@@ -50,7 +50,7 @@ workspace "Mathematica"
             symbols "Default"
 
         filter { "configurations:ProfilerRelease" }
-            defines { "MTH_RELEASE", "NDEBUG", "MTH_CONFIG=\"Release\"", "MTH_USE_PROFILER" }
+            defines { "MTH_RELEASE", "NDEBUG", "MTH_CONFIG=\"Release\"", "MTH_ENABLE_PROFILER" }
             optimize "On"
             symbols "Default"
 
@@ -60,6 +60,6 @@ workspace "Mathematica"
             symbols "Off"
 
         filter { "configurations:ProfilerDistribution" }
-            defines { "MTH_DISTRIBUTION", "NDEBUG", "MTH_CONFIG=\"Distribution\"", "MTH_USE_PROFILER" }
+            defines { "MTH_DISTRIBUTION", "NDEBUG", "MTH_CONFIG=\"Distribution\"", "MTH_ENABLE_PROFILER" }
             optimize "Full"
             symbols "Off"

@@ -21,16 +21,16 @@ constexpr auto MTH_PROJECT_PATH = "MathematicaCLI/";
 
 #endif
 
-#define MTH_UNUSED(x) Mathematica::Cast<void>(x)
-#define MTH_ADDRESS_OF(x) Mathematica::Cast<void*>(&x)
-#define MTH_UINT_ADDRESS_OF(x) Mathematica::Cast<UInt32*>(MTH_ADDRESS_OF(x))
+#define MTH_UNUSED(x)			Mathematica::Cast<void>(x)
+#define MTH_ADDRESS_OF(x)		Mathematica::Cast<void*>(&x)
+#define MTH_UINT_ADDRESS_OF(x)	Mathematica::Cast<UInt32*>(MTH_ADDRESS_OF(x))
 
-#define MTH_HIGH_WORD(x) Mathematica::Cast<UInt8>((x >> 8) & MTH_WORD_MASK)	
-#define MTH_LOW_WORD(x)	Mathematica::Cast<UInt8>(x & MTH_WORD_MASK)
-#define MTH_HIGH_DWORD(x) Mathematica::Cast<UInt16>((x >> 16) & MTH_DWORD_MASK)
-#define MTH_LOW_DWORD(x) Mathematica::Cast<UInt16>(x & MTH_DWORD_MASK)
-#define MTH_HIGH_QWORD(x) Mathematica::Cast<UInt32>((x >> 32) & MTH_QWORD_MASK)
-#define MTH_LOW_QWORD(x) Mathematica::Cast<UInt32>(x & MTH_QWORD_MASK)
+#define MTH_HIGH_WORD(x)	Mathematica::Cast<UInt8>((x >> 8) & MTH_WORD_MASK)	
+#define MTH_LOW_WORD(x)		Mathematica::Cast<UInt8>(x & MTH_WORD_MASK)
+#define MTH_HIGH_DWORD(x)	Mathematica::Cast<UInt16>((x >> 16) & MTH_DWORD_MASK)
+#define MTH_LOW_DWORD(x)	Mathematica::Cast<UInt16>(x & MTH_DWORD_MASK)
+#define MTH_HIGH_QWORD(x)	Mathematica::Cast<UInt32>((x >> 32) & MTH_QWORD_MASK)
+#define MTH_LOW_QWORD(x)	Mathematica::Cast<UInt32>(x & MTH_QWORD_MASK)
 
 constexpr auto MTH_VERSION = "Version 0.0.16a";
 constexpr auto MTH_NO_MESSAGE = "No message provided.";

@@ -3,7 +3,7 @@
 #include "Core/Utility/Types.h"
 #include "Core/Utility/Timer.h"
 
-#ifdef MTH_USE_PROFILER
+#ifdef MTH_ENABLE_PROFILER
 #define MTH_PROFILE_SCOPE(name) Timer timer##__LINE__(name)
 #define MTH_PROFILE_FUNCTION() MTH_PROFILE_SCOPE(__FUNCSIG__)
 #define MTH_PROFILE_BEGIN(...) Profiler::Get().BeginProfile(__VA_ARGS__);
