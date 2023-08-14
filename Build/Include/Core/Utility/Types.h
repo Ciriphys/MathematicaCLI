@@ -2,6 +2,7 @@
 
 // Forward declarations
 struct RationalNumber;
+struct RealNumber;
 
 // Data structures
 using String = std::string;
@@ -43,7 +44,8 @@ using MersenneTwister = std::mt19937;
 using RandomDevice = std::random_device;
 
 // Functions
-typedef RationalNumber(*FBinaryFunction)(const RationalNumber&, const RationalNumber&);
+typedef RationalNumber(*FRationalBinaryRational)(const RationalNumber&, const RationalNumber&);
+typedef RealNumber(*FRealBinaryRational)(const RationalNumber&, const RationalNumber&);
 
 // Primitive types
 using UInt64  = unsigned long long int;

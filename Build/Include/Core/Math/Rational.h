@@ -15,5 +15,8 @@ namespace Mathematica
 		Int32 Sign(Float32 number);
 
 		RationalNumber Farey(Float32 number);
+
+		// Rationality
+		bool IsRootRational(RationalNumber arg, Int32 index);
 	}
 }

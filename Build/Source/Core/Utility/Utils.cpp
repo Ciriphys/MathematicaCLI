@@ -133,7 +133,7 @@ namespace Mathematica
 		}
 		catch (...)
 		{
-			auto function = Mathematica::AnyCast<FBinaryFunction>(node->data);
+			auto function = Mathematica::AnyCast<FRationalBinaryRational>(node->data);
 			data = Stringify(function);
 		}
 
@@ -249,7 +249,7 @@ namespace Mathematica
 		return a < b ? a : b;
 	}
 
-	FBinaryFunction GetBinaryFunctionFromRawData(const String& data)
+	FRationalBinaryRational GetBinaryFunctionFromRawData(const String& data)
 	{
 		if (data.size() == 1)
 		{
@@ -266,12 +266,12 @@ namespace Mathematica
 		return {};
 	}
 
-	char ToChar(FBinaryFunction address)
+	char ToChar(FRationalBinaryRational address)
 	{
-		FBinaryFunction addAddress = &Mathematica::Operation::Add;
-		FBinaryFunction subtractAddress = &Mathematica::Operation::Subtract;
-		FBinaryFunction multiplyAddress = &Mathematica::Operation::Multiply;
-		FBinaryFunction divideAddress = &Mathematica::Operation::Divide;
+		FRationalBinaryRational addAddress = &Mathematica::Operation::Add;
+		FRationalBinaryRational subtractAddress = &Mathematica::Operation::Subtract;
+		FRationalBinaryRational multiplyAddress = &Mathematica::Operation::Multiply;
+		FRationalBinaryRational divideAddress = &Mathematica::Operation::Divide;
 
 		if (address == addAddress)				return '+';
 		else if (address == subtractAddress)	return '-';
@@ -282,12 +282,12 @@ namespace Mathematica
 		return {};
 	}
 
-	String Stringify(FBinaryFunction address)
+	String Stringify(FRationalBinaryRational address)
 	{
-		FBinaryFunction addAddress		= &Mathematica::Operation::Add;
-		FBinaryFunction subtractAddress = &Mathematica::Operation::Subtract;
-		FBinaryFunction multiplyAddress = &Mathematica::Operation::Multiply;
-		FBinaryFunction divideAddress	= &Mathematica::Operation::Divide;
+		FRationalBinaryRational addAddress		= &Mathematica::Operation::Add;
+		FRationalBinaryRational subtractAddress = &Mathematica::Operation::Subtract;
+		FRationalBinaryRational multiplyAddress = &Mathematica::Operation::Multiply;
+		FRationalBinaryRational divideAddress	= &Mathematica::Operation::Divide;
 
 		if		(address == addAddress)			return "Add";
 		else if (address == subtractAddress)	return "Subtract";

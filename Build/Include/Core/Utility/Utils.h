@@ -105,9 +105,9 @@ namespace Mathematica
 	void Swap(T& a, T& b);
 
 	// === Functions ===
-	FBinaryFunction GetBinaryFunctionFromRawData(const String& data);
-	char   ToChar(FBinaryFunction address);
-	String Stringify(FBinaryFunction address);
+	FRationalBinaryRational GetBinaryFunctionFromRawData(const String& data);
+	char   ToChar(FRationalBinaryRational address);
+	String Stringify(FRationalBinaryRational address);
 
 	// === String manipulation ===
 	// * The following functions are not locale-safe.

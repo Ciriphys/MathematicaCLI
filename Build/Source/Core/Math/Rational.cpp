@@ -1,6 +1,7 @@
 #include "mthpch.h"
 
 #include "Core/Math/Rational.h"
+#include "Core/Math/Integer.h"
 #include "Core/Math/Number.h"
 
 #include "Core/Utility/Profiler.h"
@@ -75,6 +76,17 @@ namespace Mathematica
 
 			between.numerator *= Mathematica::Rational::Sign(number);
 			return abs(number) < 1 ? between : between + Mathematica::Cast<Int32>(number);
+		}
+
+		bool IsRootRational(RationalNumber arg, Int32 index)
+		{
+			auto numFact = Mathematica::Integer::Factorize(arg.numerator);
+			auto denFact = Mathematica::Integer::Factorize(arg.denominator);
+
+			for (auto [prime, exponent] : numFact) if (exponent % index != 0) return false;
+			for (auto [prime, exponent] : denFact) if (exponent % index != 0) return false;
+
+			return true;
 		}
 	}
 }

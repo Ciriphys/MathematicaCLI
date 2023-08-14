@@ -47,20 +47,30 @@ namespace Mathematica
 
 					for (auto [irrational, count] : symbolCounter)
 					{
-						String functionName = Mathematica::Stringify(Mathematica::AnyCast<FBinaryFunction>(irrational.numerator->data));
+						String functionName = Mathematica::Stringify(Mathematica::AnyCast<FRationalBinaryRational>(irrational.numerator->data));
 
 						if (functionName == "Raise")
 						{
 							RationalNumber argument = Mathematica::AnyCast<RealNumber>(irrational.numerator->children[0]).rational;
 							RationalNumber exponent = Mathematica::AnyCast<RealNumber>(irrational.numerator->children[1]).rational;
 
-							// TODO : Function left unfinished.
+							RationalNumber newExponent = exponent * count;
+
+							Int32 lastExponent = Mathematica::Cast<Int32>(newExponent.RawNumerical());
+							newExponent.numerator -= lastExponent;
+
+							// Exponentiate using Integer and multiply the result with multiplication.rational.
+
+							if (newExponent.numerator != 0)
+							{
+								// We have another irrational part, so append it to multiplication.
+								
+							}
 						}
 					}
 
 					if (multiplication.irrational.Size() == 0) multiplication.irrational.EmplaceBack();
 					result.push_back(multiplication);
-
 				}
 			}
 

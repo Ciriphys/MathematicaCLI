@@ -40,7 +40,7 @@ void ExplanationSystem::RecursiveExplain(Ref<MathNode> node)
 		mCurrentStep += node->scope != 0 ? "(" : "";
 		RecursiveExplain(node->children[0]);
 		mCurrentStep += " ";
-		mCurrentStep += Mathematica::ToChar(Mathematica::AnyCast<FBinaryFunction>(node->data));
+		mCurrentStep += Mathematica::ToChar(Mathematica::AnyCast<FRationalBinaryRational>(node->data));
 		mCurrentStep += " ";
 		RecursiveExplain(node->children[1]);
 		mCurrentStep += node->scope != 0 ? ")" : "";

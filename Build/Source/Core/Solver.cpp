@@ -44,7 +44,7 @@ RationalNumber Solver::RecursiveSolve(const Ref<MathNode>& node)
                 RationalNumber right = RecursiveSolve(rightChild);
 
                 // Get the function assigned to the math node.
-                FBinaryFunction function = Mathematica::AnyCast<FBinaryFunction>(node->data);
+                FRationalBinaryRational function = Mathematica::AnyCast<FRationalBinaryRational>(node->data);
                 return function(left, right);
             }
             break;
@@ -85,7 +85,7 @@ RationalNumber Solver::ExecutionSolve()
             RationalNumber left  = Mathematica::AnyCast<RationalNumber>( leftChild->data);
             RationalNumber right = Mathematica::AnyCast<RationalNumber>(rightChild->data);
 
-            FBinaryFunction function = Mathematica::AnyCast<FBinaryFunction>(operation->data);
+            FRationalBinaryRational function = Mathematica::AnyCast<FRationalBinaryRational>(operation->data);
             RationalNumber operationResult = function(left, right);
 
             Ref<MathNode> newNode = Mathematica::MakeRef<MathNode>();
