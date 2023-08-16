@@ -307,4 +307,18 @@ namespace Mathematica
 
 		return;
 	}
+
+	template<typename T>
+	T GetValueFromAnyCast(const Any& data)
+	{
+		try 
+		{
+			T result = Mathematica::AnyCast<T>(data);
+			return result;
+		}
+		catch (...)
+		{
+			return Mathematica::Cast<T>(0);
+		}
+	}
 }

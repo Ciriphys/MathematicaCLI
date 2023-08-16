@@ -1,5 +1,6 @@
 #include "mthpch.h"
 
+#include "Core/Math/Operations.h"
 #include "Core/Math/Real.h"
 
 namespace Mathematica
@@ -31,49 +32,56 @@ namespace Mathematica
 
 		Vector<RealNumber> ExecuteMultiply(const Vector<RealNumber>& first, const Vector<RealNumber>& second)
 		{
+			// TODO : Check if ExecuteMultiply can be performed on two MathExpression objects.
+
 			Vector<RealNumber> result = {};
 
-			for (auto firstReal : first)
+			for (auto& firstReal : first)
 			{
-				for (auto secondReal : second)
+				for (auto& secondReal : second)
 				{
 					RealNumber multiplication;
-					HashMap<IrrationalNumber, Int32, HashBinding<IrrationalNumber>, CompareHashable<IrrationalNumber>> symbolCounter;
+					multiplication.irrational.PopBack();
 
 					multiplication.rational = firstReal.rational * secondReal.rational;
 
-					for (auto irrational : firstReal.irrational) symbolCounter[irrational] = symbolCounter.find(irrational) == symbolCounter.end() ? 0 : symbolCounter[irrational] + 1;
-					for (auto irrational : secondReal.irrational) symbolCounter[irrational] = symbolCounter.find(irrational) == symbolCounter.end() ? 0 : symbolCounter[irrational] + 1;
+					// Check if the irrational parts can be simplified.
+					// The following Hash Map is used to count the irrational symbols that are found in the reals.
+					HashMap<IrrationalNumber, UInt32, HashBinding<IrrationalNumber>, CompareHashable<IrrationalNumber>> symbolMap;
 
-					for (auto [irrational, count] : symbolCounter)
+					// Store the irrational symbols stored in firstReal and secondReal.
+					for (auto& irrational : firstReal.irrational)
 					{
-						String functionName = Mathematica::Stringify(Mathematica::AnyCast<FRationalBinaryRational>(irrational.numerator->data));
+						symbolMap[irrational] = (symbolMap.find(irrational) != symbolMap.end()) ? symbolMap[irrational] + 1 : 1;
+					}
 
-						if (functionName == "Raise")
-						{
-							RationalNumber argument = Mathematica::AnyCast<RealNumber>(irrational.numerator->children[0]).rational;
-							RationalNumber exponent = Mathematica::AnyCast<RealNumber>(irrational.numerator->children[1]).rational;
+					for (auto& irrational : secondReal.irrational)
+					{
+						symbolMap[irrational] = (symbolMap.find(irrational) != symbolMap.end()) ? symbolMap[irrational] + 1 : 1;
+					}
 
-							RationalNumber newExponent = exponent * count;
+					// After each irrational symbol is stored, we loop through the HashMap to make sure that each symbol
+					// is processed correctly. 
+					for (auto& [_symbol, _count] : symbolMap)
+					{
+						// Skip processing for empty irrational.
+						if(Hashable::Compare(_symbol, IrrationalNumber())) continue;
 
-							Int32 lastExponent = Mathematica::Cast<Int32>(newExponent.RawNumerical());
-							newExponent.numerator -= lastExponent;
-
-							// Exponentiate using Integer and multiply the result with multiplication.rational.
-
-							if (newExponent.numerator != 0)
-							{
-								// We have another irrational part, so append it to multiplication.
-								
-							}
-						}
+						// Do the same thing for both numerator and denominator.
+						RealNumber realNumerator   = Mathematica::Irrational::ProcessIrrationalSubTree(_symbol.numerator, _count);
+						RealNumber realDenominator = Mathematica::Irrational::ProcessIrrationalSubTree(_symbol.denominator, _count);
+						
+						multiplication.rational *= realNumerator.rational / realDenominator.rational;
+						multiplication.irrational.EmplaceBack(realNumerator.irrational[0].numerator, realDenominator.irrational[0].numerator);
 					}
 
 					if (multiplication.irrational.Size() == 0) multiplication.irrational.EmplaceBack();
+
 					result.push_back(multiplication);
 				}
 			}
 
+		
 			return ExecuteSimplify(result);
 		}
 
@@ -104,4 +112,36 @@ namespace Mathematica
 			return result;
 		}
 	}
+}
+
+RealNumber Mathematica::Irrational::ProcessIrrationalSubTree(const Ref<MathNode>& subTree, const UInt32& counter)
+{
+	if (!subTree) return RealNumber();
+
+	// Get the function name
+	MTH_ASSERT(subTree->type == EMathNodeType::NamedFunction, 
+		"Error: Something went wrong, subTree->type should have been NamedFunction. "
+		"Perhaps some function did not generate metadata correctly?"
+	);
+
+	String functionName = Mathematica::AnyCast<String>(subTree->data);
+
+	// Check which operation generated the irrational tree.
+	// The irrational tree has been generated from a root.
+	if (functionName == "Raise")
+	{
+		// Get both argument and exponent.
+		RationalNumber argument = Mathematica::AnyCast<RationalNumber>(subTree->children[0]);
+		RationalNumber exponent = Mathematica::AnyCast<RationalNumber>(subTree->children[1]);
+
+		// Multiply the exponent with the symbol count .
+		exponent *= counter;
+
+		// Delegate the following operation on exponentiate.
+		return Mathematica::Operation::Exponentiate(argument, exponent);
+	}
+
+
+	MTH_ASSERT(false, "What kind of sorcery is this?!");
+	return RealNumber();
 }

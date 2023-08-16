@@ -19,6 +19,9 @@ protected:
 	template<typename T>
 	void HashField(T field);
 
+	void AddChachedHash(const UInt32& cached) { mHash *= cached; }
+	void ResetHash() { mHash = 1; }
+
 private:
 	void Hash(UInt32 seed);
 
@@ -46,7 +49,7 @@ struct CompareHashable
 template<typename T>
 inline void Hashable::HashField(T field)
 {
-	throw "HashError: To use Hashable with this type, you have to implement your own hash function!";
+	MTH_ASSERT(false, "HashError: To use Hashable with this type, you have to implement your own hash function!");
 }
 
 template<>

@@ -55,25 +55,34 @@ namespace Mathematica
             return { numerator, denominator };
         }
 
-        RealNumber Exponentiate(const RationalNumber& a, const RationalNumber& b)
+        RealNumber Exponentiate(const RationalNumber& a, RationalNumber b)
         {
             MTH_PROFILE_FUNCTION();
             MTH_ASSERT(b.denominator % 2 != 0 || Mathematica::Sign(a) == 1, "DomainError: Cannot compute an even-indexed root on a negative number!");
 
 			RealNumber result = {};
-			result.rational = Raise(a, b.numerator);
 
+            RationalNumber integer  = Mathematica::Cast<Int32>(b.RawNumerical());
+            RationalNumber fraction = b - integer;
+
+			result.rational = Raise(a, integer.numerator);
+
+            // NOTE : Keep an eye on this check, maybe it is necessary to perform the check with the full fraction.
 			if (!Mathematica::Rational::IsRootRational(a, b.denominator))
 			{
                 Ref<MathNode> operation = Mathematica::MakeRef<MathNode>();
                 operation->data = "Raise";
+                operation->type = EMathNodeType::NamedFunction;
 
                 Ref<MathNode> arg = Mathematica::MakeRef<MathNode>();
                 Ref<MathNode> exp = Mathematica::MakeRef<MathNode>();
                 arg->data = a;
-                exp->data = b;
+                exp->data = fraction;
+                arg->type = EMathNodeType::Number;
+                exp->type = EMathNodeType::Number;
 
-                // TODO : Finish this function.
+                operation->children.push_back(arg);
+                operation->children.push_back(exp);
 			}
 
             return result;

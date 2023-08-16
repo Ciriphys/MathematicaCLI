@@ -104,6 +104,9 @@ namespace Mathematica
 	template<typename T>
 	void Swap(T& a, T& b);
 
+	template<typename T>
+	T GetValueFromAnyCast(const Any& data);
+
 	// === Functions ===
 	FRationalBinaryRational GetBinaryFunctionFromRawData(const String& data);
 	char   ToChar(FRationalBinaryRational address);

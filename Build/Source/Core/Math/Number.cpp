@@ -207,7 +207,7 @@ bool IrrationalNumber::operator==(const IrrationalNumber& other)
 
 void IrrationalNumber::Rehash()
 {
-
+    ResetHash();
 }
 
 Float32 IrrationalNumber::RawNumerical()
@@ -248,6 +248,8 @@ Float32 RealNumber::RawNumerical()
 
 void IrrationalPart::Rehash()
 {
+   ResetHash();
+
    for (auto& irrational : *this)
    {
         HashField(irrational);
@@ -274,8 +276,28 @@ void IrrationalPart::PopBack()
 
 MathExpression::MathExpression(Vector<RealNumber> num, Vector<RealNumber> den)
 {
+    Rehash();
 }
 
 MathExpression::MathExpression(RealNumber real)
+{
+    Rehash();
+}
+
+void MathExpression::Rehash()
+{
+    ResetHash();
+
+    for (auto& real : numerator)   AddChachedHash(real.irrational.GetHash());
+    for (auto& real : denominator) AddChachedHash(real.irrational.GetHash());
+
+    for (auto& [transformer, mathexpr] : transformers)
+    {
+        HashField(Mathematica::Cast<UInt32>(transformer));
+        AddChachedHash(mathexpr.GetHash());
+    }
+}
+
+void MathExpression::CollapseTransformers()
 {
 }

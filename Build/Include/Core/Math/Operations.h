@@ -10,7 +10,7 @@ namespace Mathematica
 		RationalNumber Subtract     (const RationalNumber& a, const RationalNumber& b);
 		RationalNumber Multiply     (const RationalNumber& a, const RationalNumber& b);
 		RationalNumber Divide       (const RationalNumber& a, const RationalNumber& b);
-        RealNumber     Exponentiate (const RationalNumber& a, const RationalNumber& b);
+        RealNumber     Exponentiate (const RationalNumber& a, RationalNumber b);
 
         RationalNumber Raise        (const RationalNumber& a, const Int32& b);
 

@@ -20,6 +20,11 @@ enum class ESubset : Int32
 	Real,
 };
 
+enum class ETransformer : UInt32
+{
+	Exponentiate
+};
+
 struct RationalNumber
 {
     Int32 numerator;
@@ -72,6 +77,7 @@ struct IrrationalNumber : public Hashable
 	Float32 RawNumerical();
 };
 
+// REFACTOR : Create HashableVector Data Structure
 struct IrrationalPart : private Vector<IrrationalNumber>, public Hashable
 {
     using Super = Vector<IrrationalNumber>;
@@ -84,7 +90,7 @@ struct IrrationalPart : private Vector<IrrationalNumber>, public Hashable
 	template<typename ...Args>
 	inline decltype(auto) EmplaceBack(Args&&... args)
 	{
-		emplace_back(std::forward<Args>(args)...);
+		Super::emplace_back(std::forward<Args>(args)...);
 		Rehash();
 	}
 
@@ -94,11 +100,14 @@ struct IrrationalPart : private Vector<IrrationalNumber>, public Hashable
 	ConstIteratorType begin() const { return Super::begin(); }
 	ConstIteratorType end() const   { return Super::end(); }
 
+	IrrationalNumber operator[](const UInt64& where) { return Super::operator[](where); }
+	const IrrationalNumber& operator[](const UInt64& where) const { return Super::operator[](where); }
+
 	void PushBack(const IrrationalNumber& what);
 	void PushBack(IrrationalNumber&& what);
 
 	void PopBack();
-	UInt64 Size() const { return size(); }
+	UInt64 Size() const { return Super::size(); }
 
 	virtual void Rehash() override;
 };
@@ -109,20 +118,25 @@ struct RealNumber
 	IrrationalPart irrational;
 	ESubset type;
 
-	// TODO : Change to irrational part.
 	RealNumber(RationalNumber rational = {}, IrrationalPart irrational = {});
 	RealNumber(const String& strNumber);
 
 	Float32 RawNumerical();
 };
 
-struct MathExpression
+struct MathExpression : public Hashable
 {
 	Vector<RealNumber> numerator;
 	Vector<RealNumber> denominator;
 
+	Vector<Pair<ETransformer, MathExpression>> transformers;
+
 	MathExpression(Vector<RealNumber> num = {}, Vector<RealNumber> den = { {} });
 	MathExpression(RealNumber real);
+
+	virtual void Rehash() override;
+
+	void CollapseTransformers();
 };
 
 // TODO : Move these functions somewhere else.

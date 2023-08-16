@@ -17,4 +17,9 @@ namespace Mathematica
 		Vector<RealNumber> ExecuteSimplify(const Vector<RealNumber>& expression);
 		Vector<RealNumber> ExecuteMultiply(const Vector<RealNumber>& first, const Vector<RealNumber>& second);
 	}
+
+	namespace Irrational
+	{
+		RealNumber ProcessIrrationalSubTree(const Ref<MathNode>& subTree, const UInt32& counter);
+	}
 }

@@ -5,7 +5,7 @@
 
 Hashable::Hashable()
 {
-	mHash = 1;
+	ResetHash();
 }
 
 bool Hashable::Compare(const Hashable& first, const Hashable& second)
