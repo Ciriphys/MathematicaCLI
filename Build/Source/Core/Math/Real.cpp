@@ -11,22 +11,56 @@ namespace Mathematica
 		{
 			MathExpression Add(const MathExpression& first, const MathExpression& second)
 			{
-				return {};
+				Vector<RealNumber> firstAdd  = Mathematica::Real::ExecuteMultiply(first.numerator, second.denominator);
+				Vector<RealNumber> secondAdd = Mathematica::Real::ExecuteMultiply(second.numerator, first.denominator);
+
+				Vector<RealNumber> common = Mathematica::Real::ExecuteMultiply(first.denominator, second.denominator);
+
+				// Merge firstAdd and secondAdd and call ExecuteSimplify
+				firstAdd.insert(firstAdd.begin(), secondAdd.begin(), secondAdd.end());
+
+				// NOTE : Should simplify using factorization here although it's not strictly necessary right now.
+
+				return { ExecuteSimplify(firstAdd), common };
 			}
 
 			MathExpression Subtract(const MathExpression& first, const MathExpression& second)
 			{
-				return {};
+				Vector<RealNumber> firstSub  = Mathematica::Real::ExecuteMultiply(first.numerator, second.denominator);
+				Vector<RealNumber> secondSub = Mathematica::Real::ExecuteMultiply(second.numerator, first.denominator);
+
+				Vector<RealNumber> common = Mathematica::Real::ExecuteMultiply(first.denominator, second.denominator);
+
+				// Merge firstAdd and reversed secondAdd and call ExecuteSimplify
+				for (auto& real : secondSub) firstSub.push_back(-real);
+
+				// NOTE : Should simplify using factorization here although it's not strictly necessary right now.
+
+				return { ExecuteSimplify(firstSub), common };
 			}
 
 			MathExpression Multiply(const MathExpression& first, const MathExpression& second)
 			{
-				return {};
+				Vector<RealNumber> newNumerator   = Mathematica::Real::ExecuteMultiply(first.numerator,   second.numerator);
+				Vector<RealNumber> newDenominator = Mathematica::Real::ExecuteMultiply(first.denominator, second.denominator);
+
+				// NOTE : Should simplify using factorization here although it's not strictly necessary right now.
+
+				MTH_ASSERT(newDenominator.size() != 0, "DomainError: Denominator cannot be zero!");
+
+				return { newNumerator, newDenominator };
 			}
 
 			MathExpression Divide(const MathExpression& first, const MathExpression& second)
 			{
-				return MathExpression();
+				MTH_ASSERT(second.numerator.size() != 0, "DomainError: Cannot divide by zero!");
+
+				Vector<RealNumber> newNumerator   = Mathematica::Real::ExecuteMultiply(first.numerator, second.denominator);
+				Vector<RealNumber> newDenominator = Mathematica::Real::ExecuteMultiply(first.denominator, second.numerator);
+
+				// NOTE : Should simplify using factorization here although it's not strictly necessary right now.
+
+				return { newNumerator, newDenominator };
 			}
 		}
 

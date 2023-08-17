@@ -39,6 +39,8 @@ struct RationalNumber
     RationalNumber operator*(RationalNumber other);
     RationalNumber operator/(RationalNumber other);
 
+	RationalNumber operator-();
+
 	const RationalNumber& operator+(RationalNumber other) const;
 	const RationalNumber& operator-(RationalNumber other) const;
 	const RationalNumber& operator*(RationalNumber other) const;
@@ -120,6 +122,8 @@ struct RealNumber
 
 	RealNumber(RationalNumber rational = {}, IrrationalPart irrational = {});
 	RealNumber(const String& strNumber);
+
+	RealNumber operator-();
 
 	Float32 RawNumerical();
 };

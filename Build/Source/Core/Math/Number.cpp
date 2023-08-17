@@ -82,6 +82,11 @@ RationalNumber RationalNumber::operator/(RationalNumber other)
     return Mathematica::Operation::Divide(*this, other);
 }
 
+RationalNumber RationalNumber::operator-()
+{
+    return { -numerator, denominator };
+}
+
 const RationalNumber& RationalNumber::operator+(RationalNumber other) const
 {
     return Mathematica::Operation::Add(*this, other);
@@ -239,6 +244,11 @@ RealNumber::RealNumber(RationalNumber rational, IrrationalPart irrational) : typ
 
 RealNumber::RealNumber(const String& strNumber)
 {
+}
+
+RealNumber RealNumber::operator-()
+{
+    return { -rational, irrational };
 }
 
 Float32 RealNumber::RawNumerical()
