@@ -1,4 +1,5 @@
 import platform
+import shutil
 import os
 
 def XCodeSetPCHLocation():
@@ -12,18 +13,28 @@ def XCodeSetPCHLocation():
         file.write(filedata)
 
 def GenerateDarwinDocs():
-     os.system("./Vendor/doxygen/macOS/doxygen Doxyfile")
-     os.chdir("Docs/PDF/")
-     os.system("make pdf")
-     os.system("mv refman.pdf ../Manual.pdf")
-     os.chdir("../../")
-     os.system("rm Docs/PDF/*")
-     os.system("rmdir Docs/PDF")
-     os.system("mkdir Docs/PDF")
-     os.system("mv Docs/Manual.pdf Docs/PDF/")
+    os.system("./Vendor/doxygen/macOS/doxygen Doxyfile")
+    os.chdir("Docs/PDF/")
+    os.system("make pdf")
+    os.system("mv refman.pdf ../Manual.pdf")
+    os.chdir("../../")
+    os.system("rm Docs/PDF/*")
+    os.system("mv Docs/Manual.pdf Docs/PDF/")
 
 def GenerateWinDocs():
-     pass
+    os.system("\"Vendor\\doxygen\\Windows\\doxygen.exe\" Doxyfile")
+    os.chdir("Docs\\PDF")
+    os.system("make.bat")
+    os.system("move refman.pdf ..\\Manual.pdf")
+    os.chdir("..\\..")
+    
+    try:
+        shutil.rmtree("Docs\\PDF")
+    except PermissionError:
+        print("Docs\\PDF could not be deleted because it is used by a process. \nTerminate it and relaunch the script.")
+    finally: 
+        os.system("mkdir Docs\\PDF")
+        os.system("move Docs\\Manual.pdf Docs\\PDF\\")
 
 if __name__ == "__main__":
     system = platform.system()
@@ -36,7 +47,7 @@ if __name__ == "__main__":
     elif system == "Windows":
         command = str("\"Vendor\\premake5\\Windows\\premake5.exe\" vs2022")
     elif system == "Linux":
-        command = f"./Vendor/premake5/Linux/premake5 gmake2"
+        command = "./Vendor/premake5/Linux/premake5 gmake2"
     else:
         print("Unidentified system. Halting.")
         exit(1)
