@@ -70,5 +70,8 @@ if __name__ == "__main__":
     RemoveFile("todo.txt")
     WrapperRemoveTree("Binaries/")
     WrapperRemoveTree("Build/ProfilerLogs")
+    choice = input("Remove documentation folder? [y/N] ")
+    if choice == "y" or choice == "Y":
+        WrapperRemoveTree("Docs")
     print("Nothing left to clean. Halting")
     exit(0)

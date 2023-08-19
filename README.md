@@ -11,6 +11,7 @@ MathematicaCLI is built for Windows, macOS and Linux. Despite this, Windows and 
 
 # Getting started
 MathematicaCLI uses [premake5](https://premake.github.io) to build the source, and for now, a binary source of such program is distributed with the source code.
+[Doxygen](https://www.doxygen.nl) is also used to generate a documentation for the project. The documentation can be found in the Docs folder in the form of an HTML web page or a PDF document.
 To get started you'd need to install python 3.x (I'm using 3.11) and launch the scripts.
 To generate project files for your platform launch `generate.py` and to clean generated files use `clean.py`. You can also use the wrapper `run.py`
 to access quickly the binaries, specifying the arguments and thee configuration. There is also a new script, `todo.py`. Its role is to generate a `todo.txt` file, containing information about todos and more, extracted directly from source files.

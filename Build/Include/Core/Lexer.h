@@ -12,6 +12,14 @@ enum class EPriority : Int32
 	Macro
 };
 
+/**
+ * 
+ * This class is used to generate an array of LexiconToken objects
+ * given a user input. It generates also metadata for each array,
+ * used during the parsing and solving steps. 
+ * 
+ */
+
 class Lexer
 {
 public:
