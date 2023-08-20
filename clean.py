@@ -54,7 +54,7 @@ if __name__ == "__main__":
     if system == "Darwin":
         if os.path.exists("Makefile") or os.path.exists(".vscode/"):
             DarwinCleanMakefile()
-        else:
+        if os.path.exists("Mathematica.xcworkspace"):
             DarwinCleanXCode()
 
     elif system == "Windows":

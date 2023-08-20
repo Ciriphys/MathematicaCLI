@@ -284,7 +284,8 @@ void IrrationalPart::PopBack()
     Rehash();
 }
 
-MathExpression::MathExpression(Vector<RealNumber> num, Vector<RealNumber> den)
+MathExpression::MathExpression(Vector<RealNumber> num, Vector<RealNumber> den) :
+numerator(num), denominator(den)
 {
     Rehash();
 }
@@ -297,10 +298,7 @@ MathExpression::MathExpression(RealNumber real)
 void MathExpression::Rehash()
 {
     ResetHash();
-
-    for (auto& real : numerator)   AddChachedHash(real.irrational.GetHash());
-    for (auto& real : denominator) AddChachedHash(real.irrational.GetHash());
-
+    
     for (auto& [transformer, mathexpr] : transformers)
     {
         HashField(Mathematica::Cast<UInt32>(transformer));
